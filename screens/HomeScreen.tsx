@@ -2,20 +2,21 @@ import React from "react";
 import { useState, useEffect } from "react";
 
 import { Text, View } from "../components/Themed";
-import { StyleSheet, Image, TouchableOpacity } from "react-native";
-
+import { StyleSheet, Image, TouchableOpacity, Button } from "react-native";
 import CartApi from "../api/CartApi";
 import { Ionicons } from "@expo/vector-icons";
 import Header from "../components/Header";
 import FlashSale from "../components/FlashSale";
 import { AxiosResponse } from "axios";
 import { useNavigation } from "@react-navigation/native";
+import Test from "../components/HomeScreen/test";
+import Pagination from "../components/HomeScreen/Pagination";
 
 export default function HomeScreen() {
   const [flashSale, setFlashSale] = useState<AxiosResponse | null | void>(null);
   const navigation = useNavigation();
   const [lastPage, setLastPage] = useState(50);
-  const [PrimaryPage, setPrimaryPage] = useState(5);
+  const [primaryPage, setPrimaryPage] = useState(5);
   {
     /*primaryPage la trang dau tien trong danh sach cac trang*/
   }
@@ -24,10 +25,10 @@ export default function HomeScreen() {
     /*currentPage la trang hien tai trong danh sach cac trang*/
   }
   const [pages, setPages] = useState([
-    PrimaryPage,
-    PrimaryPage + 1,
-    PrimaryPage + 2,
-    PrimaryPage + 3,
+    primaryPage,
+    primaryPage + 1,
+    primaryPage + 2,
+    primaryPage + 3,
     "...",
     lastPage,
   ]);
@@ -41,17 +42,16 @@ export default function HomeScreen() {
         console.log(error);
       }
     }
-
     fetchFlashSale();
     setPages([
-      PrimaryPage,
-      PrimaryPage + 1,
-      PrimaryPage + 2,
-      PrimaryPage + 3,
+      primaryPage,
+      primaryPage + 1,
+      primaryPage + 2,
+      primaryPage + 3,
       "...",
       lastPage,
     ]);
-  }, [lastPage, PrimaryPage]);
+  }, [lastPage, primaryPage]);
   return (
     <View>
       <Header />
@@ -69,74 +69,14 @@ export default function HomeScreen() {
         </TouchableOpacity>
       </View>
       <FlashSale list={flashSale} />
-
-      {/* <SafeAreaView style={styles.container}>
-        <CarouselCards />
-      </SafeAreaView> */}
-      <View style={styles.pagination}>
-        <View style={styles.alignCenter}>
-          <TouchableOpacity
-            onPress={() => {
-              setPrimaryPage(1);
-            }}
-          >
-            <Ionicons name="play-back-circle-outline" size={30}></Ionicons>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.alignCenter}>
-          <TouchableOpacity
-            onPress={() => {
-              if (PrimaryPage > 1) setPrimaryPage(PrimaryPage - 1);
-            }}
-          >
-            <Ionicons name="caret-back-circle-outline" size={30}></Ionicons>
-          </TouchableOpacity>
-        </View>
-        {pages.map((page, index) => (
-          <TouchableOpacity
-            onPress={() => {
-              if (page != "...") {
-                setCurrentPage(page);
-                if (PrimaryPage == page) {
-                  if (PrimaryPage > 2) setPrimaryPage(page - 2);
-                  else if (PrimaryPage == 2) setPrimaryPage(1);
-                } else if (PrimaryPage + 3 == page)
-                  if (PrimaryPage < lastPage - 4) setPrimaryPage(page);
-              }
-            }}
-            key={index}
-          >
-            {page == currentPage ? (
-              <View style={styles.specialPage}>
-                <Text>{page}</Text>
-              </View>
-            ) : (
-              <View style={styles.eachPage}>
-                <Text>{page}</Text>
-              </View>
-            )}
-          </TouchableOpacity>
-        ))}
-        <View style={styles.alignCenter}>
-          <TouchableOpacity
-            onPress={() => {
-              if (PrimaryPage < lastPage - 4)
-                setPrimaryPage((prev) => prev + 1);
-            }}
-          >
-            <Ionicons name="caret-forward-circle-outline" size={30}></Ionicons>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.alignCenter}>
-          <TouchableOpacity
-            onPress={() => {
-              setPrimaryPage(lastPage - 4);
-            }}
-          >
-            <Ionicons name="play-forward-circle-outline" size={30}></Ionicons>
-          </TouchableOpacity>
-        </View>
-      </View>
+      <Pagination
+        primaryPage={primaryPage}
+        setPrimaryPage={setPrimaryPage}
+        pages={pages}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        lastPage={lastPage}
+      />
     </View>
   );
 }
