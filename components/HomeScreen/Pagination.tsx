@@ -18,6 +18,7 @@ export default function Pagination({
         <TouchableOpacity
           onPress={() => {
             setPrimaryPage(1);
+            setCurrentPage(1);
           }}
         >
           <Ionicons name="play-back-circle-outline" size={30}></Ionicons>
@@ -26,7 +27,9 @@ export default function Pagination({
       <View style={styles.alignCenter}>
         <TouchableOpacity
           onPress={() => {
-            if (primaryPage > 1) setPrimaryPage(primaryPage - 1);
+            if (currentPage == primaryPage)
+              setPrimaryPage((prev: any) => prev - 4);
+            if (currentPage > 1) setCurrentPage((prev: any) => prev - 1);
           }}
         >
           <Ionicons name="caret-back-circle-outline" size={30}></Ionicons>
@@ -60,8 +63,11 @@ export default function Pagination({
       <View style={styles.alignCenter}>
         <TouchableOpacity
           onPress={() => {
-            if (primaryPage < lastPage - 4)
-              setPrimaryPage((prev: any) => prev + 1);
+            if (currentPage == primaryPage + 3 && primaryPage < lastPage - 4)
+              setPrimaryPage((prev: any) => prev + 4);
+            if (currentPage < lastPage) {
+              setCurrentPage((prev: any) => prev + 1);
+            }
           }}
         >
           <Ionicons name="caret-forward-circle-outline" size={30}></Ionicons>
@@ -71,6 +77,7 @@ export default function Pagination({
         <TouchableOpacity
           onPress={() => {
             setPrimaryPage(lastPage - 4);
+            setCurrentPage(lastPage - 4);
           }}
         >
           <Ionicons name="play-forward-circle-outline" size={30}></Ionicons>
