@@ -38,6 +38,7 @@ export default function HomeScreen() {
       try {
         const data = await CartApi.getAll();
         setFlashSale(data);
+        console.log(data);
       } catch (error) {
         console.log(error);
       }

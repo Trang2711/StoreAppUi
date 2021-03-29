@@ -1,12 +1,15 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FlatList, StyleSheet, Image } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Text, View } from "../components/Themed";
 import { Ionicons } from "@expo/vector-icons";
-
+import ProductApi from "../api/ProductApi";
+import axios from "axios";
 export default function NotificationsScreen() {
   const [amountOfCmt, setAmountOfCmt] = useState(125);
+  const [allProducts, setAllProducts] = useState([]);
+  const [specifiedProduct, setSpecifiedProduct] = useState({});
   const [comment, setComment] = useState([
     {
       user: "hung",
@@ -102,7 +105,31 @@ export default function NotificationsScreen() {
         'require("../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg")',
     },
   ];
-  console.log({ comment });
+  useEffect(() => {
+    async function fetchSpecifiedProduct() {
+      try {
+        const response = await ProductApi.getSpecifiedProduct(3);
+        // const { comments } = await ProductApi.getSpecifiedProduct(3);
+        setSpecifiedProduct(response);
+        setComment(response.comments);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    async function fetchAllProducts() {
+      try {
+        const response = await ProductApi.getAllProducts();
+        setAllProducts(response as any);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchAllProducts();
+    fetchSpecifiedProduct();
+  }, []);
+  console.log(comment);
+  console.log(allProducts[4]);
+  console.log(specifiedProduct);
   return (
     <ScrollView>
       <View style={styles.container}>
