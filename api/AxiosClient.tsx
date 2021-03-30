@@ -2,7 +2,7 @@ import axios from "axios";
 import queryString from "query-string";
 
 const AxiosClient = axios.create({
-  baseURL: "https://lazy-mule-90.loca.lt/",
+  baseURL: "https://application-mock-server.loca.lt",
   headers: {
     "content-type": "application/json",
   },

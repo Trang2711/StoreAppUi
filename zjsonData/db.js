@@ -6,12 +6,11 @@ module.exports = () => {
       id: i,
       laptopName: `Laptop${i}`,
       lapUrl: [
-        "../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg",
-        "../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg",
-        "../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg",
-        "../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg",
-        "../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg",
-        "../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg",
+        "require('../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg')",
+        "require('../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg')",
+        "require('../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg')",
+        "require('../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg')",
+        "require('../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg')",
       ],
       comments: [
         { user: `user${i}`, comment: `comment${i}` },

@@ -1,43 +1,19 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import { FlatList, StyleSheet, Image } from "react-native";
+import { FlatList, StyleSheet, Image, ImageStore } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Text, View } from "../components/Themed";
 import { Ionicons } from "@expo/vector-icons";
 import ProductApi from "../api/ProductApi";
-import axios from "axios";
 export default function NotificationsScreen() {
   const [amountOfCmt, setAmountOfCmt] = useState(125);
   const [allProducts, setAllProducts] = useState([]);
   const [specifiedProduct, setSpecifiedProduct] = useState({});
-  const [comment, setComment] = useState([
-    {
-      user: "hung",
-      id: 1,
-      cmt: "con hang nay ngon lam",
-    },
-    {
-      user: "hung",
-      id: 2,
-      cmt: "con hang nay ngon lam",
-    },
-    {
-      user: "hung",
-      id: 3,
-      cmt:
-        "con hang nay ngon lamaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-    },
-    {
-      user: "hung",
-      id: 4,
-      cmt: "con hang nay ngon lam",
-    },
-    {
-      user: "hung",
-      id: 5,
-      cmt: "con hang nay ngon lam",
-    },
-  ]);
+  const [comment, setComment] = useState<any[]>([]);
+  const [itemImg, setItemImg] = useState([]);
+  interface Provider {
+    company: string;
+  }
   const imgs = [
     {
       id: 1,
@@ -49,68 +25,13 @@ export default function NotificationsScreen() {
       ulr:
         "../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg",
     },
-    {
-      id: 3,
-      ulr:
-        "../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg",
-    },
-    {
-      id: 4,
-      ulr:
-        "../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg",
-    },
-    {
-      id: 5,
-      ulr:
-        "../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg",
-    },
-    {
-      id: 6,
-      ulr:
-        "../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg",
-    },
-    {
-      id: 7,
-      ulr:
-        "../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg",
-    },
-    {
-      id: 8,
-      ulr:
-        "../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg",
-    },
-    {
-      id: 9,
-      ulr:
-        "../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg",
-    },
-    {
-      id: 10,
-      ulr:
-        "../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg",
-    },
-    {
-      id: 11,
-      ulr:
-        "../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg",
-    },
-    {
-      id: 12,
-      ulr:
-        "../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg",
-    },
-    {
-      id: 13,
-      ulr:
-        'require("../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg")',
-    },
   ];
   useEffect(() => {
     async function fetchSpecifiedProduct() {
       try {
-        const response = await ProductApi.getSpecifiedProduct(3);
-        // const { comments } = await ProductApi.getSpecifiedProduct(3);
+        const response: object = await ProductApi.getSpecifiedProduct(3);
         setSpecifiedProduct(response);
+        setItemImg(response.lapUrl);
         setComment(response.comments);
       } catch (error) {
         console.log(error);
@@ -127,39 +48,23 @@ export default function NotificationsScreen() {
     fetchAllProducts();
     fetchSpecifiedProduct();
   }, []);
-  console.log(comment);
-  console.log(allProducts[4]);
-  console.log(specifiedProduct);
+  console.log(itemImg);
+  const url =
+    "../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg";
   return (
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.scrollArea}>
           <ScrollView horizontal={true}>
-            <Image
-              style={styles.image}
-              resizeMode={"contain"}
-              source={require("../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg")}
-            ></Image>
-            <Image
-              style={styles.image}
-              resizeMode={"contain"}
-              source={require("../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg")}
-            ></Image>
-            <Image
-              style={styles.image}
-              resizeMode={"contain"}
-              source={require("../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg")}
-            ></Image>
-            <Image
-              style={styles.image}
-              resizeMode={"contain"}
-              source={require("../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg")}
-            ></Image>
-            <Image
-              style={styles.image}
-              resizeMode={"contain"}
-              source={require("../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg")}
-            ></Image>
+            {itemImg.map((item, index) => (
+              <View key={index}>
+                <Image
+                  style={styles.image}
+                  resizeMode={"contain"}
+                  source={require(url)}
+                ></Image>
+              </View>
+            ))}
           </ScrollView>
         </View>
 
@@ -175,12 +80,12 @@ export default function NotificationsScreen() {
         <View style={styles.commentSection}>
           <Text>Nhan xet: ({amountOfCmt})</Text>
           <View>
-            {comment.map((item) => (
-              <View key={item.id} style={styles.userComment}>
+            {comment.map((item, index) => (
+              <View key={index} style={styles.userComment}>
                 <Text style={[{ flex: 2, fontWeight: "bold" }, styles.text16]}>
                   {item.user}
                 </Text>
-                <Text style={[{ flex: 9 }, styles.text16]}>{item.cmt}</Text>
+                <Text style={[{ flex: 9 }, styles.text16]}>{item.comment}</Text>
               </View>
             ))}
           </View>
@@ -201,17 +106,25 @@ export default function NotificationsScreen() {
             Co the ban cung thich
           </Text>
           <View style={styles.moreItemContainer}>
-            {imgs.map((img, index) => (
-              <View key={index} style={styles.eachPost}>
-                <Image
-                  style={styles.moreItemImg}
-                  source={require("../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg")}
-                ></Image>
-                <Text>Gia: 1 trieu</Text>
-              </View>
-            ))}
+            {itemImg.map((imgUrl, index) => {
+              var icon = require("../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg");
+
+              // var icon = require(imgUrl);
+
+              console.log(imgUrl);
+              return (
+                <View key={index} style={styles.eachPost}>
+                  <Image style={styles.moreItemImg} source={icon}></Image>
+                  <Text>Gia: 1 trieu</Text>
+                </View>
+              );
+            })}
           </View>
         </View>
+        <Image
+          style={styles.moreItemImg}
+          source={require("../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg")}
+        ></Image>
       </View>
     </ScrollView>
   );
@@ -265,6 +178,7 @@ const styles = StyleSheet.create({
     width: 370,
     height: "auto",
     marginLeft: 5,
+    backgroundColor: "red",
   },
   boldText: {
     fontWeight: "bold",
