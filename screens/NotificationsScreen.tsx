@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import { FlatList, StyleSheet, Image, ImageStore } from "react-native";
+import { StyleSheet, Image, ActivityIndicator, Dimensions } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Text, View } from "../components/Themed";
 import { Ionicons } from "@expo/vector-icons";
@@ -8,12 +8,14 @@ import ProductApi from "../api/ProductApi";
 import ImgSlider from "../components/itemDetailScreen/ImgSlider";
 import ItemProperty from "../components/itemDetailScreen/ItemProperty";
 import RelatedItems from "../components/itemDetailScreen/RelatedItems";
+
 export default function NotificationsScreen() {
   const [amountOfCmt, setAmountOfCmt] = useState(125);
   const [allProducts, setAllProducts] = useState([]);
   const [specifiedProduct, setSpecifiedProduct] = useState({});
   const [comment, setComment] = useState<any[]>([]);
   const [itemImg, setItemImg] = useState([]);
+  const [loadingWhileFetchData, setLoadingWhileFetchData] = useState(true);
   interface Provider {
     company: string;
   }
@@ -39,6 +41,9 @@ export default function NotificationsScreen() {
     }
     fetchAllProducts();
     fetchSpecifiedProduct();
+    setInterval(() => {
+      setLoadingWhileFetchData(false);
+    }, 1000);
   }, []);
   console.log("itemImgs");
   console.log(itemImg);
@@ -47,11 +52,17 @@ export default function NotificationsScreen() {
   return (
     <ScrollView>
       <View style={styles.container}>
-        <ImgSlider itemImg={itemImg} />
-
-        <ItemProperty amountOfCmt={amountOfCmt} comment={comment} />
-        {/* mat hang lien quan */}
-        <RelatedItems itemImg={itemImg} />
+        {loadingWhileFetchData ? (
+          <View style={[styles.loadingContainer, styles.loadingHorizontal]}>
+            <ActivityIndicator size="large" color="#00ff00" />
+          </View>
+        ) : (
+          <View>
+            <ImgSlider itemImg={itemImg} />
+            <ItemProperty amountOfCmt={amountOfCmt} comment={comment} />
+            <RelatedItems itemImg={itemImg} />
+          </View>
+        )}
       </View>
     </ScrollView>
   );
@@ -59,9 +70,20 @@ export default function NotificationsScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    width: "100%",
+    height: "100%",
   },
-
+  loadingContainer: {
+    flex: 1,
+    height: 675,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loadingHorizontal: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    padding: 10,
+  },
   text16: {
     fontSize: 16,
   },

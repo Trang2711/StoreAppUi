@@ -7,8 +7,10 @@ import {
   Text,
   View,
 } from "react-native";
+
 const { width } = Dimensions.get("window");
 const height = (width * 100) / 60;
+
 const ImgSlider = ({ itemImg }: any) => {
   const [activePage, setActivePage] = useState(0);
   function change({ nativeEvent }: any) {
