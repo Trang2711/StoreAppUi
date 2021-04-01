@@ -2,7 +2,7 @@ import axios from "axios";
 import queryString from "query-string";
 
 const AxiosClient = axios.create({
-  baseURL: "https://application-mock-server.loca.lt",
+  baseURL: "https://sour-seahorse-80.loca.lt/",
   headers: {
     "content-type": "application/json",
   },
@@ -14,17 +14,17 @@ AxiosClient.interceptors.request.use(async (config) => {
   return config;
 });
 
-AxiosClient.interceptors.response.use(
-  (response) => {
-    if (response && response.data) {
-      return response.data;
-    }
+// AxiosClient.interceptors.response.use(
+//   (response) => {
+//     if (response && response.data) {
+//       return response.data;
+//     }
 
-    return response;
-  },
-  (error) => {
-    throw error;
-  }
-);
+//     return response;
+//   },
+//   (error) => {
+//     throw error;
+//   }
+// );
 
 export default AxiosClient;
