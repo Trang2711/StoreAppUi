@@ -10,23 +10,31 @@ import ItemProperty from "../components/itemDetailScreen/ItemProperty";
 import RelatedItems from "../components/itemDetailScreen/RelatedItems";
 
 export default function NotificationsScreen() {
-  const [amountOfCmt, setAmountOfCmt] = useState(125);
+  const [amountOfCmt, setAmountOfCmt] = useState();
+  const [AmountOfPage, setAmountOfPage] = useState();
   const [allProducts, setAllProducts] = useState([]);
   const [specifiedProduct, setSpecifiedProduct] = useState({});
   const [comment, setComment] = useState<any[]>([]);
   const [itemImg, setItemImg] = useState([]);
   const [loadingWhileFetchData, setLoadingWhileFetchData] = useState(true);
-  interface Provider {
-    company: string;
-  }
-  const imgs = [];
+  const [IsloadingMoreItem, setIsloadingMoreItem] = useState(true);
+  const [CurrentPage, setCurrentPage] = useState(1);
   useEffect(() => {
     async function fetchSpecifiedProduct() {
       try {
         const response = await ProductApi.getSpecifiedProduct(3);
-        setSpecifiedProduct(response);
+        setSpecifiedProduct(response.data);
         setItemImg(response.data.lapUrl);
         setComment(response.data.comments);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    async function fetchProductByPage() {
+      try {
+        const response = await ProductApi.getProductByPagination(CurrentPage);
+
+        setAllProducts((prev): any => [...prev, ...response.data]);
       } catch (error) {
         console.log(error);
       }
@@ -34,23 +42,39 @@ export default function NotificationsScreen() {
     async function fetchAllProducts() {
       try {
         const response = await ProductApi.getAllProducts();
-        setAllProducts(response as any);
+        setAmountOfPage(response.data.length);
       } catch (error) {
         console.log(error);
       }
     }
+    function handlingLoadingMoreItemSpinner() {
+      if (CurrentPage > (AmountOfPage as any) / 10) {
+        setIsloadingMoreItem(false);
+      }
+    }
+    handlingLoadingMoreItemSpinner();
     fetchAllProducts();
     fetchSpecifiedProduct();
+    fetchProductByPage();
     setInterval(() => {
       setLoadingWhileFetchData(false);
     }, 1000);
-  }, []);
-  console.log("itemImgs");
-  console.log(itemImg);
+  }, [CurrentPage]);
   const url =
     "../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg";
   return (
-    <ScrollView>
+    <ScrollView
+      onMomentumScrollEnd={(e) => {
+        const scrollPosition = e.nativeEvent.contentOffset.y;
+        const scrollViewHeight = e.nativeEvent.layoutMeasurement.height;
+        const contentHeight = e.nativeEvent.contentSize.height;
+        const isScrollToBottom = scrollViewHeight + scrollPosition;
+
+        if (isScrollToBottom >= contentHeight - 1) {
+          setCurrentPage((prev) => prev + 1);
+        }
+      }}
+    >
       <View style={styles.container}>
         {loadingWhileFetchData ? (
           <View style={[styles.loadingContainer, styles.loadingHorizontal]}>
@@ -60,7 +84,10 @@ export default function NotificationsScreen() {
           <View>
             <ImgSlider itemImg={itemImg} />
             <ItemProperty amountOfCmt={amountOfCmt} comment={comment} />
-            <RelatedItems itemImg={itemImg} />
+            <RelatedItems allProducts={allProducts} />
+            {IsloadingMoreItem ? (
+              <ActivityIndicator size="large" color="black" />
+            ) : null}
           </View>
         )}
       </View>

@@ -9,6 +9,10 @@ const ProductApi = {
     const url = `/products/${id}`;
     return AxiosClient.get(url);
   },
+  getProductByPagination: (id: any) => {
+    const url = `/products?_page=${id}&_limit=10`;
+    return AxiosClient.get(url);
+  },
 };
 
 export default ProductApi;

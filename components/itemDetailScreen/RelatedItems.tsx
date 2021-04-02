@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, Image, View } from "react-native";
 
-const RelatedItems = ({ itemImg }: any) => {
+const RelatedItems = ({ allProducts }: any) => {
   return (
     <View>
       <View>
@@ -15,12 +15,12 @@ const RelatedItems = ({ itemImg }: any) => {
           Co the ban cung thich
         </Text>
         <View style={styles.moreItemContainer}>
-          {itemImg.map((imgUrl: any, index: any) => {
+          {allProducts.map((product: any, index: any) => {
             return (
               <View key={index} style={styles.eachPost}>
                 <Image
                   style={styles.moreItemImg}
-                  source={{ uri: imgUrl }}
+                  source={{ uri: product.lapUrl[0] }}
                 ></Image>
                 <Text>Gia: 1 trieu</Text>
               </View>
