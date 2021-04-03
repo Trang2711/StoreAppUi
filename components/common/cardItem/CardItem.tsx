@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text, ImageBackground, StyleSheet } from 'react-native'
 import { Fontisto } from '@expo/vector-icons'
 
-const CardItemSmall = ({ props }: any) => {
+const CardItem = ({ props }: any) => {
     const { id, srcImg, retialPrice, priceSale, dealsDiscount } = props
     return (
         <View nativeID={id} style={styles.container}>
@@ -64,4 +64,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default CardItemSmall
+export default CardItem

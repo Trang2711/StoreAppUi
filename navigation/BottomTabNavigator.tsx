@@ -18,7 +18,7 @@ export default function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="Home"
+      initialRouteName="Categories"
       tabBarOptions={{
         activeTintColor: "black",
         labelPosition: "below-icon"

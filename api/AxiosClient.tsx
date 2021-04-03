@@ -2,7 +2,7 @@ import axios from 'axios';
 import queryString from 'query-string';
 
 const AxiosClient = axios.create({
-    baseURL: 'https://application-mock-server.loca.lt/',
+    baseURL: 'https://6000db286a4a.ngrok.io/',
     headers: {
         'content-type': 'application/json'
     },

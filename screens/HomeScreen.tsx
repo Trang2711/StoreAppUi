@@ -6,8 +6,8 @@ import { StyleSheet, Image } from "react-native";
 
 import CartApi from '../api/CartApi'
 
-import Header from '../components/Header';
-import FlashSale from '../components/FlashSale';
+import Header from '../components/common/Header';
+import FlashSale from '../components/home/FlashSale';
 import { AxiosResponse } from 'axios';
 
 export default function HomeScreen() {
@@ -29,7 +29,7 @@ export default function HomeScreen() {
 
   return (
     <View>
-      <Header />
+      <Header/>
       <View style={styles.cards}>
         <Text style={styles.title}>Sản phẩm mới về</Text>
         <Image style={styles.image} source={require("../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg")} />
