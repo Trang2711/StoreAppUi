@@ -51,7 +51,7 @@ export default function HomeScreen() {
   }, [lastPage, primaryPage]);
   return (
     <View>
-      <Header/>
+      <Header />
       <View style={styles.cards}>
         <Text style={styles.title}>Sản phẩm mới về</Text>
         <TouchableOpacity
