@@ -10,9 +10,10 @@ const RelatedItems = ({ allProducts }: any) => {
             styles.centerItem,
             styles.text16,
             { backgroundColor: "#4287f5" },
+            styles.mayBeUlike,
           ]}
         >
-          Co the ban cung thich
+          Có thể bạn cũng thích
         </Text>
         <View style={styles.moreItemContainer}>
           {allProducts.map((product: any, index: any) => {
@@ -22,7 +23,7 @@ const RelatedItems = ({ allProducts }: any) => {
                   style={styles.moreItemImg}
                   source={{ uri: product.lapUrl[0] }}
                 ></Image>
-                <Text>Gia: 1 trieu</Text>
+                <Text>Giá: 1 triệu</Text>
               </View>
             );
           })}
@@ -38,6 +39,10 @@ const styles = StyleSheet.create({
   text16: {
     fontSize: 16,
   },
+  mayBeUlike: {
+    paddingBottom: 10,
+    paddingTop: 10,
+  },
   centerItem: {
     textAlign: "center",
   },
@@ -49,6 +54,7 @@ const styles = StyleSheet.create({
   eachPost: {
     marginRight: 8,
     marginTop: 5,
+    marginBottom: 20,
   },
   moreItemImg: {
     width: 184,

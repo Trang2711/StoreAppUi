@@ -17,6 +17,7 @@ import CategoriesScreen from "../screens/CategoriesScreen";
 import NewsScreen from "../screens/NewsScreen";
 import ChatScreen from "../screens/ChatScreen";
 import AccountScreen from "../screens/AccountScreen";
+import ItemDetailScreen from "../screens/ItemDetailScreen";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -101,6 +102,11 @@ function HomeTabNavigator() {
       <HomeTabStack.Screen
         name="HomeScreen"
         component={HomeScreen}
+        options={{ headerShown: false }}
+      />
+      <HomeTabStack.Screen
+        name="ItemDetailScreen"
+        component={ItemDetailScreen}
         options={{ headerShown: false }}
       />
     </HomeTabStack.Navigator>

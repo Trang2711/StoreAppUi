@@ -14,18 +14,20 @@ export default function NotificationsScreen() {
   const [AmountOfPage, setAmountOfPage] = useState();
   const [allProducts, setAllProducts] = useState([]);
   const [specifiedProduct, setSpecifiedProduct] = useState({});
-  const [comment, setComment] = useState<any[]>([]);
+  const [extraCmt, setExtraCmt] = useState(0);
+  const [DisPlayCmt, setDisPlayCmt] = useState<any[]>([]);
   const [itemImg, setItemImg] = useState([]);
   const [loadingWhileFetchData, setLoadingWhileFetchData] = useState(true);
   const [IsloadingMoreItem, setIsloadingMoreItem] = useState(true);
   const [CurrentPage, setCurrentPage] = useState(1);
+  const [IsLoadingMoreCmt, setIsLoadingMoreCmt] = useState(false);
   useEffect(() => {
     async function fetchSpecifiedProduct() {
       try {
         const response = await ProductApi.getSpecifiedProduct(3);
-        setSpecifiedProduct(response.data);
-        setItemImg(response.data.lapUrl);
-        setComment(response.data.comments);
+        setSpecifiedProduct(response);
+        const temp = response as any;
+        setItemImg(temp.lapUrl);
       } catch (error) {
         console.log(error);
       }
@@ -33,8 +35,8 @@ export default function NotificationsScreen() {
     async function fetchProductByPage() {
       try {
         const response = await ProductApi.getProductByPagination(CurrentPage);
-
-        setAllProducts((prev): any => [...prev, ...response.data]);
+        const temp = response as any;
+        setAllProducts((prev): any => [...prev, ...temp]);
       } catch (error) {
         console.log(error);
       }
@@ -42,7 +44,8 @@ export default function NotificationsScreen() {
     async function fetchAllProducts() {
       try {
         const response = await ProductApi.getAllProducts();
-        setAmountOfPage(response.data.length);
+        const temp = response as any;
+        setAmountOfPage(temp.length);
       } catch (error) {
         console.log(error);
       }
@@ -60,8 +63,26 @@ export default function NotificationsScreen() {
       setLoadingWhileFetchData(false);
     }, 1000);
   }, [CurrentPage]);
-  const url =
-    "../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg";
+  useEffect(() => {
+    sliceCmt();
+  }, [extraCmt]);
+  function handlingUserPressingWatchMoreCmt() {
+    setExtraCmt((prev) => prev + 5);
+    setIsLoadingMoreCmt(true);
+    setTimeout(() => {
+      setIsLoadingMoreCmt(false);
+    }, 1000);
+  }
+  async function sliceCmt() {
+    try {
+      const response = await ProductApi.getSpecifiedProduct(3);
+      const temp = response as any;
+      const allCmts = temp.comments;
+      setDisPlayCmt(allCmts.slice(0, 5 + extraCmt));
+    } catch (error) {
+      console.log(error);
+    }
+  }
   return (
     <ScrollView
       onMomentumScrollEnd={(e) => {
@@ -83,7 +104,14 @@ export default function NotificationsScreen() {
         ) : (
           <View>
             <ImgSlider itemImg={itemImg} />
-            <ItemProperty amountOfCmt={amountOfCmt} comment={comment} />
+            <ItemProperty
+              amountOfCmt={amountOfCmt}
+              comment={DisPlayCmt}
+              handlingUserPressingWatchMoreCmt={
+                handlingUserPressingWatchMoreCmt
+              }
+              IsLoadingMoreCmt={IsLoadingMoreCmt}
+            />
             <RelatedItems allProducts={allProducts} />
             {IsloadingMoreItem ? (
               <ActivityIndicator size="large" color="black" />
