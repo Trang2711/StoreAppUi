@@ -2,10 +2,10 @@ import * as React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { StyleSheet, FlatList } from 'react-native';
-import Carousel from '../components/categories/Carousel'
+import Carousel from '../components/categoriesScreen/Carousel'
 
-import Header from '../components/common/Header';
-import CardItemSmall from '../components/categories/CardItemSmall'
+import Header from '../components/homeScreen/Header';
+import CardItemSmall from '../components/categoriesScreen/CardItemSmall'
 import CategoryApi from '../api/CategoryApi';
 
 import { Text, View } from '../components/Themed';
@@ -78,9 +78,7 @@ export default function CategoriesScreen() {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      console.log(activeCategory)
       if (activeCategory) {
-        console.log(activeCategory.id)
         const data = await CategoryApi.getCategory(activeCategory.id)
         const _data = data as any
         setProducts(_data.products)
