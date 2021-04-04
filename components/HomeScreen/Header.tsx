@@ -16,7 +16,7 @@ export default function Header() {
                     size={24}
                     color="black"
                     onPress={() => {
-                        navigation.navigate("TopNav", {screen: "SearchScreen"})
+                        navigation.navigate("TopNav", {screen: "FilterScreen"})
                     }}
                 />
             </View>
