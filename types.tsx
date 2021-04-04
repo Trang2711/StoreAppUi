@@ -19,6 +19,7 @@ export type BottomTabParamList = {
 
 export type TopTabParamList = {
   SearchScreen: undefined;
+  FilterScreen: undefined;
   NotificationsScreen: undefined;
   CartScreen: undefined;
 }

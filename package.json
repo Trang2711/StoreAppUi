@@ -8,6 +8,8 @@
     "eject": "expo eject",
     "test": "jest --watchAll",
     "server": "json-server --watch zjsonData/db.js --port 5000",
+    "trangServer": "json-server --watch zjsonData/trangDb.json --port 5111",
+    "trangSubServer": "lt --port 5111 --subdomain application-mock-server",
     "subServer": "lt --port 5000 --subdomain application-mock-server"
   },
   "jest": {

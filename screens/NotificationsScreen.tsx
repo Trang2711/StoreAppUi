@@ -8,6 +8,7 @@ import ProductApi from "../api/ProductApi";
 import ImgSlider from "../components/itemDetailScreen/ImgSlider";
 import ItemProperty from "../components/itemDetailScreen/ItemProperty";
 import RelatedItems from "../components/itemDetailScreen/RelatedItems";
+import Pagination from "../components/common/pagination/Pagination";
 
 export default function NotificationsScreen() {
   const [amountOfCmt, setAmountOfCmt] = useState();
@@ -83,6 +84,7 @@ export default function NotificationsScreen() {
       console.log(error);
     }
   }
+
   return (
     <ScrollView
       onMomentumScrollEnd={(e) => {

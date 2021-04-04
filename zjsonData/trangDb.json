@@ -1,0 +1,179 @@
+{
+  "carts": [
+    {
+      "id": "1",
+      "srcImg": "https://www.hnmac.vn/media/cache/data/16t-350x265.jpg",
+      "retialPrice": "806.000",
+      "priceSale": "680.900",
+      "dealsDiscount": "-68%"
+    },
+    {
+      "id": "2",
+      "srcImg": "https://www.hnmac.vn/media/cache/data/san-pham/mac-air/Screen-Shot-2020-03-18-at-23.21.14-350x265.png",
+      "retialPrice": "906.000",
+      "priceSale": "680.900",
+      "dealsDiscount": "-36%"
+    },
+    {
+      "id": "3",
+      "srcImg": "https://www.hnmac.vn/media/cache/data/16t-350x265.jpg",
+      "retialPrice": "707.000",
+      "priceSale": "690.900",
+      "dealsDiscount": "-13%"
+    },
+    {
+      "id": "4",
+      "srcImg": "https://www.hnmac.vn/media/cache/data/p17n-1-350x265.jpg",
+      "retialPrice": "130.000",
+      "priceSale": "96.900",
+      "dealsDiscount": "-21%"
+    },
+    {
+      "id": "5",
+      "srcImg": "https://www.hnmac.vn/media/cache/data/MRXJ2-350x265.jpeg",
+      "retialPrice": "546.000",
+      "priceSale": "267.900",
+      "dealsDiscount": "-53%"
+    }
+  ],
+  "categories": [
+    {
+      "id": "1",
+      "name": "Hàng mới",
+      "carousel": [
+        {
+          "imgUrl": "https://images.pexels.com/photos/3236733/pexels-photo-3236733.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+        },
+        {
+          "imgUrl": "https://images.pexels.com/photos/6553054/pexels-photo-6553054.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+        },
+        {
+          "imgUrl": "https://images.pexels.com/photos/5845336/pexels-photo-5845336.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+        },
+        {
+          "imgUrl": "https://images.pexels.com/photos/5651673/pexels-photo-5651673.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "name": "Macbook Pro",
+      "carousel": [
+        {
+          "imgUrl": "https://images.pexels.com/photos/2242235/pexels-photo-2242235.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500 500w"
+        },
+        {
+          "imgUrl": "https://images.pexels.com/photos/2242235/pexels-photo-2242235.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500 500w"
+        },
+        {
+          "imgUrl": "https://images.pexels.com/photos/5845336/pexels-photo-5845336.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+        },
+        {
+          "imgUrl": "https://images.pexels.com/photos/5651673/pexels-photo-5651673.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "name": "Mackbook Air",
+      "carousel": [
+        {
+          "imgUrl": "https://www.pexels.com/vi-vn/anh/ng-i-ph-n-c-m-hoa-h-ng-tr-ng-2242235/"
+        },
+        {
+          "imgUrl": "https://images.pexels.com/photos/2242235/pexels-photo-2242235.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500 500w"
+        },
+        {
+          "imgUrl": "https://images.pexels.com/photos/5845336/pexels-photo-5845336.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+        },
+        {
+          "imgUrl": "https://images.pexels.com/photos/5651673/pexels-photo-5651673.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "name": "Iphone",
+      "carousel": [
+        {
+          "imgUrl": "https://www.pexels.com/vi-vn/anh/ng-i-ph-n-c-m-hoa-h-ng-tr-ng-2242235/"
+        },
+        {
+          "imgUrl": "https://images.pexels.com/photos/2242235/pexels-photo-2242235.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500 500w"
+        },
+        {
+          "imgUrl": "https://images.pexels.com/photos/5845336/pexels-photo-5845336.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+        },
+        {
+          "imgUrl": "https://images.pexels.com/photos/5651673/pexels-photo-5651673.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "name": "Phụ kiện",
+      "carousel": [
+        {
+          "imgUrl": "https://www.pexels.com/vi-vn/anh/ng-i-ph-n-c-m-hoa-h-ng-tr-ng-2242235/"
+        },
+        {
+          "imgUrl": "https://images.pexels.com/photos/2242235/pexels-photo-2242235.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500 500w"
+        },
+        {
+          "imgUrl": "https://images.pexels.com/photos/5845336/pexels-photo-5845336.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+        },
+        {
+          "imgUrl": "https://images.pexels.com/photos/5651673/pexels-photo-5651673.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+        }
+      ]
+    }
+  ],
+  "category": [
+    {
+      "id": "1",
+      "products": [
+        {
+          "id": "1",
+          "srcImg": "https://www.hnmac.vn/media/cache/data/16t-350x265.jpg",
+          "title": "Macbook Pro 16 inch 2019"
+        },
+        {
+          "id": "2",
+          "srcImg": "https://www.hnmac.vn/media/cache/data/P20201-350x265.jpg",
+          "title": "Macbook Pro 13 inch 2020"
+        },
+        {
+          "id": "3",
+          "srcImg": "https://www.hnmac.vn/media/cache/data/16tt-350x265.jpg",
+          "title": "Macbook Pro 16 inch 2019"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "products": [
+        {
+          "id": "1",
+          "srcImg": "https://www.hnmac.vn/media/cache/data/16tt-350x265.jpg",
+          "title": "Macbook Pro 16 inch 2019"
+        },
+        {
+          "id": "2",
+          "srcImg": "https://www.hnmac.vn/media/cache/data/16t-350x265.jpg",
+          "title": "Macbook Pro 16 inch 2019"
+        },
+        {
+          "id": "3",
+          "srcImg": "https://www.hnmac.vn/media/cache/data/P20201-350x265.jpg",
+          "title": "Macbook Pro 13 inch 2020"
+        }
+      ]
+    }
+  ],
+  "searchHistory": [
+    "trang",
+    "trinh thi thu trang",
+    "trinh trang",
+    "trinh thu trang"
+  ]
+}

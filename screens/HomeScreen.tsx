@@ -1,16 +1,14 @@
 import React from "react";
 import { useState, useEffect } from "react";
-
 import { Text, View } from "../components/Themed";
 import { StyleSheet, Image, TouchableOpacity, Button } from "react-native";
-import CartApi from "../api/CartApi";
-import { Ionicons } from "@expo/vector-icons";
-import Header from "../components/Header";
-import FlashSale from "../components/FlashSale";
 import { AxiosResponse } from "axios";
 import { useNavigation } from "@react-navigation/native";
-import Test from "../components/HomeScreen/test";
-import Pagination from "../components/HomeScreen/Pagination";
+
+import CartApi from "../api/CartApi";
+import Header from "../components/homeScreen/Header";
+import FlashSale from "../components/homeScreen/FlashSale";
+import Pagination from "../components/homeScreen/Pagination";
 
 export default function HomeScreen() {
   const [flashSale, setFlashSale] = useState<AxiosResponse | null | void>(null);
@@ -32,7 +30,6 @@ export default function HomeScreen() {
     "...",
     lastPage,
   ]);
-  console.log(pages);
   useEffect(() => {
     async function fetchFlashSale() {
       try {
@@ -44,15 +41,7 @@ export default function HomeScreen() {
       }
     }
     fetchFlashSale();
-    setPages([
-      primaryPage,
-      primaryPage + 1,
-      primaryPage + 2,
-      primaryPage + 3,
-      "...",
-      lastPage,
-    ]);
-  }, [lastPage, primaryPage]);
+  }, [, primaryPage]);
   return (
     <View>
       <Header />
@@ -70,14 +59,6 @@ export default function HomeScreen() {
         </TouchableOpacity>
       </View>
       <FlashSale list={flashSale} />
-      <Pagination
-        primaryPage={primaryPage}
-        setPrimaryPage={setPrimaryPage}
-        pages={pages}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        lastPage={lastPage}
-      />
     </View>
   );
 }
