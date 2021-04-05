@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, Text, Image, View } from "react-native";
 
 const RelatedItems = ({ allProducts }: any) => {
+  console.log(allProducts.length)
   return (
     <View>
       <View>

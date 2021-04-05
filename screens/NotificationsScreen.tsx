@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import { StyleSheet, Image, ActivityIndicator, Dimensions } from "react-native";
+import { StyleSheet, Image, ActivityIndicator } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Text, View } from "../components/Themed";
 import { Ionicons } from "@expo/vector-icons";
@@ -12,61 +12,36 @@ import Pagination from "../components/common/pagination/Pagination";
 
 export default function NotificationsScreen() {
   const [amountOfCmt, setAmountOfCmt] = useState();
-  const [AmountOfPage, setAmountOfPage] = useState();
-  const [allProducts, setAllProducts] = useState([]);
   const [specifiedProduct, setSpecifiedProduct] = useState({});
   const [extraCmt, setExtraCmt] = useState(0);
   const [DisPlayCmt, setDisPlayCmt] = useState<any[]>([]);
   const [itemImg, setItemImg] = useState([]);
   const [loadingWhileFetchData, setLoadingWhileFetchData] = useState(true);
-  const [IsloadingMoreItem, setIsloadingMoreItem] = useState(true);
   const [CurrentPage, setCurrentPage] = useState(1);
   const [IsLoadingMoreCmt, setIsLoadingMoreCmt] = useState(false);
   useEffect(() => {
-    async function fetchSpecifiedProduct() {
-      try {
-        const response = await ProductApi.getSpecifiedProduct(3);
-        setSpecifiedProduct(response);
-        const temp = response as any;
-        setItemImg(temp.lapUrl);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    async function fetchProductByPage() {
-      try {
-        const response = await ProductApi.getProductByPagination(CurrentPage);
-        const temp = response as any;
-        setAllProducts((prev): any => [...prev, ...temp]);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    async function fetchAllProducts() {
-      try {
-        const response = await ProductApi.getAllProducts();
-        const temp = response as any;
-        setAmountOfPage(temp.length);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    function handlingLoadingMoreItemSpinner() {
-      if (CurrentPage > (AmountOfPage as any) / 10) {
-        setIsloadingMoreItem(false);
-      }
-    }
-    handlingLoadingMoreItemSpinner();
-    fetchAllProducts();
     fetchSpecifiedProduct();
-    fetchProductByPage();
     setInterval(() => {
       setLoadingWhileFetchData(false);
     }, 1000);
   }, [CurrentPage]);
+
   useEffect(() => {
     sliceCmt();
   }, [extraCmt]);
+
+
+  async function fetchSpecifiedProduct() {
+    try {
+      const response = await ProductApi.getSpecifiedProduct(3);
+      setSpecifiedProduct(response);
+      const temp = response as any;
+      setItemImg(temp.lapUrl);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   function handlingUserPressingWatchMoreCmt() {
     setExtraCmt((prev) => prev + 5);
     setIsLoadingMoreCmt(true);
@@ -85,44 +60,52 @@ export default function NotificationsScreen() {
     }
   }
 
-  return (
-    <ScrollView
-      onMomentumScrollEnd={(e) => {
-        const scrollPosition = e.nativeEvent.contentOffset.y;
-        const scrollViewHeight = e.nativeEvent.layoutMeasurement.height;
-        const contentHeight = e.nativeEvent.contentSize.height;
-        const isScrollToBottom = scrollViewHeight + scrollPosition;
+  const _renderProduct = (item: any, key: any) => {
+    return (
+      <View key={key} style={styles.eachPost}>
+        <Image
+          style={styles.moreItemImg}
+          source={{ uri: item.lapUrl[0] }}
+        ></Image>
+        <Text>Giá: 1 triệu</Text>
+      </View>
+    )
+  }
 
-        if (isScrollToBottom >= contentHeight - 1) {
-          setCurrentPage((prev) => prev + 1);
-        }
-      }}
-    >
-      <View style={styles.container}>
-        {loadingWhileFetchData ? (
-          <View style={[styles.loadingContainer, styles.loadingHorizontal]}>
+  return (
+    <>
+      {
+        loadingWhileFetchData ?
+          <View style={[styles.loadingContainer, styles.loadingHorizontal]} >
             <ActivityIndicator size="large" color="#00ff00" />
           </View>
-        ) : (
-          <View>
-            <ImgSlider itemImg={itemImg} />
-            <ItemProperty
-              amountOfCmt={amountOfCmt}
-              comment={DisPlayCmt}
-              handlingUserPressingWatchMoreCmt={
-                handlingUserPressingWatchMoreCmt
-              }
-              IsLoadingMoreCmt={IsLoadingMoreCmt}
-            />
-            <RelatedItems allProducts={allProducts} />
-            {IsloadingMoreItem ? (
-              <ActivityIndicator size="large" color="black" />
-            ) : null}
-          </View>
-        )}
-      </View>
-    </ScrollView>
-  );
+          :
+          <Pagination renderItem={_renderProduct}>
+            <View>
+              <ImgSlider itemImg={itemImg} />
+              <ItemProperty
+                amountOfCmt={amountOfCmt}
+                comment={DisPlayCmt}
+                handlingUserPressingWatchMoreCmt={
+                  handlingUserPressingWatchMoreCmt
+                }
+                IsLoadingMoreCmt={IsLoadingMoreCmt}
+              />
+            </View>
+            <Text
+              style={[
+                styles.centerItem,
+                styles.text16,
+                { backgroundColor: "#4287f5" },
+                styles.mayBeUlike,
+              ]}
+            >
+              Có thể bạn cũng thích
+        </Text>
+          </Pagination>
+      }
+    </>
+  )
 }
 
 const styles = StyleSheet.create({
@@ -155,5 +138,21 @@ const styles = StyleSheet.create({
 
   boldText: {
     fontWeight: "bold",
+  },
+  eachPost: {
+    marginRight: 8,
+    marginTop: 5,
+    marginBottom: 20,
+  },
+  moreItemImg: {
+    width: 184,
+    height: 150,
+  },
+  mayBeUlike: {
+    paddingBottom: 10,
+    paddingTop: 10,
+  },
+  centerItem: {
+    textAlign: "center",
   },
 });
