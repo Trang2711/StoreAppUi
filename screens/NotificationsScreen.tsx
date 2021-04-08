@@ -8,9 +8,12 @@ import ProductApi from "../api/ProductApi";
 import ImgSlider from "../components/itemDetailScreen/ImgSlider";
 import ItemProperty from "../components/itemDetailScreen/ItemProperty";
 import RelatedItems from "../components/itemDetailScreen/RelatedItems";
-import Pagination from "../components/common/pagination/Pagination";
+import { useAppSelector, useAppDispatch } from "../redux/app/hook";
+import { incrementByAmount, selectCount } from "../redux/features/counterSlice";
 
 export default function NotificationsScreen() {
+  const count = useAppSelector(selectCount);
+  const dispatch = useAppDispatch();
   const [amountOfCmt, setAmountOfCmt] = useState();
   const [AmountOfPage, setAmountOfPage] = useState();
   const [allProducts, setAllProducts] = useState([]);
@@ -22,6 +25,7 @@ export default function NotificationsScreen() {
   const [IsloadingMoreItem, setIsloadingMoreItem] = useState(true);
   const [CurrentPage, setCurrentPage] = useState(1);
   const [IsLoadingMoreCmt, setIsLoadingMoreCmt] = useState(false);
+
   useEffect(() => {
     async function fetchSpecifiedProduct() {
       try {
@@ -84,7 +88,13 @@ export default function NotificationsScreen() {
       console.log(error);
     }
   }
-
+  useEffect(() => {
+    console.log("count: " + count);
+  }, [count]);
+  const _clickedToItem = () => {
+    alert("ah ah ah");
+    dispatch(incrementByAmount(6));
+  };
   return (
     <ScrollView
       onMomentumScrollEnd={(e) => {
@@ -114,7 +124,10 @@ export default function NotificationsScreen() {
               }
               IsLoadingMoreCmt={IsLoadingMoreCmt}
             />
-            <RelatedItems allProducts={allProducts} />
+            <RelatedItems
+              allProducts={allProducts}
+              clickedToItem={_clickedToItem}
+            />
             {IsloadingMoreItem ? (
               <ActivityIndicator size="large" color="black" />
             ) : null}

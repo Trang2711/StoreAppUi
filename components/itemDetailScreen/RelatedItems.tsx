@@ -1,7 +1,7 @@
 import React from "react";
-import { StyleSheet, Text, Image, View } from "react-native";
+import { StyleSheet, Text, Image, View, TouchableOpacity } from "react-native";
 
-const RelatedItems = ({ allProducts }: any) => {
+const RelatedItems = ({ allProducts, clickedToItem }: any) => {
   return (
     <View>
       <View>
@@ -18,13 +18,15 @@ const RelatedItems = ({ allProducts }: any) => {
         <View style={styles.moreItemContainer}>
           {allProducts.map((product: any, index: any) => {
             return (
-              <View key={index} style={styles.eachPost}>
-                <Image
-                  style={styles.moreItemImg}
-                  source={{ uri: product.lapUrl[0] }}
-                ></Image>
-                <Text>Giá: 1 triệu</Text>
-              </View>
+              <TouchableOpacity key={index} onPress={clickedToItem}>
+                <View style={styles.eachPost}>
+                  <Image
+                    style={styles.moreItemImg}
+                    source={{ uri: product.lapUrl[0] }}
+                  ></Image>
+                  <Text>Giá: 1 triệu</Text>
+                </View>
+              </TouchableOpacity>
             );
           })}
         </View>
