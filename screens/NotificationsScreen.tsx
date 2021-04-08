@@ -92,7 +92,7 @@ export default function NotificationsScreen() {
     console.log("count: " + count);
   }, [count]);
   const _clickedToItem = () => {
-    alert("ah ah ah");
+    alert("ah ah ahaa");
     dispatch(incrementByAmount(6));
   };
   return (
