@@ -8,9 +8,13 @@ import ProductApi from "../api/ProductApi";
 import ImgSlider from "../components/itemDetailScreen/ImgSlider";
 import ItemProperty from "../components/itemDetailScreen/ItemProperty";
 import RelatedItems from "../components/itemDetailScreen/RelatedItems";
-import Pagination from "../components/common/pagination/Pagination";
+import { useAppSelector, useAppDispatch } from "../redux/app/hook";
+import { incrementByAmount, selectCount } from "../redux/features/counterSlice";
+import Pagination from "../components/common/pagination/Pagination"
 
 export default function NotificationsScreen() {
+  const count = useAppSelector(selectCount);
+  const dispatch = useAppDispatch();
   const [amountOfCmt, setAmountOfCmt] = useState();
   const [specifiedProduct, setSpecifiedProduct] = useState({});
   const [extraCmt, setExtraCmt] = useState(0);
@@ -19,6 +23,7 @@ export default function NotificationsScreen() {
   const [loadingWhileFetchData, setLoadingWhileFetchData] = useState(true);
   const [CurrentPage, setCurrentPage] = useState(1);
   const [IsLoadingMoreCmt, setIsLoadingMoreCmt] = useState(false);
+
   useEffect(() => {
     fetchSpecifiedProduct();
     setInterval(() => {
