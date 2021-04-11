@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { StyleSheet, TextInput, View, TouchableOpacity, SafeAreaView, Text } from "react-native";
 import { Button } from 'react-native-elements'
 import { Ionicons } from '@expo/vector-icons';
 
-export default function Header({ navigation,  getSuggestedValues, handleSearchSubmit, defaultValue='' }: any) {
-    const [searchValue, updateSearchValue] = useState(defaultValue);
+export default function Header({ navigation,  getSuggestedValues, handleSearchSubmit, searchValueInit }: any) {
+    const [searchValue, updateSearchValue] = useState('')
+
+    useEffect(() => {
+        updateSearchValue(searchValueInit)
+    }, [searchValueInit])
 
     const handleSearchChange = (value: string) => {
         updateSearchValue(value)
@@ -14,7 +18,7 @@ export default function Header({ navigation,  getSuggestedValues, handleSearchSu
     }
 
     const onSubmit = () => {
-        if(handleSearchSubmit)
+        if(!handleSearchSubmit)
             return
         handleSearchSubmit(searchValue)
     }
@@ -34,7 +38,6 @@ export default function Header({ navigation,  getSuggestedValues, handleSearchSu
                 returnKeyType="search"
                 onChangeText={handleSearchChange}
                 value={searchValue}
-                clearButtonMode="always"
             />
 
             <TouchableOpacity onPress={onSubmit}>

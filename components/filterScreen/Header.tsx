@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { StyleSheet, TextInput, View, TouchableOpacity, SafeAreaView, Text } from "react-native";
+import { StyleSheet, TextInput, View, TouchableOpacity, Pressable, Text } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 
 export default function Header({ navigation, getSuggestedValues, handleSearchSubmit, defaultValue = '' }: any) {
@@ -27,14 +27,16 @@ export default function Header({ navigation, getSuggestedValues, handleSearchSub
                     color="black" />
             </TouchableOpacity>
 
-            <TextInput
-                style={styles.searchBar}
-                placeholder="Tìm kiếm với Ponzi"
-                returnKeyType="search"
-                onChangeText={handleSearchChange}
-                value={searchValue}
-                clearButtonMode="always"
-            />
+            <Pressable style={styles.searchBar} onPress={()=> navigation.navigate('SearchScreen')}>
+                <TextInput
+                    placeholder="Tìm kiếm với Ponzi"
+                    returnKeyType="search"
+                    onChangeText={handleSearchChange}
+                    value={searchValue}
+                    clearButtonMode="always"
+                    editable={false}
+                />
+            </Pressable>
 
             <Ionicons
                 name="cart-outline"

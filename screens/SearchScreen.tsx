@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
+import { StyleSheet, SafeAreaView, TouchableOpacity, Pressable } from 'react-native';
 import { ListItem } from 'react-native-elements'
 import { Text, View } from '../components/Themed';
 import { Ionicons } from '@expo/vector-icons';
 
 import Header from '../components/searchScreen/Header'
-import SearchApi from '../api/SearchApi'
+import SearchApi from '../api/SearchAndFiltersApi'
 
 const searchHistory1 = ["trang", "trinh trang", "trinh thi thu trang", "trinh thi trang"]
 
@@ -22,6 +22,7 @@ export default function SearchScreen({ navigation }: any) {
   const [searchHistory, setSearchHistory] = useState<Array<string>>([])
   const [suggestedValues, setSuggestedValues] = useState<Array<string>>(searchHistory1)
   const [productList, setProductList] = useState<Array<Product>>([])
+  const [searchValue, setSearchValue] = useState('')
 
 
   useEffect(() => {
@@ -35,6 +36,9 @@ export default function SearchScreen({ navigation }: any) {
   const getSuggestedValues = (value: string) => {
     const fetchSuggestedValues = async (value: string) => {
       const data = await SearchApi.getSuggestedValues(value)
+      /**
+       * update sugguest value
+       */
     }
     fetchSuggestedValues(value)
   }
@@ -44,11 +48,10 @@ export default function SearchScreen({ navigation }: any) {
   }
 
   const handleSearchSubmit = (value: string) => {
-    const fetchProductList = async (value: string) => {
-      const data = await SearchApi.getProductList(value)
-      setProductList(data as any)
-    }
-    fetchProductList(value)
+    console.log("chuyen sang filter screen")
+    navigation.navigate('FilterScreen', {
+      searchKeywords: value
+    })
   }
 
   const _renderSearchHistory = () => {
@@ -76,9 +79,9 @@ export default function SearchScreen({ navigation }: any) {
       <View>
         {
           suggestedValues.map((item, index) => (
-            <View style={styles.suggestedValue} key={index}>
+            <Pressable style={styles.suggestedValue} key={index} onPress={() => setSearchValue(item)}>
                 <Text style={{fontSize: 15}}>{item}</Text>
-            </View>
+            </Pressable>
           ))
         }
       </View>
@@ -92,9 +95,9 @@ export default function SearchScreen({ navigation }: any) {
           navigation={navigation}
           getSuggestedValues={getSuggestedValues}
           handleSearchSubmit={handleSearchSubmit}
+          searchValueInit={searchValue}
         />
         {
-          // _renderSearchHistory()
           _renderSuggestedValues()
 
         }

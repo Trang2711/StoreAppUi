@@ -1,6 +1,6 @@
 import AxiosClient from "./AxiosClient";
 
-const SearchApi = {
+const SearchAndFiltersApi = {
     getSearchHistory: () => {
         const url = '/searchHistory';
         return AxiosClient.get(url);
@@ -15,6 +15,11 @@ const SearchApi = {
         const url = `/search/${data}`;
         return AxiosClient.get(url);
     },
+
+    getFilterFields: () => {
+        const url = `/filterFeilds`
+        return AxiosClient.get(url)
+    }
 }
 
-export default SearchApi;
+export default SearchAndFiltersApi;
