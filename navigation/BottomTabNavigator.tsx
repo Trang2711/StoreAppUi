@@ -171,12 +171,6 @@ function AccountTabNavigator() {
         component={AccountScreen}
         options={{ headerShown: false }}
       />
-
-      <AccountTabStack.Screen
-        name="InfoScreen"
-        component={AccountScreen}
-        options={{ headerShown: false }}
-      />
     </AccountTabStack.Navigator>
   );
 }

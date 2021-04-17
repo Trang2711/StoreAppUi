@@ -1,24 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
-import { StyleSheet, TextInput, View, TouchableOpacity, SafeAreaView, Text } from "react-native";
-import { Button } from 'react-native-elements'
+import { StyleSheet, TextInput, View, TouchableOpacity, Pressable, Text } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 
-export default function Header({ navigation,  getSuggestedValues, handleSearchSubmit, searchValueInit }: any) {
-    const [searchValue, updateSearchValue] = useState('')
-
-    useEffect(() => {
-        updateSearchValue(searchValueInit)
-    }, [searchValueInit])
+export default function Header({ navigation, getSuggestedValues, handleSearchSubmit, defaultValue = '' }: any) {
+    const [searchValue, updateSearchValue] = useState(defaultValue);
 
     const handleSearchChange = (value: string) => {
         updateSearchValue(value)
-        if(getSuggestedValues) return
+        if (getSuggestedValues) return
         getSuggestedValues(value)
     }
 
     const onSubmit = () => {
-        if(!handleSearchSubmit)
+        if (handleSearchSubmit)
             return
         handleSearchSubmit(searchValue)
     }
@@ -32,17 +27,29 @@ export default function Header({ navigation,  getSuggestedValues, handleSearchSu
                     color="black" />
             </TouchableOpacity>
 
-            <TextInput
-                style={styles.searchBar}
-                placeholder="Tìm kiếm với Ponzi"
-                returnKeyType="search"
-                onChangeText={handleSearchChange}
-                value={searchValue}
+            <Pressable style={styles.searchBar} onPress={()=> navigation.navigate('SearchScreen')}>
+                <TextInput
+                    placeholder="Tìm kiếm với Ponzi"
+                    returnKeyType="search"
+                    onChangeText={handleSearchChange}
+                    value={searchValue}
+                    clearButtonMode="always"
+                    editable={false}
+                />
+            </Pressable>
+
+            <Ionicons
+                name="cart-outline"
+                size={27}
+                color="black"
+                onPress={() => {
+                    navigation.navigate("TopNav", { screen: "CartScreen" })
+                }}
             />
 
-            <TouchableOpacity onPress={onSubmit}>
+            {/* <TouchableOpacity onPress={onSubmit}>
                 <Text style={styles.searchBtn}> Tìm kiếm </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
         </View >
     );
 }
@@ -55,11 +62,9 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: 'space-between',
         alignItems: "center",
-        borderBottomWidth: 0.5,
-        borderBottomColor: "#DDDDDD"
     },
     searchBar: {
-        width: '65%',
+        width: '70%',
         fontSize: 15,
         paddingHorizontal: 10,
         paddingVertical: 4,

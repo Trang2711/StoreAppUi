@@ -9,7 +9,7 @@ const CardItem = ({ props }: any) => {
             <ImageBackground style={styles.image} source={{ uri: srcImg }} >
                 <View style={styles.flash}>
                     <Fontisto name="flash" size={15} color="black" />
-                    <Text style={styles.dealsDiscount}>{dealsDiscount}</Text>
+                    <Text style={styles.dealsDiscount}>-{Math.round(priceSale/retialPrice)}%</Text>
                 </View>
             </ImageBackground>
             <Text style={styles.priceSale}>{priceSale}đ</Text>
