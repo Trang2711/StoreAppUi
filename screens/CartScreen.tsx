@@ -1,25 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Image } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
+import { useAppSelector, useAppDispatch } from "../redux/app/hook";
 import ProductItem from "../components/cartScreen/ProductItem";
 
 import { Text, View } from "../components/Themed";
-
+import { productsInsideCart } from "../redux/features/cartSlice";
 export default function CartScreen() {
-  const [allProducts, setAllProducts] = useState([]);
-  const [CurrentPage, setCurrentPage] = useState(0);
-  useEffect(() => {
-    // async function fetchProductByPage() {
-    //   try {
-    //     const response = await ProductApi.getProductByPagination(CurrentPage);
-    //     const temp = response as any;
-    //     setAllProducts((prev): any => [...prev, ...temp]);
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // }
-    // fetchProductByPage();
-  }, []);
+  const dispatch = useAppDispatch();
+  const productList = useAppSelector(productsInsideCart);
+  console.log("product in cart ", productList);
+  useEffect(() => {}, []);
   return (
     <View style={styles.whole_screen}>
       <ScrollView>

@@ -6,6 +6,8 @@ interface product {
   id: number;
   productName: string;
   quantity: number;
+  price: number;
+  imgUrl: string;
 }
 interface ProductState {
   products: Array<product>;
@@ -13,7 +15,9 @@ interface ProductState {
 
 // Define the initial state using that type
 const initialCart: ProductState = {
-  products: [],
+  products: [
+    { id: 1, productName: "lap", quantity: 1, price: 20000, imgUrl: "a" },
+  ],
 };
 
 export const cartSlice = createSlice({
@@ -28,6 +32,7 @@ export const cartSlice = createSlice({
       state.products = state.products.filter(
         (product) => product.id !== action.payload
       );
+      return state;
     },
   },
 });

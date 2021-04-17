@@ -3,13 +3,11 @@ import { useState, useEffect } from "react";
 import { StyleSheet, Image, ActivityIndicator, Dimensions } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Text, View } from "../components/Themed";
-import { Ionicons } from "@expo/vector-icons";
 import ProductApi from "../api/ProductApi";
-import ImgSlider from "../components/itemDetailScreen/ImgSlider";
-import ItemProperty from "../components/itemDetailScreen/ItemProperty";
-import RelatedItems from "../components/itemDetailScreen/RelatedItems";
 import { useAppSelector, useAppDispatch } from "../redux/app/hook";
 import { incrementByAmount, selectCount } from "../redux/features/counterSlice";
+import RelatedItems from "../components/itemDetailScreen/RelatedItems";
+import ProductItem from "../components/itemDetailScreen/ProductItem";
 
 export default function NotificationsScreen() {
   const count = useAppSelector(selectCount);
@@ -17,26 +15,12 @@ export default function NotificationsScreen() {
   const [amountOfCmt, setAmountOfCmt] = useState();
   const [AmountOfPage, setAmountOfPage] = useState();
   const [allProducts, setAllProducts] = useState([]);
-  const [specifiedProduct, setSpecifiedProduct] = useState({});
-  const [extraCmt, setExtraCmt] = useState(0);
-  const [DisPlayCmt, setDisPlayCmt] = useState<any[]>([]);
-  const [itemImg, setItemImg] = useState([]);
   const [loadingWhileFetchData, setLoadingWhileFetchData] = useState(true);
   const [IsloadingMoreItem, setIsloadingMoreItem] = useState(true);
   const [CurrentPage, setCurrentPage] = useState(1);
-  const [IsLoadingMoreCmt, setIsLoadingMoreCmt] = useState(false);
 
   useEffect(() => {
-    async function fetchSpecifiedProduct() {
-      try {
-        const response = await ProductApi.getSpecifiedProduct(3);
-        setSpecifiedProduct(response);
-        const temp = response as any;
-        setItemImg(temp.lapUrl);
-      } catch (error) {
-        console.log(error);
-      }
-    }
+    let mounted = true;
     async function fetchProductByPage() {
       try {
         const response = await ProductApi.getProductByPagination(CurrentPage);
@@ -60,37 +44,19 @@ export default function NotificationsScreen() {
         setIsloadingMoreItem(false);
       }
     }
-    handlingLoadingMoreItemSpinner();
-    fetchAllProducts();
-    fetchSpecifiedProduct();
-    fetchProductByPage();
-    setInterval(() => {
-      setLoadingWhileFetchData(false);
-    }, 1000);
-  }, [CurrentPage]);
-  useEffect(() => {
-    sliceCmt();
-  }, [extraCmt]);
-  function handlingUserPressingWatchMoreCmt() {
-    setExtraCmt((prev) => prev + 5);
-    setIsLoadingMoreCmt(true);
-    setTimeout(() => {
-      setIsLoadingMoreCmt(false);
-    }, 1000);
-  }
-  async function sliceCmt() {
-    try {
-      const response = await ProductApi.getSpecifiedProduct(3);
-      const temp = response as any;
-      const allCmts = temp.comments;
-      setDisPlayCmt(allCmts.slice(0, 5 + extraCmt));
-    } catch (error) {
-      console.log(error);
+    if (mounted) {
+      handlingLoadingMoreItemSpinner();
+      fetchAllProducts();
+      fetchProductByPage();
+      setInterval(() => {
+        setLoadingWhileFetchData(false);
+      }, 1000);
     }
-  }
-  useEffect(() => {
-    console.log("count: " + count);
-  }, [count]);
+    return () => {
+      mounted = false;
+    };
+  }, [CurrentPage]);
+
   const _clickedToItem = () => {
     alert("ah ah ahaa");
     dispatch(incrementByAmount(6));
@@ -102,7 +68,6 @@ export default function NotificationsScreen() {
         const scrollViewHeight = e.nativeEvent.layoutMeasurement.height;
         const contentHeight = e.nativeEvent.contentSize.height;
         const isScrollToBottom = scrollViewHeight + scrollPosition;
-
         if (isScrollToBottom >= contentHeight - 1) {
           setCurrentPage((prev) => prev + 1);
         }
@@ -115,15 +80,7 @@ export default function NotificationsScreen() {
           </View>
         ) : (
           <View>
-            <ImgSlider itemImg={itemImg} />
-            <ItemProperty
-              amountOfCmt={amountOfCmt}
-              comment={DisPlayCmt}
-              handlingUserPressingWatchMoreCmt={
-                handlingUserPressingWatchMoreCmt
-              }
-              IsLoadingMoreCmt={IsLoadingMoreCmt}
-            />
+            <ProductItem itemId={1} />
             <RelatedItems
               allProducts={allProducts}
               clickedToItem={_clickedToItem}
