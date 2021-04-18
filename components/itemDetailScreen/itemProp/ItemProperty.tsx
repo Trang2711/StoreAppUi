@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -7,6 +7,7 @@ import {
   addingNewProductToCart,
   productsInsideCart,
 } from "../../../redux/features/cartSlice";
+import { unwrapResult } from "@reduxjs/toolkit";
 const ItemProperty = ({
   amountOfCmt,
   comment,
@@ -18,7 +19,7 @@ const ItemProperty = ({
   const productList = useAppSelector(productsInsideCart);
 
   function _addingAnItemToCart() {
-    dispatch(
+    const actionResult = dispatch(
       addingNewProductToCart({
         id: specifiedProduct.id,
         productName: specifiedProduct.laptopName,
@@ -27,8 +28,11 @@ const ItemProperty = ({
         imgUrl: specifiedProduct.lapUrl[0],
       })
     );
+    console.log("unwarp", unwrapResult(actionResult));
   }
-  console.log("product inside list", productList);
+  useEffect(() => {
+    console.log("product in cart", productList);
+  }, [productList]);
   return (
     <View>
       <View>

@@ -12,12 +12,9 @@ interface product {
 interface ProductState {
   products: Array<product>;
 }
-
 // Define the initial state using that type
 const initialCart: ProductState = {
-  products: [
-    { id: 1, productName: "lap", quantity: 1, price: 20000, imgUrl: "a" },
-  ],
+  products: [],
 };
 
 export const cartSlice = createSlice({
@@ -26,7 +23,15 @@ export const cartSlice = createSlice({
   initialState: initialCart,
   reducers: {
     addingNewProductToCart: (state, action: PayloadAction<product>) => {
-      state.products.push(action.payload);
+      const index = state.products.findIndex(
+        (product) => product.id == action.payload.id
+      );
+      console.log("index", index);
+      if (index >= 0) {
+        state.products[index].quantity = state.products[index].quantity + 1;
+      } else {
+        state.products.push(action.payload);
+      }
     },
     deleteAnItemFromCart: (state, action: PayloadAction<number>) => {
       state.products = state.products.filter(

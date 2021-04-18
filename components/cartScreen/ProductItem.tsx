@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Image, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-const ProductItem = () => {
+const ProductItem = ({ productItem }: any) => {
   return (
     <View style={styles.container}>
       <View style={styles.product_container}>
@@ -16,7 +16,7 @@ const ProductItem = () => {
             <View style={styles.title_price_assurence}>
               <View>
                 <Text numberOfLines={1} style={[styles.text22, styles.title]}>
-                  Laptop gaming ngon nghe, ngon bo va re
+                  {productItem.productName}
                 </Text>
               </View>
               <View>
@@ -26,7 +26,9 @@ const ProductItem = () => {
                 <Text style={[styles.text15, { fontWeight: "bold" }]}>
                   Giá: {"  "}
                 </Text>
-                <Text style={[styles.text18, styles.price]}>200.000.000₫ </Text>
+                <Text style={[styles.text18, styles.price]}>
+                  {productItem.price}₫{" "}
+                </Text>
               </View>
             </View>
             <View style={styles.discardIcon}>
@@ -43,7 +45,7 @@ const ProductItem = () => {
               <Text style={styles.text22}>-</Text>
             </View>
             <View style={styles.quantity_outerContainer}>
-              <Text style={styles.text22}> 1 </Text>
+              <Text style={styles.text22}> {productItem.quantity} </Text>
             </View>
             <View style={styles.subtractQuantity}>
               <Text style={styles.text22}>+</Text>

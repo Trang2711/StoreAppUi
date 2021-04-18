@@ -3,22 +3,21 @@ import { StyleSheet, Image } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { useAppSelector, useAppDispatch } from "../redux/app/hook";
 import ProductItem from "../components/cartScreen/ProductItem";
-
 import { Text, View } from "../components/Themed";
 import { productsInsideCart } from "../redux/features/cartSlice";
 export default function CartScreen() {
   const dispatch = useAppDispatch();
   const productList = useAppSelector(productsInsideCart);
-  console.log("product in cart ", productList);
-  useEffect(() => {}, []);
+  useEffect(() => {
+    console.log("product in cart", productList);
+  }, []);
   return (
     <View style={styles.whole_screen}>
       <ScrollView>
         <View>
-          <ProductItem />
-          <ProductItem />
-          <ProductItem />
-          <ProductItem />
+          {productList.map((productItem, index) => (
+            <ProductItem key={index} productItem={productItem} />
+          ))}
         </View>
       </ScrollView>
       <View style={styles.payment_area}>
