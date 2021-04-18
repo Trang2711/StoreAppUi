@@ -9,7 +9,7 @@ import { incrementByAmount, selectCount } from "../redux/features/counterSlice";
 import RelatedItems from "../components/itemDetailScreen/RelatedItems";
 import ProductItem from "../components/itemDetailScreen/ProductItem";
 
-export default function NotificationsScreen() {
+export default function NotificationsScreen({ route }: any) {
   const count = useAppSelector(selectCount);
   const dispatch = useAppDispatch();
   const [amountOfCmt, setAmountOfCmt] = useState();
@@ -57,6 +57,9 @@ export default function NotificationsScreen() {
     };
   }, [CurrentPage]);
 
+  useEffect(() => {
+    console.log("route param", route.params.itemId);
+  }, []);
   const _clickedToItem = () => {
     alert("ah ah ahaa");
     dispatch(incrementByAmount(6));
@@ -80,7 +83,7 @@ export default function NotificationsScreen() {
           </View>
         ) : (
           <View>
-            <ProductItem itemId={1} />
+            <ProductItem itemId={route.params.itemId} />
             <RelatedItems
               allProducts={allProducts}
               clickedToItem={_clickedToItem}

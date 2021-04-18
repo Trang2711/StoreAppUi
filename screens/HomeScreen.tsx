@@ -9,27 +9,14 @@ import CartApi from "../api/CartApi";
 import Header from "../components/homeScreen/Header";
 import FlashSale from "../components/homeScreen/FlashSale";
 import Pagination from "../components/homeScreen/Pagination";
+import ProductApi from "../api/ProductApi";
+import RelatedItems from "../components/itemDetailScreen/RelatedItems";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function HomeScreen() {
   const [flashSale, setFlashSale] = useState<AxiosResponse | null | void>(null);
   const navigation = useNavigation();
-  const [lastPage, setLastPage] = useState(50);
-  const [primaryPage, setPrimaryPage] = useState(5);
-  {
-    /*primaryPage la trang dau tien trong danh sach cac trang*/
-  }
-  const [currentPage, setCurrentPage] = useState(1);
-  {
-    /*currentPage la trang hien tai trong danh sach cac trang*/
-  }
-  const [pages, setPages] = useState([
-    primaryPage,
-    primaryPage + 1,
-    primaryPage + 2,
-    primaryPage + 3,
-    "...",
-    lastPage,
-  ]);
+  const [DataByPage, setDataByPage] = useState([]);
   useEffect(() => {
     async function fetchFlashSale() {
       try {
@@ -40,25 +27,39 @@ export default function HomeScreen() {
         console.log(error);
       }
     }
+    async function fetchProductByPage() {
+      try {
+        const response = await ProductApi.getProductByPagination(1);
+        const temp = response as any;
+        setDataByPage(temp);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchProductByPage();
     fetchFlashSale();
-  }, [, primaryPage]);
+  }, []);
+  console.log("databypage", DataByPage);
   return (
     <View>
-      <Header />
-      <View style={styles.cards}>
-        <Text style={styles.title}>Sản phẩm mới về</Text>
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("TopNav", { screen: "NotificationsScreen" })
-          }
-        >
-          <Image
-            style={styles.image}
-            source={require("../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg")}
-          />
-        </TouchableOpacity>
-      </View>
-      <FlashSale list={flashSale} />
+      <ScrollView>
+        <Header />
+        <View style={styles.cards}>
+          <Text style={styles.title}>Sản phẩm mới về</Text>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate("TopNav", { screen: "NotificationsScreen" })
+            }
+          >
+            <Image
+              style={styles.image}
+              source={require("../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg")}
+            />
+          </TouchableOpacity>
+        </View>
+        <FlashSale list={flashSale} />
+        <RelatedItems allProducts={DataByPage} />
+      </ScrollView>
     </View>
   );
 }

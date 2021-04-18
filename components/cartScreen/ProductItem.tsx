@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, Image, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native-gesture-handler";
 const ProductItem = ({ productItem }: any) => {
   return (
     <View style={styles.container}>
@@ -32,24 +33,30 @@ const ProductItem = ({ productItem }: any) => {
               </View>
             </View>
             <View style={styles.discardIcon}>
-              <Ionicons
-                name="trash-outline"
-                size={35}
-                color="#cc0000"
-              ></Ionicons>
+              <TouchableOpacity>
+                <Ionicons
+                  name="trash-outline"
+                  size={35}
+                  color="#cc0000"
+                ></Ionicons>
+              </TouchableOpacity>
             </View>
           </View>
           <View style={styles.quantity_area}>
             <Text style={styles.text18}>Số lượng:{"     "} </Text>
-            <View style={styles.addingQuantity}>
-              <Text style={styles.text22}>-</Text>
-            </View>
+            <TouchableOpacity style={styles.icon}>
+              <View style={styles.addingQuantity}>
+                <Text style={styles.text40}>-</Text>
+              </View>
+            </TouchableOpacity>
             <View style={styles.quantity_outerContainer}>
               <Text style={styles.text22}> {productItem.quantity} </Text>
             </View>
-            <View style={styles.subtractQuantity}>
-              <Text style={styles.text22}>+</Text>
-            </View>
+            <TouchableOpacity style={styles.icon}>
+              <View style={styles.subtractQuantity}>
+                <Text style={styles.text30}>+</Text>
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -67,6 +74,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     borderRadius: 10,
   },
+
   product_container: {
     marginTop: 10,
     width: "95%",
@@ -113,6 +121,12 @@ const styles = StyleSheet.create({
   text22: {
     fontSize: 22,
   },
+  text30: {
+    fontSize: 32,
+  },
+  text40: {
+    fontSize: 40,
+  },
   text18: {
     fontSize: 18,
   },
@@ -139,8 +153,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   subtractQuantity: {
-    width: "15%",
-    height: "50%",
+    width: "100%",
+    height: "100%",
     borderColor: "black",
     backgroundColor: "#bfbfbf",
     display: "flex",
@@ -156,12 +170,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   addingQuantity: {
-    width: "15%",
-    height: "50%",
+    width: "100%",
+    height: "100%",
     borderColor: "black",
     backgroundColor: "#bfbfbf",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+  },
+  icon: {
+    width: 30,
+    height: 30,
   },
 });

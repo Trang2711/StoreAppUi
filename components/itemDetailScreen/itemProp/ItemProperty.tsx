@@ -32,6 +32,7 @@ const ItemProperty = ({
   }
   useEffect(() => {
     console.log("product in cart", productList);
+    console.log("product length", productList.length);
   }, [productList]);
   return (
     <View>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Image } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { useAppSelector, useAppDispatch } from "../redux/app/hook";
 import ProductItem from "../components/cartScreen/ProductItem";
 import { Text, View } from "../components/Themed";
@@ -10,31 +10,42 @@ export default function CartScreen() {
   const productList = useAppSelector(productsInsideCart);
   useEffect(() => {
     console.log("product in cart", productList);
-  }, []);
+    console.log("product lenght", productList.length);
+  }, [productList]);
   return (
     <View style={styles.whole_screen}>
-      <ScrollView>
+      {productList.length > 0 ? (
+        <View style={styles.wrapper}>
+          <ScrollView>
+            <View>
+              {productList.map((productItem, index) => (
+                <ProductItem key={index} productItem={productItem} />
+              ))}
+            </View>
+          </ScrollView>
+          <View style={styles.payment_area}>
+            <View style={styles.price_container}>
+              <View style={[{ flex: 1 }, styles.into_money]}>
+                <Text style={styles.intoMoney}>Thành tiền (5)</Text>
+              </View>
+              <View style={[{ flex: 1 }, styles.total_amount]}>
+                <Text style={styles.money}>200.000.000₫</Text>
+              </View>
+            </View>
+            <View style={styles.proceed_buying}>
+              <View style={styles.outer_box}>
+                <Text style={styles.proceed_buying_text}>
+                  Tiến hành đặt hàng
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      ) : (
         <View>
-          {productList.map((productItem, index) => (
-            <ProductItem key={index} productItem={productItem} />
-          ))}
+          <Text>trong gio hang khong co gi</Text>
         </View>
-      </ScrollView>
-      <View style={styles.payment_area}>
-        <View style={styles.price_container}>
-          <View style={[{ flex: 1 }, styles.into_money]}>
-            <Text style={styles.intoMoney}>Thành tiền (5)</Text>
-          </View>
-          <View style={[{ flex: 1 }, styles.total_amount]}>
-            <Text style={styles.money}>200.000.000₫</Text>
-          </View>
-        </View>
-        <View style={styles.proceed_buying}>
-          <View style={styles.outer_box}>
-            <Text style={styles.proceed_buying_text}>Tiến hành đặt hàng</Text>
-          </View>
-        </View>
-      </View>
+      )}
     </View>
   );
 }
@@ -42,6 +53,10 @@ export default function CartScreen() {
 const styles = StyleSheet.create({
   whole_screen: {
     flex: 1,
+  },
+  wrapper: {
+    height: "100%",
+    width: "100%",
   },
   payment_area: {
     height: "20%",

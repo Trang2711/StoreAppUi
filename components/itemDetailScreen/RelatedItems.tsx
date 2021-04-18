@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, Image, View, TouchableOpacity } from "react-native";
+import DisplayItems from "./DisplayItems";
 
 const RelatedItems = ({ allProducts, clickedToItem }: any) => {
   return (
@@ -17,17 +18,7 @@ const RelatedItems = ({ allProducts, clickedToItem }: any) => {
         </Text>
         <View style={styles.moreItemContainer}>
           {allProducts.map((product: any, index: any) => {
-            return (
-              <TouchableOpacity key={index} onPress={clickedToItem}>
-                <View style={styles.eachPost}>
-                  <Image
-                    style={styles.moreItemImg}
-                    source={{ uri: product.lapUrl[0] }}
-                  ></Image>
-                  <Text>Giá: 1 triệu</Text>
-                </View>
-              </TouchableOpacity>
-            );
+            return <DisplayItems product={product} key={index} />;
           })}
         </View>
       </View>
@@ -52,14 +43,5 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     flexDirection: "row",
     flexWrap: "wrap",
-  },
-  eachPost: {
-    marginRight: 8,
-    marginTop: 5,
-    marginBottom: 20,
-  },
-  moreItemImg: {
-    width: 184,
-    height: 150,
   },
 });

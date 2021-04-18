@@ -51,6 +51,9 @@ const ProductItem = ({ itemId }: any) => {
     }
     sliceCmt();
   }, [extraCmt]);
+  useEffect(() => {
+    console.log("id in productItem", itemId);
+  }, []);
   return (
     <View>
       <ImgSlider itemImg={itemImg} />
