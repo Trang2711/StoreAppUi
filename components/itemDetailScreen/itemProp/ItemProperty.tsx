@@ -29,6 +29,7 @@ const ItemProperty = ({
       })
     );
     console.log("unwarp", unwrapResult(actionResult));
+    alert("item nay da duoc them vao gio hang cua ban");
   }
   useEffect(() => {
     console.log("product in cart", productList);
