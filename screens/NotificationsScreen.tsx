@@ -38,7 +38,7 @@ export default function NotificationsScreen() {
 
   async function fetchSpecifiedProduct() {
     try {
-      const response = await ProductApi.getSpecifiedProduct(3);
+      const response = await ProductApi.getProductDetails(3);
       setSpecifiedProduct(response);
       const temp = response as any;
       setItemImg(temp.lapUrl);
@@ -56,7 +56,7 @@ export default function NotificationsScreen() {
   }
   async function sliceCmt() {
     try {
-      const response = await ProductApi.getSpecifiedProduct(3);
+      const response = await ProductApi.getProductDetails(3);
       const temp = response as any;
       const allCmts = temp.comments;
       setDisPlayCmt(allCmts.slice(0, 5 + extraCmt));
