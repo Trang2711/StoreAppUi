@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, ScrollView, Button, DrawerLayoutAndroid, Pressable, TextInput } from 'react-native';
+import { StyleSheet, ScrollView, FlatList, DrawerLayoutAndroid, Pressable, TextInput } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { Text, View } from '../components/Themed';
 import { AntDesign, Ionicons } from '@expo/vector-icons';
@@ -8,6 +8,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Header from '../components/filterScreen/Header'
 import Tag from '../components/filterScreen/Tag'
 import ColorCircle from '../components/filterScreen/ColorCircle'
+import CardItem from '../components/common/cardItem/CartItem'
+import Pagination from '../components/common/Pagination'
 import SearchAndFiltersApi from '../api/SearchAndFiltersApi'
 
 const brands = ["Apple", "Dell", "Nokia", "Samsung", "Lenovo", "Asus", "Sony"]
@@ -121,13 +123,49 @@ const status = [
   },
 ]
 
+const displayProducts = [
+  {
+    id: '1',
+    srcImg: 'https://images.pexels.com/photos/5054213/pexels-photo-5054213.jpeg?cs=srgb&dl=pexels-cottonbro-5054213.jpg&fm=jpg',
+    retialPrice: '10.000',
+    priceSale: '5.000',
+    sold: '1200',
+    rating_average: '4'
+  },
+  {
+    id: '2',
+    srcImg: 'https://images.pexels.com/photos/3975677/pexels-photo-3975677.jpeg?cs=srgb&dl=pexels-tatiana-syrikova-3975677.jpg&fm=jpg',
+    retialPrice: '110.000',
+    priceSale: '100.000',
+    sold: '200',
+    rating_average: '2.5'
+  },
+  {
+    id: '3',
+    srcImg: 'https://images.pexels.com/photos/3844565/pexels-photo-3844565.jpeg?cs=srgb&dl=pexels-ilya-klimenko-3844565.jpg&fm=jpg',
+    retialPrice: '340.000',
+    priceSale: '310.000',
+    sold: '120',
+    rating_average: '5'
+  }
+]
+
 export default function FilterScreen({ route, navigation }: any) {
 
   const drawer = useRef<DrawerLayoutAndroid>(null)
 
   const { searchKeywords } = route.params
-  console.log(searchKeywords)
-  // const [listProduct, setListProduct] = useState([])
+
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    perPage: 10,
+    total: 11,
+  })
+  const [paging, setPaging] = useState({
+    currentPage: 1,
+    perPage: 10
+  })
+  const [postList, setPostList] = useState([])
 
   const [isFilter, setIsFilter] = useState(false)
   const [brandsSelected, setBrandsSelected] = useState<string[]>([])
@@ -150,7 +188,7 @@ export default function FilterScreen({ route, navigation }: any) {
   const [sortPrice, setSortPrice] = useState('RANDOM')
   const [bestseller, setBestseller] = useState(false)
 
-  
+
 
   const _handleLatestChange = () => {
     setActive('LATEST')
@@ -159,7 +197,6 @@ export default function FilterScreen({ route, navigation }: any) {
 
   const _handleSortPriceChange = () => {
     setActive('PRICE')
-    console.log(sortPrice)
     if (sortPrice === 'RANDOM') {
       setSortPrice('ASC')
       return
@@ -210,8 +247,8 @@ export default function FilterScreen({ route, navigation }: any) {
   }
 
   useEffect(() => {
-    sendRequest()
-  }, [bestseller, latest, sortPrice])
+    fetchPostListPagination()
+  }, [bestseller, latest, sortPrice, paging])
 
   useEffect(() => {
     setPriceError(false)
@@ -221,7 +258,7 @@ export default function FilterScreen({ route, navigation }: any) {
     setYearReleaseError(false)
   }, [yearRelease])
 
-  const sendRequest = () => {
+  const fetchPostListPagination = async () => {
     const request = {
       searchKeywords: searchKeywords,
       brands: brandsSelected,
@@ -233,18 +270,37 @@ export default function FilterScreen({ route, navigation }: any) {
       colors: colorSelected,
       prices: {
         min: minPrice === '' ? -1 : parseInt(minPrice),
-        max: maxPrice === '' ? -1 : parseInt(maxPrice),
+        max: maxPrice === '' ? 1e9 : parseInt(maxPrice),
       },
       yearRelease: yearRelease === '' ? -1 : parseInt(yearRelease),
       status: selectedStatus,
       latest: latest,
       sortPrice: sortPrice,
-      bestseller: bestseller
+      bestseller: bestseller,
+      paging: paging
     }
-    console.log(request)
+    // console.log(request)
+    try {
+      const responce = await SearchAndFiltersApi.getProductList(request)
+      const { data, paging } = responce as any
+
+      console.log("responce data: ")
+      console.log(data)
+      
+      console.log("responce pagination: ")
+      console.log(paging)
+
+      if(paging.currentPage === 1)
+        setPostList(data)
+      else
+        setPostList(postList.concat(data))
+      setPagination(paging)
+    } catch (error) {
+      console.log("Failed to fetch post list in filterScreen: " + error)
+    }
   }
 
-  const onSubmit = () => {
+  const onSubmit = async() => {
     if (!vaildateFIlters()) {
       return
     }
@@ -261,7 +317,7 @@ export default function FilterScreen({ route, navigation }: any) {
       setIsFilter(true)
     }
 
-    sendRequest()
+    setPaging({...paging, currentPage: 1})
   }
 
   const clearFilter = () => {
@@ -480,6 +536,16 @@ export default function FilterScreen({ route, navigation }: any) {
     </View>
   );
 
+  const renderItem = ({ item }: any) => (
+    <CardItem
+      props={item} />
+  )
+
+  const handlePaginationChange = (newPage: number) => {
+    // console.log(newPage)
+    setPaging({ ...paging, currentPage: newPage })
+  }
+
   return (
     <DrawerLayoutAndroid
       ref={drawer}
@@ -487,7 +553,12 @@ export default function FilterScreen({ route, navigation }: any) {
       drawerPosition="right"
       renderNavigationView={_renderNavigationView}
     >
-      <View style={{ height: "200%" }}>
+      <Pagination
+        renderItem={renderItem}
+        paging={pagination}
+        onPageChange={handlePaginationChange}
+        data={postList}
+      >
         <Header
           navigation={navigation}
           defaultValue={searchKeywords}
@@ -519,7 +590,9 @@ export default function FilterScreen({ route, navigation }: any) {
             </Pressable>
           }
         </View>
-      </View>
+
+
+      </Pagination>
     </DrawerLayoutAndroid>
 
   );

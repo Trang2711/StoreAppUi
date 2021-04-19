@@ -1,51 +1,59 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, SafeAreaView, TouchableOpacity, Pressable } from 'react-native';
-import { ListItem } from 'react-native-elements'
 import { Text, View } from '../components/Themed';
 import { Ionicons } from '@expo/vector-icons';
 
 import Header from '../components/searchScreen/Header'
-import SearchApi from '../api/SearchAndFiltersApi'
+import SearchAndFiltersApi from '../api/SearchAndFiltersApi'
 
-const searchHistory1 = ["trang", "trinh trang", "trinh thi thu trang", "trinh thi trang"]
+interface Product {
+  id: any;
+  const: string;
+  rating: number;
+  image: string;
+  count: number;
+}
+
+const searchHistory1 = [
+  "trang",
+  "trinh trang",
+  "trinh thi thu trang",
+  "trinh thi trang",
+];
 
 export default function SearchScreen({ navigation }: any) {
 
-  interface Product {
-    id: any,
-    const: string,
-    rating: number,
-    image: string,
-    count: number,
-  }
-
-  const [searchHistory, setSearchHistory] = useState<Array<string>>([])
-  const [suggestedValues, setSuggestedValues] = useState<Array<string>>(searchHistory1)
-  const [productList, setProductList] = useState<Array<Product>>([])
-  const [searchValue, setSearchValue] = useState('')
+  // const [searchHistory, setSearchHistory] = useState<Array<string>>([])
+  const [suggestedValues, setSuggestedValues] = useState<string | undefined>()
+  const [searchValue, setSearchValue] = useState<string | undefined>('')
 
 
-  useEffect(() => {
-    const fetchSearchHistory = async () => {
-      const data = await SearchApi.getSearchHistory()
-      setSearchHistory(data as any)
+  // useEffect(() => {
+  //   const fetchSearchHistory = async () => {
+  //     const data = await SearchApi.getSearchHistory();
+  //     setSearchHistory(data as any);
+  //   };
+  //   fetchSearchHistory();
+  // }, []);
+
+  const fetchSuggestedValues = async (value: string) => {
+    const request = {
+      key: value
     }
-    fetchSearchHistory()
-  }, [])
+    const data = await SearchAndFiltersApi.getSuggestedValues(request)
+    const _data = data as any
+    // console.log(_data)
+    setSuggestedValues(_data.keyword)
+  }
 
   const getSuggestedValues = (value: string) => {
-    const fetchSuggestedValues = async (value: string) => {
-      const data = await SearchApi.getSuggestedValues(value)
-      /**
-       * update sugguest value
-       */
-    }
-    fetchSuggestedValues(value)
+    if (value !== '')
+      fetchSuggestedValues(value)
   }
 
-  const clearSearchHistory = () => {
-    console.log("clear history")
-  }
+  // const clearSearchHistory = () => {
+  //   console.log("clear history");
+  // };
 
   const handleSearchSubmit = (value: string) => {
     console.log("chuyen sang filter screen")
@@ -54,43 +62,51 @@ export default function SearchScreen({ navigation }: any) {
     })
   }
 
-  const _renderSearchHistory = () => {
-    return (
-      <View style={{ paddingHorizontal: 10 }}>
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text style={styles.title}>Tìm kiếm gần đây</Text>
-          <TouchableOpacity onPress={clearSearchHistory} style={{ flexDirection: "row", alignItems: "center" }}>
-            <Ionicons name="ios-trash-outline" size={19} color="#757575" />
-            <Text style={{ fontSize: 13, color: "#757575", marginLeft: 3 }} >Xóa</Text>
-          </TouchableOpacity>
-        </View>
+  // const _renderSearchHistory = () => {
+  //   return (
+  //     <View style={{ paddingHorizontal: 10 }}>
+  //       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+  //         <Text style={styles.title}>Tìm kiếm gần đây</Text>
+  //         <TouchableOpacity
+  //           onPress={clearSearchHistory}
+  //           style={{ flexDirection: "row", alignItems: "center" }}
+  //         >
+  //           <Ionicons name="ios-trash-outline" size={19} color="#757575" />
+  //           <Text style={{ fontSize: 13, color: "#757575", marginLeft: 3 }}>
+  //             Xóa
+  //           </Text>
+  //         </TouchableOpacity>
+  //       </View>
 
-        <View style={styles.tagContainer}>
-          {
-            searchHistory.map(item => <Text style={styles.suggestionTag} numberOfLines={1} >{item}</Text>)
-          }
-        </View>
-      </View>
-    )
-  }
+  //       <View style={styles.tagContainer}>
+  //         {searchHistory.map((item) => (
+  //           <Text style={styles.suggestionTag} numberOfLines={1}>
+  //             {item}
+  //           </Text>
+  //         ))}
+  //       </View>
+  //     </View>
+  //   );
+  // };
 
   const _renderSuggestedValues = () => {
     return (
       <View>
         {
-          suggestedValues.map((item, index) => (
-            <Pressable style={styles.suggestedValue} key={index} onPress={() => setSearchValue(item)}>
-                <Text style={{fontSize: 15}}>{item}</Text>
+          suggestedValues !== ''
+            ? <Pressable style={styles.suggestedValue} onPress={() => setSearchValue(suggestedValues)}>
+              <Text style={{ fontSize: 15 }}>{suggestedValues}</Text>
             </Pressable>
-          ))
+            : <></>
         }
+
       </View>
-    )
-  }
+    );
+  };
 
   return (
     <SafeAreaView>
-      <View style={{height: "100%"}}>
+      <View style={{ height: "100%" }}>
         <Header
           navigation={navigation}
           getSuggestedValues={getSuggestedValues}
@@ -99,12 +115,9 @@ export default function SearchScreen({ navigation }: any) {
         />
         {
           _renderSuggestedValues()
-
         }
-
       </View>
     </SafeAreaView>
-
   );
 }
 
@@ -119,9 +132,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingBottom: 15,
   },
-  clearBtn: {
-
-  },
+  clearBtn: {},
   suggestionTag: {
     padding: 5,
     color: "#757575",
@@ -132,8 +143,8 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   suggestedValue: {
-    paddingVertical: 12, 
-    paddingHorizontal: 15, 
+    paddingVertical: 12,
+    paddingHorizontal: 15,
     borderBottomWidth: 0.5,
     borderBottomColor: "#DDDDDD",
   },

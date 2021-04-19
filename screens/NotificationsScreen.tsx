@@ -1,254 +1,165 @@
 import * as React from "react";
-import { useState } from "react";
-import { FlatList, StyleSheet, Image } from "react-native";
+import { useState, useEffect } from "react";
+import { StyleSheet, Image, ActivityIndicator } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Text, View } from "../components/Themed";
 import { Ionicons } from "@expo/vector-icons";
+import ProductApi from "../api/ProductApi";
+import ImgSlider from "../components/itemDetailScreen/ImgSlider";
+import ItemProperty from "../components/itemDetailScreen/ItemProperty";
+import RelatedItems from "../components/itemDetailScreen/RelatedItems";
+import { useAppSelector, useAppDispatch } from "../redux/app/hook";
+import { incrementByAmount, selectCount } from "../redux/features/counterSlice";
+// import Pagination from "../components/common/Pagination"
 
 export default function NotificationsScreen() {
-  const [amountOfCmt, setAmountOfCmt] = useState(125);
-  const [comment, setComment] = useState([
-    {
-      user: "hung",
-      id: 1,
-      cmt: "con hang nay ngon lam",
-    },
-    {
-      user: "hung",
-      id: 2,
-      cmt: "con hang nay ngon lam",
-    },
-    {
-      user: "hung",
-      id: 3,
-      cmt:
-        "con hang nay ngon lamaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-    },
-    {
-      user: "hung",
-      id: 4,
-      cmt: "con hang nay ngon lam",
-    },
-    {
-      user: "hung",
-      id: 5,
-      cmt: "con hang nay ngon lam",
-    },
-  ]);
-  const imgs = [
-    {
-      id: 1,
-      ulr:
-        "../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg",
-    },
-    {
-      id: 2,
-      ulr:
-        "../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg",
-    },
-    {
-      id: 3,
-      ulr:
-        "../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg",
-    },
-    {
-      id: 4,
-      ulr:
-        "../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg",
-    },
-    {
-      id: 5,
-      ulr:
-        "../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg",
-    },
-    {
-      id: 6,
-      ulr:
-        "../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg",
-    },
-    {
-      id: 7,
-      ulr:
-        "../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg",
-    },
-    {
-      id: 8,
-      ulr:
-        "../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg",
-    },
-    {
-      id: 9,
-      ulr:
-        "../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg",
-    },
-    {
-      id: 10,
-      ulr:
-        "../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg",
-    },
-    {
-      id: 11,
-      ulr:
-        "../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg",
-    },
-    {
-      id: 12,
-      ulr:
-        "../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg",
-    },
-    {
-      id: 13,
-      ulr:
-        'require("../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg")',
-    },
-  ];
-  console.log({ comment });
-  return (
-    <ScrollView>
-      <View style={styles.container}>
-        <View style={styles.scrollArea}>
-          <ScrollView horizontal={true}>
-            <Image
-              style={styles.image}
-              resizeMode={"contain"}
-              source={require("../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg")}
-            ></Image>
-            <Image
-              style={styles.image}
-              resizeMode={"contain"}
-              source={require("../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg")}
-            ></Image>
-            <Image
-              style={styles.image}
-              resizeMode={"contain"}
-              source={require("../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg")}
-            ></Image>
-            <Image
-              style={styles.image}
-              resizeMode={"contain"}
-              source={require("../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg")}
-            ></Image>
-            <Image
-              style={styles.image}
-              resizeMode={"contain"}
-              source={require("../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg")}
-            ></Image>
-          </ScrollView>
-        </View>
+  const count = useAppSelector(selectCount);
+  const dispatch = useAppDispatch();
+  const [amountOfCmt, setAmountOfCmt] = useState();
+  const [specifiedProduct, setSpecifiedProduct] = useState({});
+  const [extraCmt, setExtraCmt] = useState(0);
+  const [DisPlayCmt, setDisPlayCmt] = useState<any[]>([]);
+  const [itemImg, setItemImg] = useState([]);
+  const [loadingWhileFetchData, setLoadingWhileFetchData] = useState(true);
+  const [CurrentPage, setCurrentPage] = useState(1);
+  const [IsLoadingMoreCmt, setIsLoadingMoreCmt] = useState(false);
 
-        <View>
-          <View style={styles.productNamePrice}>
-            <Text style={{ fontSize: 20 }}>Laptop abc</Text>
-            <Text style={{ fontSize: 20 }}>
-              Gia: <Text style={styles.boldText}>20.000.000d</Text>
-            </Text>
-          </View>
-          <Text style={{ fontSize: 18 }}>Cau hinh</Text>
-        </View>
-        <View style={styles.commentSection}>
-          <Text>Nhan xet: ({amountOfCmt})</Text>
-          <View>
-            {comment.map((item) => (
-              <View key={item.id} style={styles.userComment}>
-                <Text style={[{ flex: 2, fontWeight: "bold" }, styles.text16]}>
-                  {item.user}
-                </Text>
-                <Text style={[{ flex: 9 }, styles.text16]}>{item.cmt}</Text>
-              </View>
-            ))}
-          </View>
-          <Text style={[styles.text20, styles.watchFurther]}>
-            Xem them{" "}
-            <Ionicons name="arrow-forward-outline" size={20}></Ionicons>
-          </Text>
-        </View>
-        {/* mat hang lien quan */}
-        <View>
-          <Text
-            style={[
-              styles.centerItem,
-              styles.text16,
-              { backgroundColor: "#4287f5" },
-            ]}
-          >
-            Co the ban cung thich
-          </Text>
-          <View style={styles.moreItemContainer}>
-            {imgs.map((img, index) => (
-              <View key={index} style={styles.eachPost}>
-                <Image
-                  style={styles.moreItemImg}
-                  source={require("../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg")}
-                ></Image>
-                <Text>Gia: 1 trieu</Text>
-              </View>
-            ))}
-          </View>
-        </View>
+  useEffect(() => {
+    fetchSpecifiedProduct();
+    setInterval(() => {
+      setLoadingWhileFetchData(false);
+    }, 1000);
+  }, [CurrentPage]);
+
+  useEffect(() => {
+    sliceCmt();
+  }, [extraCmt]);
+
+
+  async function fetchSpecifiedProduct() {
+    try {
+      const response = await ProductApi.getSpecifiedProduct(3);
+      setSpecifiedProduct(response);
+      const temp = response as any;
+      setItemImg(temp.lapUrl);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  function handlingUserPressingWatchMoreCmt() {
+    setExtraCmt((prev) => prev + 5);
+    setIsLoadingMoreCmt(true);
+    setTimeout(() => {
+      setIsLoadingMoreCmt(false);
+    }, 1000);
+  }
+  async function sliceCmt() {
+    try {
+      const response = await ProductApi.getSpecifiedProduct(3);
+      const temp = response as any;
+      const allCmts = temp.comments;
+      setDisPlayCmt(allCmts.slice(0, 5 + extraCmt));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const _renderProduct = (item: any, key: any) => {
+    return (
+      <View key={key} style={styles.eachPost}>
+        <Image
+          style={styles.moreItemImg}
+          source={{ uri: item.lapUrl[0] }}
+        ></Image>
+        <Text>Giá: 1 triệu</Text>
       </View>
-    </ScrollView>
-  );
+    )
+  }
+
+  return (
+    <>
+      {
+        loadingWhileFetchData ?
+          <View style={[styles.loadingContainer, styles.loadingHorizontal]} >
+            <ActivityIndicator size="large" color="#00ff00" />
+          </View>
+          :
+          <View>
+          {/* // <Pagination renderItem={_renderProduct}> */}
+            <View>
+              <ImgSlider itemImg={itemImg} />
+              <ItemProperty
+                amountOfCmt={amountOfCmt}
+                comment={DisPlayCmt}
+                handlingUserPressingWatchMoreCmt={
+                  handlingUserPressingWatchMoreCmt
+                }
+                IsLoadingMoreCmt={IsLoadingMoreCmt}
+              />
+            </View>
+            <Text
+              style={[
+                styles.centerItem,
+                styles.text16,
+                { backgroundColor: "#4287f5" },
+                styles.mayBeUlike,
+              ]}
+            >
+              Có thể bạn cũng thích
+        </Text>
+          {/* // </Pagination> */}
+          </View>
+      }
+    </>
+  )
 }
 
 const styles = StyleSheet.create({
   container: {
+    width: "100%",
+    height: "100%",
+  },
+  loadingContainer: {
     flex: 1,
+    height: 675,
+    justifyContent: "center",
+    alignItems: "center",
   },
-  moreItemContainer: {
-    marginLeft: 8,
+  loadingHorizontal: {
     flexDirection: "row",
-    flexWrap: "wrap",
-  },
-  eachPost: {
-    marginRight: 8,
-    marginTop: 5,
-  },
-  moreItemImg: {
-    width: 184,
-    height: 150,
-  },
-  centerItem: {
-    textAlign: "center",
+    justifyContent: "space-around",
+    padding: 10,
   },
   text16: {
     fontSize: 16,
   },
-  watchFurther: {
-    margin: 8,
-    textAlign: "center",
-    backgroundColor: "#cccccc",
-  },
+
   text20: {
     fontSize: 20,
-  },
-  scrollArea: {
-    height: 245,
-    backgroundColor: "rgba(52, 52, 52, 0.8)",
-  },
-  commentSection: {
-    marginTop: 5,
-    marginBottom: 5,
-    height: "auto",
   },
   title: {
     fontSize: 20,
     fontWeight: "bold",
   },
-  image: {
-    width: 370,
-    height: "auto",
-    marginLeft: 5,
-  },
+
   boldText: {
     fontWeight: "bold",
   },
-  productNamePrice: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  userComment: {
-    flexDirection: "row",
-    marginLeft: 8,
+  eachPost: {
     marginRight: 8,
+    marginTop: 5,
+    marginBottom: 20,
+  },
+  moreItemImg: {
+    width: 184,
+    height: 150,
+  },
+  mayBeUlike: {
+    paddingBottom: 10,
+    paddingTop: 10,
+  },
+  centerItem: {
+    textAlign: "center",
   },
 });

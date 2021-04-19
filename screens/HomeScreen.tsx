@@ -8,7 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 import CartApi from "../api/CartApi";
 import Header from "../components/homeScreen/Header";
 import FlashSale from "../components/homeScreen/FlashSale";
-import Pagination from "../components/homeScreen/Pagination";
+// import Pagination from "../components/homeScreen/Pagination";
 
 export default function HomeScreen() {
   const [flashSale, setFlashSale] = useState<AxiosResponse | null | void>(null);
@@ -35,23 +35,16 @@ export default function HomeScreen() {
       try {
         const data = await CartApi.getAll();
         setFlashSale(data);
+        console.log(data);
       } catch (error) {
         console.log(error);
       }
     }
     fetchFlashSale();
-    setPages([
-      primaryPage,
-      primaryPage + 1,
-      primaryPage + 2,
-      primaryPage + 3,
-      "...",
-      lastPage,
-    ]);
-  }, [lastPage, primaryPage]);
+  }, [, primaryPage]);
   return (
     <View>
-      <Header/>
+      <Header />
       <View style={styles.cards}>
         <Text style={styles.title}>Sản phẩm mới về</Text>
         <TouchableOpacity
@@ -66,14 +59,6 @@ export default function HomeScreen() {
         </TouchableOpacity>
       </View>
       <FlashSale list={flashSale} />
-      <Pagination
-        primaryPage={primaryPage}
-        setPrimaryPage={setPrimaryPage}
-        pages={pages}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-        lastPage={lastPage}
-      />
     </View>
   );
 }

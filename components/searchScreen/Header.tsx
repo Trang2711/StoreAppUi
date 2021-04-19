@@ -13,7 +13,7 @@ export default function Header({ navigation,  getSuggestedValues, handleSearchSu
 
     const handleSearchChange = (value: string) => {
         updateSearchValue(value)
-        if(getSuggestedValues) return
+        if(!getSuggestedValues) return
         getSuggestedValues(value)
     }
 
