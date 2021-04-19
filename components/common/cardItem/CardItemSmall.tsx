@@ -1,15 +1,20 @@
 
 import React from 'react'
-import { View, Text, ImageBackground, StyleSheet } from 'react-native'
+import { View, Text, ImageBackground, StyleSheet, TouchableOpacity } from 'react-native'
 
-const CardItemSmall = ({ props }: any) => {
-    const { id, srcImg, title } = props.item
+const CardItemSmall = ({ item, navigation }: any) => {
+    const { id, srcImg, title } = item
     return (
-        <View style={styles.container}>
+        <TouchableOpacity
+            style={styles.container}
+            onPress={() =>
+                navigation.navigate("NotificationsScreen" )
+            }
+        >
             <ImageBackground style={styles.image} source={{ uri: srcImg }} >
             </ImageBackground>
             <Text style={styles.title}>{title}</Text>
-        </View>
+        </TouchableOpacity>
     )
 }
 

@@ -12,15 +12,9 @@ const SearchAndFiltersApi = {
     },
 
     getProductList: (data : any) => {
-        // const query = JSON.stringify(data)
         const url = `/api/search_product/`;
         return AxiosClient.post(url, data);
     },
-
-    getFilterFields: () => {
-        const url = `/filterFeilds`
-        return AxiosClient.get(url)
-    }
 }
 
 export default SearchAndFiltersApi;

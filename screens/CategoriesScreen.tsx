@@ -5,7 +5,7 @@ import { StyleSheet, FlatList } from 'react-native';
 import Carousel from '../components/categoriesScreen/Carousel'
 
 import Header from '../components/homeScreen/Header';
-import CardItemSmall from '../components/categoriesScreen/CardItemSmall'
+import CardItemSmall from '../components/common/cardItem/CardItemSmall'
 import CategoryApi from '../api/CategoryApi';
 
 import { Text, View } from '../components/Themed';

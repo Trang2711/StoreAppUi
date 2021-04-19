@@ -123,6 +123,11 @@ function CategoriesTabNavigator() {
         component={CategoriesScreen}
         options={{ headerShown: false }}
       />
+      <CategoriesTabStack.Screen
+        name="ItemDetailScreen"
+        component={ItemDetailScreen}
+        options={{ headerShown: false }}
+      />
     </CategoriesTabStack.Navigator>
   );
 }

@@ -8,7 +8,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Header from '../components/filterScreen/Header'
 import Tag from '../components/filterScreen/Tag'
 import ColorCircle from '../components/filterScreen/ColorCircle'
-import CardItem from '../components/common/cardItem/CartItem'
+import CardItem from '../components/common/cardItem/CardItem'
 import Pagination from '../components/common/Pagination'
 import SearchAndFiltersApi from '../api/SearchAndFiltersApi'
 
@@ -538,7 +538,8 @@ export default function FilterScreen({ route, navigation }: any) {
 
   const renderItem = ({ item }: any) => (
     <CardItem
-      props={item} />
+      props={item}
+      navigation={navigation} />
   )
 
   const handlePaginationChange = (newPage: number) => {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, ActivityIndicator, ScrollView, View, FlatList, Image } from "react-native";
 
-import CardItem from './cardItem/CartItem'
+import CardItem from './cardItem/CardItem'
 import ProductApi from "../../api/ProductApi";
 
 const Pagination = ({ children, renderItem, paging, onPageChange, data }: any) => {

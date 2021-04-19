@@ -6,6 +6,7 @@ import CartScreen from '../screens/CartScreen';
 import SearchScreen from '../screens/SearchScreen';
 import NotificationsScreen from '../screens/NotificationsScreen';
 import FilterScreen from '../screens/FilterScreen'
+import ItemDetailScreen from '../screens/ItemDetailScreen'
 
 const TopTabStack = createStackNavigator<TopTabParamList>();
 
@@ -16,6 +17,8 @@ export default function TopTabNavigator() {
       <TopTabStack.Screen name="FilterScreen" component={FilterScreen} options={{headerShown:false}}/>
       <TopTabStack.Screen name="NotificationsScreen" component={NotificationsScreen} />
       <TopTabStack.Screen name="CartScreen" component={CartScreen} />
+      <TopTabStack.Screen name="ItemDetailScreen" component={ItemDetailScreen} options={{ headerShown: false }}
+      />
     </TopTabStack.Navigator>
   );
 }

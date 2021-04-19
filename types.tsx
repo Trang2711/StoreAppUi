@@ -22,6 +22,8 @@ export type TopTabParamList = {
   FilterScreen: undefined;
   NotificationsScreen: undefined;
   CartScreen: undefined;
+  ItemDetailScreen: undefined;
+
 }
 
 export type HomeTabParamList = {
