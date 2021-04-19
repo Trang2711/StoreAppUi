@@ -1,19 +1,27 @@
 import React from 'react'
 import { View, Text, ImageBackground, StyleSheet } from 'react-native'
 import { Fontisto } from '@expo/vector-icons'
+import {baseUrl} from '../../../api/AxiosClient'
 
 const CardItemFlashSale = ({ props }: any) => {
-    const { id, srcImg, retialPrice, priceSale, dealsDiscount } = props
+    const { id, product_thumbnail, price, discount_price, } = props
+
+    const _fomatNumber1 = (num: number) => {
+        const formatter = new Intl.NumberFormat('us')
+        return formatter.format(num)
+    }
+
     return (
         <View nativeID={id} style={styles.container}>
-            <ImageBackground style={styles.image} source={{ uri: srcImg }} >
+            <ImageBackground style={styles.image} source={{ uri: `${product_thumbnail}` }} >
                 <View style={styles.flash}>
                     <Fontisto name="flash" size={15} color="black" />
-                    <Text style={styles.dealsDiscount}>-{Math.round(priceSale/retialPrice)}%</Text>
+                    {/* <Text style={styles.dealsDiscount}>-{Math.round(priceSale/retialPrice)}%</Text> */}
+                    <Text style={styles.dealsDiscount}>-{Math.round(30.54)}%</Text>
                 </View>
             </ImageBackground>
-            <Text style={styles.priceSale}>{priceSale}đ</Text>
-            <Text style={styles.retialPrice}>{retialPrice}đ</Text>
+            <Text numberOfLines={1} style={styles.priceSale}>{_fomatNumber1(parseInt("10000000"))}đ</Text>
+                <Text numberOfLines={1} style={styles.retialPrice}>{_fomatNumber1(parseInt(price))}đ</Text>
         </View>
     )
 }

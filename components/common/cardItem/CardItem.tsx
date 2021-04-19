@@ -4,7 +4,7 @@ import StarRating from '../StarRating'
 import {baseUrl} from '../../../api/AxiosClient'
 
 const CardItem = ({ props, navigation }: any) => {
-    const { id, product_thumbnail, price, discount_price, sold, rating_average } = props
+    const { id, title, product_thumbnail, price, discount_price, sold, rating_average } = props
 
     const _fomatNumber = (num: number) => {
         const formatter = new Intl.NumberFormat('en', {
@@ -28,13 +28,12 @@ const CardItem = ({ props, navigation }: any) => {
         >
             <ImageBackground style={styles.image} source={{ uri: `${baseUrl}${product_thumbnail}`}} >
                 <View style={styles.flash}>
-                    {/* <Text style={styles.dealsDiscount}>-{Math.round(discount_price / price)}%</Text> */}
-                    <Text style={styles.dealsDiscount}>-{Math.round(30.54)}%</Text>
+                    <Text style={styles.dealsDiscount}>-{Math.round(discount_price / price)}%</Text>
                 </View>
             </ImageBackground>
-            <Text numberOfLines={1} style={{ fontSize: 13, flex: 1, marginBottom: 5 }}>Macbook Air M1MXK32 / MXK62 - Macbook Pro 13</Text>
+            <Text numberOfLines={1} style={{ fontSize: 13, flex: 1, marginBottom: 5 }}>{title}</Text>
             <View style={{ flexDirection: 'row', marginBottom: 5}}>
-                <Text numberOfLines={1} style={styles.priceSale}>{_fomatNumber1(parseInt("10000000"))}đ</Text>
+                <Text numberOfLines={1} style={styles.priceSale}>{_fomatNumber1(parseInt(discount_price))}đ</Text>
                 <Text numberOfLines={1} style={styles.retialPrice}>{_fomatNumber1(parseInt(price))}đ</Text>
             </View>
             <View style={{ flexDirection: 'row', justifyContent: "space-between",  alignItems: "center"}}>
@@ -70,7 +69,7 @@ const styles = StyleSheet.create({
 
     priceSale: {
         fontSize: 13,
-        color: "#d53332",
+        color: "black",
         fontWeight: "bold",
         marginRight: 10,
     },
@@ -79,18 +78,19 @@ const styles = StyleSheet.create({
         position: "absolute",
         top: 0,
         left: 0,
-        width: 28,
-        height: 31,
+        width: 35,
+        height: 35,
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "black",
+        backgroundColor: "#f02322",
         color: "white",
+        borderRadius: 70,
     },
 
     dealsDiscount: {
         fontWeight: "bold",
-        fontSize: 9,
+        fontSize: 10,
         color: 'white'
     }
 });

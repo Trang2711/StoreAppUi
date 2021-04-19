@@ -12,79 +12,13 @@ import CardItem from '../components/common/cardItem/CardItem'
 import Pagination from '../components/common/Pagination'
 import SearchAndFiltersApi from '../api/SearchAndFiltersApi'
 
-const brands = ["Apple", "Dell", "Nokia", "Samsung", "Lenovo", "Asus", "Sony"]
-const configurations = {
-  RAM: [
-    {
-      value: 'all',
-      displayName: 'Tất cả'
-    },
-    {
-      value: '4 GB',
-      displayName: '4 GB'
-    },
-    {
-      value: '8 GB',
-      displayName: '8 GB'
-    },
-    {
-      value: '16 GB',
-      displayName: '16 GB'
-    },
-    {
-      value: '32 GB',
-      displayName: '32 GB'
-    },
-    {
-      value: '64 GB',
-      displayName: '64 GB'
-    },
-    {
-      value: '128 GB',
-      displayName: '128 GB'
-    }
-  ],
-  CPU: [
-    {
-      value: 'all',
-      displayName: 'Tất cả'
-    },
-    {
-      value: 'Core i3',
-      displayName: 'Core i3'
-    },
-    {
-      value: 'Core i5',
-      displayName: 'Core i5'
-    },
-    {
-      value: 'Core i7',
-      displayName: 'Core i7'
-    }
-  ],
-  SSD: [{
-    value: 'all',
-    displayName: 'Tất cả'
-  },
-  {
-    value: '64 GB',
-    displayName: '64 GB'
-  },
-  {
-    value: '128 GB',
-    displayName: '128 GB',
-  },
-  {
-    value: '256 GB',
-    displayName: '256 GB'
-  },
-  {
-    value: '1 TB',
-    displayName: '1 TB'
-  }
-  ],
-}
+const brands = ["Apple", "Dell", "Samsung"]
 
+const configurations = {
+  RAM: ['4 GB', '8 GB', '16 GB', '32 GB', '64 GB', '128 GB'],
+  SSD: ['64 GB', '128 GB', '256 GB', '512 GB', '1 TB', '2 TB', '4 TB'],
+  CPU: ['Core i3', 'Core i5', 'Core i7', 'Apple M1']
+}
 const colors = [
   {
     name: "white",
@@ -169,9 +103,9 @@ export default function FilterScreen({ route, navigation }: any) {
 
   const [isFilter, setIsFilter] = useState(false)
   const [brandsSelected, setBrandsSelected] = useState<string[]>([])
-  const [selectedRAM, setSelectedRAM] = useState("all");
-  const [selectedCPU, setSelectedCPU] = useState("all");
-  const [selectedSSD, setSelectedSSD] = useState("all");
+  const [selectedRAM, setSelectedRAM] = useState<string[]>([])
+  const [selectedCPU, setSelectedCPU] = useState<string[]>([])
+  const [selectedSSD, setSelectedSSD] = useState<string[]>([])
   const [selectedStatus, setSelectedStatus] = useState('all')
   const [colorSelected, setColorSelected] = useState<string[]>([])
   const [yearRelease, setYearRelease] = useState('')
@@ -183,37 +117,47 @@ export default function FilterScreen({ route, navigation }: any) {
 
   const [chooseTag, setChooseTag] = useState(true)
 
-  const [active, setActive] = useState<string | null>(null)
-  const [latest, setLatest] = useState<boolean>(false)
-  const [sortPrice, setSortPrice] = useState('RANDOM')
-  const [bestseller, setBestseller] = useState(false)
-
-
+  const [sortOption, setSortOption] = useState({
+    by: 'price',
+    order: 'none'
+  })
 
   const _handleLatestChange = () => {
-    setActive('LATEST')
-    setLatest(!latest)
+    setSortOption({
+      by: 'latest',
+      order: 'asc'
+    })
   }
 
   const _handleSortPriceChange = () => {
-    setActive('PRICE')
-    if (sortPrice === 'RANDOM') {
-      setSortPrice('ASC')
+    if (sortOption.by === 'latest' || sortOption.by === 'bestseller') {
+      setSortOption({
+        by: 'price',
+        order: 'asc'
+      })
       return
     }
-    if (sortPrice === 'ASC') {
-      setSortPrice('DESC')
+    if (sortOption.by === 'asc') {
+      setSortOption({
+        by: 'price',
+        order: 'desc'
+      })
       return
     }
-    if (sortPrice === 'DESC') {
-      setSortPrice('RANDOM')
+    if (sortOption.by === 'desc') {
+      setSortOption({
+        by: 'price',
+        order: 'none'
+      })
       return
     }
   }
 
   const _handleBestsellerChange = () => {
-    setActive('BESTSELLER')
-    setBestseller(!bestseller)
+    setSortOption({
+      by: 'bestseller',
+      order: 'asc'
+    })
   }
 
   const _handleFilterChange = () => {
@@ -248,7 +192,7 @@ export default function FilterScreen({ route, navigation }: any) {
 
   useEffect(() => {
     fetchPostListPagination()
-  }, [bestseller, latest, sortPrice, paging])
+  }, [sortOption, paging])
 
   useEffect(() => {
     setPriceError(false)
@@ -261,36 +205,34 @@ export default function FilterScreen({ route, navigation }: any) {
   const fetchPostListPagination = async () => {
     const request = {
       searchKeywords: searchKeywords,
-      brands: brandsSelected,
       configurations: {
+        brands: brandsSelected,
         RAM: selectedRAM,
         CPU: selectedCPU,
-        SSD: selectedSSD
+        SSD: selectedSSD,
+        colors: colorSelected,
       },
-      colors: colorSelected,
       prices: {
         min: minPrice === '' ? -1 : parseInt(minPrice),
         max: maxPrice === '' ? 1e9 : parseInt(maxPrice),
       },
       yearRelease: yearRelease === '' ? -1 : parseInt(yearRelease),
       status: selectedStatus,
-      latest: latest,
-      sortPrice: sortPrice,
-      bestseller: bestseller,
+      sort_options: sortOption,
       paging: paging
     }
-    // console.log(request)
+    console.log(request)
     try {
       const responce = await SearchAndFiltersApi.getProductList(request)
       const { data, paging } = responce as any
 
       console.log("responce data: ")
       console.log(data)
-      
+
       console.log("responce pagination: ")
       console.log(paging)
 
-      if(paging.currentPage === 1)
+      if (paging.currentPage === 1)
         setPostList(data)
       else
         setPostList(postList.concat(data))
@@ -300,13 +242,13 @@ export default function FilterScreen({ route, navigation }: any) {
     }
   }
 
-  const onSubmit = async() => {
+  const onSubmit = async () => {
     if (!vaildateFIlters()) {
       return
     }
 
     if (brandsSelected.length === 0 &&
-      selectedRAM === 'all' && selectedCPU === 'all' && selectedSSD === 'all' &&
+      selectedRAM.length === 0 && selectedCPU.length === 0 && selectedSSD.length === 0 &&
       colorSelected.length === 0 &&
       selectedStatus === 'all' &&
       minPrice === '' && maxPrice === '' &&
@@ -317,13 +259,13 @@ export default function FilterScreen({ route, navigation }: any) {
       setIsFilter(true)
     }
 
-    setPaging({...paging, currentPage: 1})
+    setPaging({ ...paging, currentPage: 1 })
   }
 
   const clearFilter = () => {
-    setSelectedRAM('all')
-    setSelectedCPU('all')
-    setSelectedSSD('all')
+    setSelectedRAM([])
+    setSelectedCPU([])
+    setSelectedSSD([])
     setColorSelected([])
     setMinPrice('')
     setMaxPrice('')
@@ -340,6 +282,33 @@ export default function FilterScreen({ route, navigation }: any) {
     else {
       const newArr = brandsSelected.filter((value: any) => value !== branch)
       setBrandsSelected(newArr)
+    }
+  }
+
+  const handleSelectRAM = (flag: 'ADD' | 'REMOVE', ramConfig: string) => {
+    if (flag === 'ADD')
+      setSelectedRAM([...selectedRAM, ramConfig])
+    else {
+      const newArr = selectedRAM.filter((value: any) => value !== ramConfig)
+      setSelectedRAM(newArr)
+    }
+  }
+
+  const handleSelectCPU = (flag: 'ADD' | 'REMOVE', cpuConfig: string) => {
+    if (flag === 'ADD')
+      setSelectedCPU([...selectedCPU, cpuConfig])
+    else {
+      const newArr = selectedCPU.filter((value: any) => value !== cpuConfig)
+      setSelectedCPU(newArr)
+    }
+  }
+
+  const handleSelectSSD = (flag: 'ADD' | 'REMOVE', SSDConfig: string) => {
+    if (flag === 'ADD')
+      setSelectedSSD([...selectedSSD, SSDConfig])
+    else {
+      const newArr = selectedSSD.filter((value: any) => value !== SSDConfig)
+      setSelectedSSD(newArr)
     }
   }
 
@@ -444,58 +413,33 @@ export default function FilterScreen({ route, navigation }: any) {
   const _renderConfiguration = () => {
     return (
       <View>
-        <Text style={{ ...styles.title, marginTop: 15 }}>Cấu hình</Text>
 
-        <View style={styles.pickerFeild}>
-          <Text style={{ marginRight: 10, fontSize: 15 }}>RAM</Text>
-          <View style={styles.pickerWrapper}>
-            <Picker
-              style={styles.picker}
-              selectedValue={selectedRAM}
-              onValueChange={(itemValue: any) => setSelectedRAM(itemValue)}
-              itemStyle={{ fontSize: 8, color: 'red' }}
-
-            >
-              {
-                configurations.RAM.map((item: any, index: any) =>
-                  <Picker.Item key={index} label={item.displayName} value={item.value} />
-                )
-              }
-            </Picker>
+        <View>
+          <Text style={{ ...styles.title}}>RAM</Text>
+          <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+            {
+              configurations.RAM.map((item: string, index: any) =>
+                <Tag value={item} key={index} onSelect={handleSelectRAM} />
+              )
+            }
           </View>
-        </View>
 
-        <View style={styles.pickerFeild}>
-          <Text style={{ marginRight: 10, fontSize: 15 }}>CPU</Text>
-          <View style={styles.pickerWrapper}>
-            <Picker
-              style={styles.picker}
-              selectedValue={selectedCPU}
-              onValueChange={(itemValue: any) => setSelectedCPU(itemValue)}
-            >
-              {
-                configurations.CPU.map((item: any, index: any) =>
-                  <Picker.Item key={index} label={item.displayName} value={item.value} />
-                )
-              }
-            </Picker>
+          <Text style={{ ...styles.title }}>CPU</Text>
+          <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+            {
+              configurations.CPU.map((item: string, index: any) =>
+                <Tag value={item} key={index} onSelect={handleSelectCPU} />
+              )
+            }
           </View>
-        </View>
 
-        <View style={{ ...styles.pickerFeild, marginBottom: 0 }}>
-          <Text style={{ marginRight: 10, fontSize: 15 }}>SSD</Text>
-          <View style={styles.pickerWrapper}>
-            <Picker
-              style={styles.picker}
-              selectedValue={selectedSSD}
-              onValueChange={(itemValue: any) => setSelectedSSD(itemValue)}
-            >
-              {
-                configurations.SSD.map((item: any, index: any) =>
-                  <Picker.Item key={index} label={item.displayName} value={item.value} />
-                )
-              }
-            </Picker>
+          <Text style={{ ...styles.title }}>SSD</Text>
+          <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+            {
+              configurations.SSD.map((item: string, index: any) =>
+                <Tag value={item} key={index} onSelect={handleSelectSSD} />
+              )
+            }
           </View>
         </View>
       </View>
@@ -521,13 +465,13 @@ export default function FilterScreen({ route, navigation }: any) {
         style={styles.drawerContent}
       >
         {_renderBranchFilter()}
-        {_renderConfiguration()}
         {_renderColorFilter()}
         {_renderPriceFilter()}
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           {_renderReleaseYear()}
           {_renderStatusFilter()}
         </View>
+        {_renderConfiguration()}
         <Pressable onPress={onSubmit} style={{ flexDirection: "row", justifyContent: "flex-end", marginTop: 20 }}>
           <Text style={styles.submitBtn}>Áp dụng</Text>
         </Pressable>
@@ -566,21 +510,21 @@ export default function FilterScreen({ route, navigation }: any) {
         />
         <View style={styles.navigation}>
           <Pressable onPress={_handleLatestChange}>
-            <Text style={active === 'LATEST' ? styles.optionActive : styles.option}>
+            <Text style={sortOption.by === 'latest' ? styles.optionActive : styles.option}>
               Mới nhất
           </Text>
           </Pressable>
           <Pressable onPress={_handleBestsellerChange}>
-            <Text style={active === 'BESTSELLER' ? styles.optionActive : styles.option}>Bán chạy</Text>
+            <Text style={sortOption.by === 'bestseller' ? styles.optionActive : styles.option}>Bán chạy</Text>
           </Pressable>
           <Pressable style={{ flexDirection: "row", alignItems: "center" }} onPress={_handleSortPriceChange}>
-            <Text style={active === 'PRICE' ? { ...styles.optionActive, marginRight: 2 } : { ...styles.option, marginRight: 2 }}>Giá</Text>
+            <Text style={sortOption.by === 'price' ? { ...styles.optionActive, marginRight: 2 } : { ...styles.option, marginRight: 2 }}>Giá</Text>
             {
-              sortPrice === "RANDOM" ?
-                <MaterialCommunityIcons name="arrow-up-down" size={16} color={`${active === 'PRICE' ? 'black' : 'gray'}`} /> :
-                sortPrice === "ASC" ?
-                  <AntDesign name="arrowup" size={16} color={`${active === 'PRICE' ? 'black' : 'gray'}`} /> :
-                  <AntDesign name="arrowdown" size={16} color={`${active === 'PRICE' ? 'black' : 'gray'}`} />
+              sortOption.order === "none" ?
+                <MaterialCommunityIcons name="arrow-up-down" size={16} color={`${sortOption.by === 'price' ? 'black' : 'gray'}`} /> :
+                sortOption.order === "asc" ?
+                  <AntDesign name="arrowup" size={16} color={`${sortOption.by === 'price' ? 'black' : 'gray'}`} /> :
+                  <AntDesign name="arrowdown" size={16} color={`${sortOption.by === 'price' ? 'black' : 'gray'}`} />
             }
           </Pressable>
 
@@ -623,8 +567,8 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 15,
     fontWeight: "bold",
-    marginBottom: 20,
-    marginTop: 40
+    marginBottom: 15,
+    marginTop: 30
   },
   pickerFeild: {
     flexDirection: "row",

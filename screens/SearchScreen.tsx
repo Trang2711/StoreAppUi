@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
   suggestedValue: {
     paddingVertical: 12,
     paddingHorizontal: 15,
-    borderBottomWidth: 0.5,
-    borderBottomColor: "#DDDDDD",
+    // borderBottomWidth: 0.5,
+    // borderBottomColor: "#DDDDDD",
   },
 });

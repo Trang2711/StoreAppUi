@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { StyleSheet, FlatList } from 'react-native';
-import Carousel from '../components/categoriesScreen/Carousel'
+import Carousel from '../components/common/Carousel'
 
 import Header from '../components/homeScreen/Header';
 import CardItemSmall from '../components/common/cardItem/CardItemSmall'
@@ -126,7 +126,7 @@ export default function CategoriesScreen() {
         {
           activeCategory &&
           <View style={styles.tabContent}>
-            <Carousel list={activeCategory.carousel} />
+            <Carousel list={activeCategory.carousel} width={240} height={110}/>
             <View style={{ marginTop: 10, paddingVertical: 10 }}>
               <Text style={styles.title}>{activeCategory.name}</Text>
               <FlatList

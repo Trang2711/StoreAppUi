@@ -1,13 +1,10 @@
 import { HeaderHeightContext } from '@react-navigation/stack'
 import React, { useEffect } from 'react'
 import { useState } from 'react'
-import { View, Text, StyleSheet, Image, Dimensions } from "react-native"
+import { View, Text, StyleSheet, Image } from "react-native"
 import { ScrollView } from 'react-native-gesture-handler'
 
-const width = 240
-const height = 110
-
-const Carousel = ({ list }: any) => {
+const Carousel = ({ list, width, height }: any) => {
     const [cardActive, setCardActive] = useState(0)
 
     const change = ({ nativeEvent }: any) => {
