@@ -13,15 +13,15 @@ const CardItemFlashSale = ({ props }: any) => {
 
     return (
         <View nativeID={id} style={styles.container}>
-            <ImageBackground style={styles.image} source={{ uri: `${product_thumbnail}` }} >
+            <ImageBackground style={styles.image} source={{ uri: `${baseUrl}${product_thumbnail}` }} >
                 <View style={styles.flash}>
                     <Fontisto name="flash" size={15} color="black" />
-                    {/* <Text style={styles.dealsDiscount}>-{Math.round(priceSale/retialPrice)}%</Text> */}
-                    <Text style={styles.dealsDiscount}>-{Math.round(30.54)}%</Text>
+                    <Text style={styles.dealsDiscount}>-{Math.round((price - discount_price) * 100.0 / price)}%</Text>
+                    {/* <Text style={styles.dealsDiscount}>-{Math.round(30.54)}%</Text> */}
                 </View>
             </ImageBackground>
-            <Text numberOfLines={1} style={styles.priceSale}>{_fomatNumber1(parseInt("10000000"))}đ</Text>
-                <Text numberOfLines={1} style={styles.retialPrice}>{_fomatNumber1(parseInt(price))}đ</Text>
+            <Text numberOfLines={1} style={styles.priceSale}>{_fomatNumber1(discount_price)}đ</Text>
+                <Text numberOfLines={1} style={styles.retialPrice}>{_fomatNumber1(price)}đ</Text>
         </View>
     )
 }

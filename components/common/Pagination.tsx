@@ -10,7 +10,6 @@ const Pagination = ({ children, renderItem, paging, onPageChange, data }: any) =
   const { total, perPage, currentPage } = paging
   const totalPage = Math.ceil(total / perPage)
 
-  console.log(totalPage)
   const handlePageChange = () => {
     if (currentPage >= totalPage) return
     if (onPageChange) {

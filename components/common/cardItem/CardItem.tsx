@@ -1,10 +1,13 @@
 import React from 'react'
 import { View, Text, ImageBackground, StyleSheet, TouchableOpacity } from 'react-native'
 import StarRating from '../StarRating'
-import {baseUrl} from '../../../api/AxiosClient'
+import { baseUrl } from '../../../api/AxiosClient'
 
 const CardItem = ({ props, navigation }: any) => {
     const { id, title, product_thumbnail, price, discount_price, sold, rating_average } = props
+    const dealDiscount = Math.round((price - discount_price) * 100.0 / price)
+
+    // console.log(props)
 
     const _fomatNumber = (num: number) => {
         const formatter = new Intl.NumberFormat('en', {
@@ -23,22 +26,28 @@ const CardItem = ({ props, navigation }: any) => {
         <TouchableOpacity
             style={styles.container}
             onPress={() =>
-                navigation.navigate("ItemDetailScreen" )
+                navigation.navigate("ItemDetailScreen")
             }
         >
-            <ImageBackground style={styles.image} source={{ uri: `${baseUrl}${product_thumbnail}`}} >
-                <View style={styles.flash}>
-                    <Text style={styles.dealsDiscount}>-{Math.round(discount_price / price)}%</Text>
+            <ImageBackground style={styles.image} source={{ uri: `${baseUrl}${product_thumbnail}` }} >
+                {
+                    dealDiscount !== 0 && <View style={styles.flash}>
+                    <Text style={styles.dealsDiscount}>-{dealDiscount}%</Text>
                 </View>
+                }
             </ImageBackground>
-            <Text numberOfLines={1} style={{ fontSize: 13, flex: 1, marginBottom: 5 }}>{title}</Text>
-            <View style={{ flexDirection: 'row', marginBottom: 5}}>
-                <Text numberOfLines={1} style={styles.priceSale}>{_fomatNumber1(parseInt(discount_price))}đ</Text>
-                <Text numberOfLines={1} style={styles.retialPrice}>{_fomatNumber1(parseInt(price))}đ</Text>
-            </View>
-            <View style={{ flexDirection: 'row', justifyContent: "space-between",  alignItems: "center"}}>
-                <StarRating num={parseFloat(rating_average)}/>
-                <Text style={{ fontSize: 10, color: "gray" }}>Đã bán {_fomatNumber(parseInt(sold))}</Text>
+            <View style={{ paddingHorizontal: 7 }}>
+                <Text numberOfLines={1} style={{ fontSize: 13, flex: 1, marginBottom: 5 }}>{title}</Text>
+                <View style={{ flexDirection: 'row', marginBottom: 5 }}>
+                    <Text numberOfLines={1} style={styles.priceSale}>{_fomatNumber1(parseInt(discount_price))}đ</Text>
+                    {
+                        dealDiscount !== 0 && <Text numberOfLines={1} style={styles.retialPrice}>{_fomatNumber1(parseInt(price))}đ</Text>
+                    }
+                </View>
+                <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: "center" }}>
+                    <StarRating num={parseFloat(rating_average)} />
+                    <Text style={{ fontSize: 10, color: "gray" }}>Đã bán {_fomatNumber(parseInt(sold))}</Text>
+                </View>
             </View>
         </TouchableOpacity>
     )
@@ -50,7 +59,6 @@ const styles = StyleSheet.create({
         position: "relative",
         marginHorizontal: 3,
         backgroundColor: 'white',
-        paddingHorizontal: 7,
         paddingBottom: 10
     },
 
