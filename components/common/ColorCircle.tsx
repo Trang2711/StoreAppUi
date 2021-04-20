@@ -2,19 +2,19 @@ import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, Pressable, View } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 
-export interface ColorCircle {
-    item: ColorItem,
-    onSelect: Function,
-    key: any
-}
+// export interface ColorCircle {
+//     item: ColorItem,
+//     onSelect: Function | undefined,
+//     key: any
+// }
 
-interface ColorItem {
-    name: string,
-    colorCode: string,
-    displayName: string,
-}
+// interface ColorItem {
+//     name: string,
+//     colorCode: string,
+//     displayName: string,
+// }
 
-const ColorCircle = ({ item, onSelect, key }: ColorCircle) => {
+const ColorCircle = ({ item, onSelect, key }: any) => {
     const [isSelected, setIsSelected] = useState<boolean>(false)
 
     useEffect(() => {

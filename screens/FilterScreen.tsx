@@ -7,7 +7,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import Header from '../components/filterScreen/Header'
 import Tag from '../components/filterScreen/Tag'
-import ColorCircle from '../components/filterScreen/ColorCircle'
+import ColorCircle from '../components/common/ColorCircle'
 import CardItem from '../components/common/cardItem/CardItem'
 import Pagination from '../components/common/Pagination'
 import SearchAndFiltersApi from '../api/SearchAndFiltersApi'

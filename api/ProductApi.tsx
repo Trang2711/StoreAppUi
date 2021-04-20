@@ -6,7 +6,7 @@ const ProductApi = {
     return AxiosClient.get(url);
   },
   getProductDetails: (id: any) => {
-    const url = `/products/${id}`;
+    const url = `/api/product/102870779/`;
     return AxiosClient.get(url);
   },
   getFlashProducts: () => {
