@@ -37,7 +37,7 @@ const CardItem = ({ props, navigation }: any) => {
                 <Text numberOfLines={1} style={styles.retialPrice}>{_fomatNumber1(parseInt(price))}đ</Text>
             </View>
             <View style={{ flexDirection: 'row', justifyContent: "space-between",  alignItems: "center"}}>
-                <StarRating num={parseFloat(rating_average)}/>
+                <StarRating num={parseFloat(rating_average)} fontSize={16}/>
                 <Text style={{ fontSize: 10, color: "gray" }}>Đã bán {_fomatNumber(parseInt(sold))}</Text>
             </View>
         </TouchableOpacity>
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 3,
         backgroundColor: 'white',
         paddingHorizontal: 7,
-        paddingBottom: 10
+        paddingBottom: 5
     },
 
     image: {

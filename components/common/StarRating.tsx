@@ -6,19 +6,19 @@ import {
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
-export default function StarRating({num}: any) {
+export default function StarRating({num, fontSize}: any) {
     const a = Math.floor(num)
     const b = num - a
     const c = 5 - a - Math.round(b)
     const jsx = []
     for (let i = 0; i < a; i++) {
-        jsx.push(<MaterialIcons name="star" size={16} color="#eec82c" />)
+        jsx.push(<MaterialIcons name="star" size={fontSize} color="#eec82c" />)
     }
 
-    if(b > 0) jsx.push(<MaterialIcons name="star-half" size={16} color="#eec82c" />)
+    if(b > 0) jsx.push(<MaterialIcons name="star-half" size={fontSize} color="#eec82c" />)
 
     for (let i = 0; i < c; i++) {
-        jsx.push(<MaterialIcons name="star-border" size={16} color="#eec82c" />)
+        jsx.push(<MaterialIcons name="star-border" size={fontSize} color="#eec82c" />)
     }
     return (
         <View style={{ flexDirection: 'row' }}>

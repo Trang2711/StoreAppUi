@@ -14,7 +14,7 @@ import { Ionicons } from '@expo/vector-icons'
 //     displayName: string,
 // }
 
-const ColorCircle = ({ item, onSelect, key }: any) => {
+const ColorCircle = ({ item, onSelect, _key }: any) => {
     const [isSelected, setIsSelected] = useState<boolean>(false)
 
     useEffect(() => {
@@ -28,7 +28,7 @@ const ColorCircle = ({ item, onSelect, key }: any) => {
     return (
         <Pressable 
             onPress={() => setIsSelected(!isSelected)} 
-            key={key} 
+            key={_key} 
             style={{ flexDirection: "row" }}
         >
             <View style={

@@ -23,18 +23,20 @@ export type TopTabParamList = {
   NotificationsScreen: undefined;
   CartScreen: undefined;
   ItemDetailScreen: undefined;
-
+  CommentsScreen: undefined;
 }
 
 export type HomeTabParamList = {
   HomeScreen: undefined;
   ItemDetailScreen: undefined;
+  CommentsScreen: undefined;
 };
 
 export type CategoriesTabParamList = {
   CategoriesScreen: undefined;
   CategoryScreen: undefined;
   ItemDetailScreen: undefined;
+  CommentsScreen: undefined;
 };
 
 export type NewsTabParamList = {
