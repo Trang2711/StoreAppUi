@@ -4,6 +4,9 @@ import * as React from 'react';
 import { ColorSchemeName } from 'react-native';
 
 import NotFoundScreen from '../screens/NotFoundScreen';
+import RegisterScreen from "../screens/RegisterScreen"
+import LoginScreen from '../screens/LoginScreen'
+
 import { RootStackParamList, StackParamList } from '../types';
 import BottomTabNavigator from './BottomTabNavigator';
 import TopTabNavigator from './TopTabNavigator';
@@ -38,16 +41,26 @@ function RootNavigator() {
 const RootStack = createStackNavigator<StackParamList>();
 
 function RootStackTabNavigator() {
-    return (
-        <RootStack.Navigator>
-            <RootStack.Screen
-              name="BottomNav" 
-              component={BottomTabNavigator}
-              options={{ headerShown: false }} />
-            <RootStack.Screen
-              name="TopNav"
-              component={TopTabNavigator}
-              options={{ headerShown: false }} />
-        </RootStack.Navigator>
-    )
+  return (
+    <RootStack.Navigator>
+      <RootStack.Screen
+        name="RegisterScreen"
+        component={RegisterScreen}
+        options={{ headerShown: false }}
+      />
+       <RootStack.Screen
+        name="LoginScreen"
+        component={LoginScreen}
+        options={{ headerShown: false }}
+      />
+      <RootStack.Screen
+        name="BottomNav"
+        component={BottomTabNavigator}
+        options={{ headerShown: false }} />
+      <RootStack.Screen
+        name="TopNav"
+        component={TopTabNavigator}
+        options={{ headerShown: false }} />
+    </RootStack.Navigator>
+  )
 }

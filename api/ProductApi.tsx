@@ -1,12 +1,8 @@
 import AxiosClient from "./AxiosClient";
 
 const ProductApi = {
-  getAllProducts: () => {
-    const url = `/products`;
-    return AxiosClient.get(url);
-  },
   getProductDetails: (id: any) => {
-    const url = `/products/${id}`;
+    const url = `/api/product/${id}`;
     return AxiosClient.get(url);
   },
   getFlashProducts: () => {

@@ -6,6 +6,8 @@ export type RootStackParamList = {
 export type StackParamList = {
   TopNav: undefined;
   BottomNav: undefined;
+  RegisterScreen: undefined;
+  LoginScreen: undefined;
 }
 
 export type BottomTabParamList = {
