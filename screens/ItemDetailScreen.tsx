@@ -231,6 +231,12 @@ export default function ItemDetailScreen({ navigation }: any) {
     )
   }
 
+  const handleShowMoreComments = () => {
+    navigation.navigate('CommentsScreen', {
+      product_id: productDetail.id
+    })
+  }
+
   const _renderComment = () => {
     return (
       productDetail &&
@@ -254,9 +260,9 @@ export default function ItemDetailScreen({ navigation }: any) {
           }
         </View>
 
-        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-          <TouchableOpacity onPress={navigation.navigate('')}>
-            <Text style={{paddingHorizontal: 10, paddingVertical: 5, borderColor: 'black', borderWidth: 1}}>Xem thêm</Text>
+        <View style={{flexDirection: 'row', justifyContent: 'center', marginTop: 10}}>
+          <TouchableOpacity onPress={handleShowMoreComments}>
+            <Text style={{paddingHorizontal: 10, paddingVertical: 5, borderColor: 'black', borderWidth: 1}}>Xem tất cả</Text>
           </TouchableOpacity>
         </View>
       </View>

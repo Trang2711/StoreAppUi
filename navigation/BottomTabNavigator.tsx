@@ -112,6 +112,7 @@ function HomeTabNavigator() {
       />
       <HomeTabStack.Screen
         name="CommentsScreen"
+        options={{ title: 'Bình luận' }}
         component={CommentsScreen}
       />
     </HomeTabStack.Navigator>
@@ -135,6 +136,7 @@ function CategoriesTabNavigator() {
       />
       <HomeTabStack.Screen
         name="CommentsScreen"
+        options={{ title: 'Bình luận' }}
         component={CommentsScreen}
       />
     </CategoriesTabStack.Navigator>

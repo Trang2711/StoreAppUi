@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { StyleSheet, ScrollView, FlatList, DrawerLayoutAndroid, Pressable, TextInput } from 'react-native';
+import { StyleSheet, ScrollView, TouchableOpacity, DrawerLayoutAndroid, Pressable, TextInput } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { Text, View } from '../components/Themed';
 import { AntDesign, Ionicons } from '@expo/vector-icons';
@@ -15,32 +15,29 @@ import SearchAndFiltersApi from '../api/SearchAndFiltersApi'
 const brands = ["Apple", "Dell", "Samsung"]
 
 const configurations = {
-  RAM: ['4 GB', '8 GB', '16 GB', '32 GB', '64 GB', '128 GB'],
-  SSD: ['64 GB', '128 GB', '256 GB', '512 GB', '1 TB', '2 TB', '4 TB'],
-  CPU: ['Core i3', 'Core i5', 'Core i7', 'Apple M1']
+  RAM: ['4GB', '8GB', '16GB', '32GB', '64GB', '128GB', '256GB', '512GB'],
+  SSD: ['32GB', '64GB', '128GB', '256GB', '512GB', '1TB', '2TB', '4TB'],
+  CPU: ['Core i3', 'Core i5', 'Core i7', 'Core i9', 'M1']
 }
 const colors = [
   {
-    name: "white",
-    displayName: "Trắng",
-    colorCode: "#FFFFFF",
+    name: 'Grey',
+    displayName: "Xám",
+    colorCode: "#b3b3b3"
   },
   {
-    name: 'black',
-    displayName: "Đen",
-    colorCode: "#000000"
-  },
-  {
-    name: 'gold',
+    name: 'Yellow',
     displayName: "Vàng",
     colorCode: "#fccc1e"
   },
   {
-    name: 'gray',
-    displayName: "Xám",
-    colorCode: "#b3b3b3"
+    name: 'Silver',
+    displayName: "Bạc",
+    colorCode: "#eaeaea"
   }
 ]
+
+const colorInit = ['Grey', 'Yellow', 'Silver']
 
 const status = [
   {
@@ -55,33 +52,6 @@ const status = [
     value: 'new',
     displayName: 'Mới'
   },
-]
-
-const displayProducts = [
-  {
-    id: '1',
-    srcImg: 'https://images.pexels.com/photos/5054213/pexels-photo-5054213.jpeg?cs=srgb&dl=pexels-cottonbro-5054213.jpg&fm=jpg',
-    retialPrice: '10.000',
-    priceSale: '5.000',
-    sold: '1200',
-    rating_average: '4'
-  },
-  {
-    id: '2',
-    srcImg: 'https://images.pexels.com/photos/3975677/pexels-photo-3975677.jpeg?cs=srgb&dl=pexels-tatiana-syrikova-3975677.jpg&fm=jpg',
-    retialPrice: '110.000',
-    priceSale: '100.000',
-    sold: '200',
-    rating_average: '2.5'
-  },
-  {
-    id: '3',
-    srcImg: 'https://images.pexels.com/photos/3844565/pexels-photo-3844565.jpeg?cs=srgb&dl=pexels-ilya-klimenko-3844565.jpg&fm=jpg',
-    retialPrice: '340.000',
-    priceSale: '310.000',
-    sold: '120',
-    rating_average: '5'
-  }
 ]
 
 export default function FilterScreen({ route, navigation }: any) {
@@ -119,35 +89,35 @@ export default function FilterScreen({ route, navigation }: any) {
 
   const [sortOption, setSortOption] = useState({
     by: 'price',
-    order: 'none'
+    order: 'random'
   })
 
   const _handleLatestChange = () => {
     setSortOption({
       by: 'latest',
-      order: 'asc'
+      order: 'desc'
     })
   }
 
   const _handleSortPriceChange = () => {
-    if (sortOption.by === 'latest' || sortOption.by === 'bestseller') {
+    if (sortOption.by === 'latest' || sortOption.by === 'bestseller' || (sortOption.by === 'price' && sortOption.order === 'random')) {
       setSortOption({
         by: 'price',
         order: 'asc'
       })
       return
     }
-    if (sortOption.by === 'asc') {
+    if (sortOption.by === 'price' && sortOption.order === 'asc') {
       setSortOption({
         by: 'price',
         order: 'desc'
       })
       return
     }
-    if (sortOption.by === 'desc') {
+    if (sortOption.by === 'price' && sortOption.order === 'desc') {
       setSortOption({
         by: 'price',
-        order: 'none'
+        order: 'random'
       })
       return
     }
@@ -156,7 +126,7 @@ export default function FilterScreen({ route, navigation }: any) {
   const _handleBestsellerChange = () => {
     setSortOption({
       by: 'bestseller',
-      order: 'asc'
+      order: 'desc'
     })
   }
 
@@ -167,7 +137,7 @@ export default function FilterScreen({ route, navigation }: any) {
   const validatePrice = () => {
     const _maxPrice = parseInt(maxPrice)
     const _minPrice = parseInt(minPrice)
-    if ((!_maxPrice && !_minPrice) || (_maxPrice && _minPrice && _maxPrice > _minPrice))
+    if (Number.isInteger(maxPrice) && Number.isInteger(minPrice) && _maxPrice > 0 && _minPrice >= 0 && _maxPrice > _minPrice)
       return true
     setPriceError(true)
     return false
@@ -206,17 +176,17 @@ export default function FilterScreen({ route, navigation }: any) {
     const request = {
       searchKeywords: searchKeywords,
       configurations: {
-        brands: brandsSelected,
-        RAM: selectedRAM,
-        CPU: selectedCPU,
-        SSD: selectedSSD,
-        colors: colorSelected,
+        brands: brandsSelected.length === 0 ? brands : brandsSelected,
+        RAM: selectedRAM.length === 0 ? configurations.RAM : selectedRAM,
+        CPU: selectedCPU.length === 0 ? configurations.CPU : selectedCPU,
+        SSD: selectedSSD.length === 0 ? configurations.SSD : selectedSSD,
+        colors: colorSelected.length === 0 ? colorInit : colorSelected,
       },
       prices: {
         min: minPrice === '' ? -1 : parseInt(minPrice),
         max: maxPrice === '' ? 1e9 : parseInt(maxPrice),
       },
-      yearRelease: yearRelease === '' ? -1 : parseInt(yearRelease),
+      year: yearRelease === '' ? -1 : parseInt(yearRelease),
       status: selectedStatus,
       sort_options: sortOption,
       paging: paging
@@ -226,14 +196,13 @@ export default function FilterScreen({ route, navigation }: any) {
       const responce = await SearchAndFiltersApi.getProductList(request)
       const { data, paging } = responce as any
 
-      console.log("responce data: ")
-      console.log(data)
-
       console.log("responce pagination: ")
       console.log(paging)
 
-      if (paging.currentPage === 1)
+      if (paging.currentPage === 1) {
+        console.log("rerender")
         setPostList(data)
+      }
       else
         setPostList(postList.concat(data))
       setPagination(paging)
@@ -415,7 +384,7 @@ export default function FilterScreen({ route, navigation }: any) {
       <View>
 
         <View>
-          <Text style={{ ...styles.title}}>RAM</Text>
+          <Text style={{ ...styles.title }}>RAM</Text>
           <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
             {
               configurations.RAM.map((item: string, index: any) =>
@@ -472,9 +441,9 @@ export default function FilterScreen({ route, navigation }: any) {
           {_renderStatusFilter()}
         </View>
         {_renderConfiguration()}
-        <Pressable onPress={onSubmit} style={{ flexDirection: "row", justifyContent: "flex-end", marginTop: 20 }}>
+        <TouchableOpacity onPress={onSubmit} style={{ flexDirection: "row", justifyContent: "flex-end", marginTop: 20 }}>
           <Text style={styles.submitBtn}>Áp dụng</Text>
-        </Pressable>
+        </TouchableOpacity>
         <View style={{ height: 100 }}></View>
       </ScrollView>
     </View>
@@ -487,7 +456,6 @@ export default function FilterScreen({ route, navigation }: any) {
   )
 
   const handlePaginationChange = (newPage: number) => {
-    // console.log(newPage)
     setPaging({ ...paging, currentPage: newPage })
   }
 
@@ -509,30 +477,30 @@ export default function FilterScreen({ route, navigation }: any) {
           defaultValue={searchKeywords}
         />
         <View style={styles.navigation}>
-          <Pressable onPress={_handleLatestChange}>
+          <TouchableOpacity onPress={_handleLatestChange}>
             <Text style={sortOption.by === 'latest' ? styles.optionActive : styles.option}>
               Mới nhất
           </Text>
-          </Pressable>
-          <Pressable onPress={_handleBestsellerChange}>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={_handleBestsellerChange}>
             <Text style={sortOption.by === 'bestseller' ? styles.optionActive : styles.option}>Bán chạy</Text>
-          </Pressable>
-          <Pressable style={{ flexDirection: "row", alignItems: "center" }} onPress={_handleSortPriceChange}>
+          </TouchableOpacity>
+          <TouchableOpacity style={{ flexDirection: "row", alignItems: "center" }} onPress={_handleSortPriceChange}>
             <Text style={sortOption.by === 'price' ? { ...styles.optionActive, marginRight: 2 } : { ...styles.option, marginRight: 2 }}>Giá</Text>
             {
-              sortOption.order === "none" ?
+              sortOption.order === "random" ?
                 <MaterialCommunityIcons name="arrow-up-down" size={16} color={`${sortOption.by === 'price' ? 'black' : 'gray'}`} /> :
                 sortOption.order === "asc" ?
                   <AntDesign name="arrowup" size={16} color={`${sortOption.by === 'price' ? 'black' : 'gray'}`} /> :
                   <AntDesign name="arrowdown" size={16} color={`${sortOption.by === 'price' ? 'black' : 'gray'}`} />
             }
-          </Pressable>
+          </TouchableOpacity>
 
           {
-            drawer && <Pressable onPress={_handleFilterChange} style={{ flexDirection: "row", alignItems: "center" }}>
+            drawer && <TouchableOpacity onPress={_handleFilterChange} style={{ flexDirection: "row", alignItems: "center" }}>
               <Text style={isFilter ? { ...styles.optionActive, marginRight: 2 } : { ...styles.option, marginRight: 2 }}>Lọc</Text>
               <AntDesign name="filter" size={16} color={`${isFilter ? 'black' : 'gray'}`} />
-            </Pressable>
+            </TouchableOpacity>
           }
         </View>
 

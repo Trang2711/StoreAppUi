@@ -42,7 +42,6 @@ export default function SearchScreen({ navigation }: any) {
     }
     const data = await SearchAndFiltersApi.getSuggestedValues(request)
     const _data = data as any
-    // console.log(_data)
     setSuggestedValues(_data.keyword)
   }
 

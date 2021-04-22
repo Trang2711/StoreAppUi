@@ -13,84 +13,6 @@ import FlashSale from "../components/homeScreen/FlashSale";
 import CardItem from '../components/common/cardItem/CardItem'
 import Carousel from '../components/common/Carousel'
 
-const flashSaleInit = [
-  {
-    id: '1',
-    product_thumbnail: 'https://images.pexels.com/photos/414630/pexels-photo-414630.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-    price: '1230000',
-    discount_price: '10000000'
-  },
-  {
-    id: '2',
-    product_thumbnail: 'https://images.pexels.com/photos/414630/pexels-photo-414630.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-    price: '1230000',
-    discount_price: '10000000'
-  },
-  {
-    id: '3',
-    product_thumbnail: 'https://images.pexels.com/photos/414630/pexels-photo-414630.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-    price: '1230000',
-    discount_price: '10000000'
-  },
-  {
-    id: '4',
-    product_thumbnail: 'https://images.pexels.com/photos/414630/pexels-photo-414630.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-    price: '1230000',
-    discount_price: '10000000'
-  },
-  {
-    id: '11',
-    product_thumbnail: 'https://images.pexels.com/photos/414630/pexels-photo-414630.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-    price: '1230000',
-    discount_price: '10000000'
-  },
-  {
-    id: '12',
-    product_thumbnail: 'https://images.pexels.com/photos/414630/pexels-photo-414630.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-    price: '1230000',
-    discount_price: '10000000'
-  },
-  {
-    id: '13',
-    product_thumbnail: 'https://images.pexels.com/photos/414630/pexels-photo-414630.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-    price: '1230000',
-    discount_price: '10000000'
-  },
-  {
-    id: '14',
-    product_thumbnail: 'https://images.pexels.com/photos/414630/pexels-photo-414630.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-    price: '1230000',
-    discount_price: '10000000'
-  }
-]
-
-const bestsellerProductInit = [
-  {
-    id: '1',
-    product_thumbnail: 'https://images.pexels.com/photos/414630/pexels-photo-414630.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-    price: '1230000',
-    discount_price: '10000000',
-    sold: '12467',
-    rating_average: 4.5
-  },
-  {
-    id: '2',
-    product_thumbnail: 'https://images.pexels.com/photos/414630/pexels-photo-414630.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-    price: '1230000',
-    discount_price: '10000000',
-    sold: '12467',
-    rating_average: 4.5
-  },
-  {
-    id: '3',
-    product_thumbnail: 'https://images.pexels.com/photos/414630/pexels-photo-414630.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-    price: '1230000',
-    discount_price: '10000000',
-    sold: '12467',
-    rating_average: 4.5
-  },
-]
-
 const carousel = [
   {
     imgUrl: 'https://images.pexels.com/photos/4006151/pexels-photo-4006151.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
@@ -117,7 +39,6 @@ export default function HomeScreen() {
     try {
       const data = await ProductApi.getFlashProducts()
       setFlashSale(data as any)
-      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -127,28 +48,27 @@ export default function HomeScreen() {
     const request = {
       searchKeywords: '',
       configurations: {
-        brands: [],
-        RAM: [],
-        CPU: [],
-        SSD: [],
-        colors: [],
+        brands: ["Apple", "Dell", "Samsung"],
+        RAM: ['4GB', '8GB', '16GB', '32GB', '64GB', '128GB', '256GB', '512BG'],
+        SSD: ['32GB', '64GB', '128GB', '256GB', '512GB', '1TB', '2TB', '4TB'],
+        CPU: ['Core i3', 'Core i5', 'Core i7', 'Core i9', 'M1'],
+        colors: ['Grey', 'Yellow', 'Silver'],
       },
       prices: {
         min: -1,
         max: 1e9,
       },
-      yearRelease: -1,
+      year: -1,
       status: 'all',
       sort_options: {
         by: 'bestseller',
-        order: 'asc'
+        order: 'desc'
       },
       paging: {
         currentPage: 1,
         perPage: 20
       }
     }
-    // console.log(request)
     try {
       const responce = await SearchAndFiltersApi.getProductList(request)
       const { data } = responce as any
@@ -163,14 +83,14 @@ export default function HomeScreen() {
     fetchBestsellerProduct()
   }, []);
 
-  const renderItem = (item: any) => (
+  const renderItem = ({item}: any) => (
     <CardItem props={item} navigation={navigation} />
   );
 
   return (
     <View>
       <Header />
-      <ScrollView style={styles.cards}>
+      <ScrollView>
         <ImageBackground
           style={styles.image}
           source={{ uri: 'https://images.pexels.com/photos/4458554/pexels-photo-4458554.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260' }}
@@ -234,7 +154,8 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     width: "100%",
     height: 160,
-    position: 'relative'
+    position: 'relative',
+    marginBottom: 20
   },
 
   slogan: {
