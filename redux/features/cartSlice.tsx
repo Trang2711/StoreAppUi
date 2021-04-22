@@ -6,8 +6,11 @@ interface product {
   id: number;
   productName: string;
   quantity: number;
-  price: number;
+  price: string;
   imgUrl: string;
+}
+interface Number {
+  id: number;
 }
 interface ProductState {
   products: Array<product>;
@@ -22,29 +25,43 @@ export const cartSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState: initialCart,
   reducers: {
+    addingItemQuantity: (state, action: PayloadAction<Number>) => {
+      const index = state.products.findIndex(
+        (product) => product.id == action.payload.id
+      );
+      state.products[index].quantity = state.products[index].quantity + 1;
+    },
+    subtractItemQuantity: (state, action: PayloadAction<Number>) => {
+      const index = state.products.findIndex(
+        (product) => product.id == action.payload.id
+      );
+      if (state.products[index].quantity > 1) {
+        state.products[index].quantity = state.products[index].quantity - 1;
+      }
+    },
     addingNewProductToCart: (state, action: PayloadAction<product>) => {
       const index = state.products.findIndex(
         (product) => product.id == action.payload.id
       );
-      console.log("index", index);
       if (index >= 0) {
         state.products[index].quantity = state.products[index].quantity + 1;
       } else {
         state.products.push(action.payload);
       }
     },
-    deleteAnItemFromCart: (state, action: PayloadAction<number>) => {
+    deleteAnItemFromCart: (state, action: PayloadAction<Number>) => {
       state.products = state.products.filter(
-        (product) => product.id !== action.payload
+        (product) => product.id !== action.payload.id
       );
-      return state;
     },
   },
 });
 
 export const {
+  addingItemQuantity,
   addingNewProductToCart,
   deleteAnItemFromCart,
+  subtractItemQuantity,
 } = cartSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type

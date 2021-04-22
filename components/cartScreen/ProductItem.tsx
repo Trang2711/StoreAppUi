@@ -1,8 +1,49 @@
-import React from "react";
-import { StyleSheet, Image, Text, View } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Image, Text, View, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useAppDispatch } from "../../redux/app/hook";
+import {
+  addingItemQuantity,
+  deleteAnItemFromCart,
+  subtractItemQuantity,
+} from "../../redux/features/cartSlice";
 const ProductItem = ({ productItem }: any) => {
+  ///////////property
+  const dispatch = useAppDispatch();
+  const [confirmDeleting, setConfirmDeleting] = useState(false);
+  //////////function
+
+  const showAlert = () => {
+    Alert.alert(
+      "Xóa sản phẩm?",
+      "Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+        { text: "OK", onPress: () => setConfirmDeleting(true) },
+      ]
+    );
+  };
+
+  const _increaseThisItemQuantity = () => {
+    dispatch(addingItemQuantity({ id: productItem.id }));
+  };
+  const _subtractThisItemQuantity = () => {
+    dispatch(subtractItemQuantity({ id: productItem.id }));
+  };
+  const _deleteThisItemFromCart = () => {
+    showAlert();
+  };
+  useEffect(() => {
+    if (confirmDeleting) {
+      dispatch(deleteAnItemFromCart({ id: productItem.id }));
+      setConfirmDeleting(false);
+    }
+  }, [confirmDeleting]);
+
   return (
     <View style={styles.container}>
       <View style={styles.product_container}>
@@ -28,12 +69,12 @@ const ProductItem = ({ productItem }: any) => {
                   Giá: {"  "}
                 </Text>
                 <Text style={[styles.text18, styles.price]}>
-                  {productItem.price}₫{" "}
+                  {productItem.price}₫
                 </Text>
               </View>
             </View>
             <View style={styles.discardIcon}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={_deleteThisItemFromCart}>
                 <Ionicons
                   name="trash-outline"
                   size={35}
@@ -44,7 +85,10 @@ const ProductItem = ({ productItem }: any) => {
           </View>
           <View style={styles.quantity_area}>
             <Text style={styles.text18}>Số lượng:{"     "} </Text>
-            <TouchableOpacity style={styles.icon}>
+            <TouchableOpacity
+              style={styles.icon}
+              onPress={_subtractThisItemQuantity}
+            >
               <View style={styles.addingQuantity}>
                 <Text style={styles.text40}>-</Text>
               </View>
@@ -52,7 +96,10 @@ const ProductItem = ({ productItem }: any) => {
             <View style={styles.quantity_outerContainer}>
               <Text style={styles.text22}> {productItem.quantity} </Text>
             </View>
-            <TouchableOpacity style={styles.icon}>
+            <TouchableOpacity
+              style={styles.icon}
+              onPress={_increaseThisItemQuantity}
+            >
               <View style={styles.subtractQuantity}>
                 <Text style={styles.text30}>+</Text>
               </View>

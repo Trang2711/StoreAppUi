@@ -1,16 +1,37 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Image } from "react-native";
+import { StyleSheet, Image, Alert, View, Text } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
-import { useAppSelector, useAppDispatch } from "../redux/app/hook";
+import { useAppSelector } from "../redux/app/hook";
 import ProductItem from "../components/cartScreen/ProductItem";
-import { Text, View } from "../components/Themed";
 import { productsInsideCart } from "../redux/features/cartSlice";
 export default function CartScreen() {
-  const dispatch = useAppDispatch();
+  ////////state
   const productList = useAppSelector(productsInsideCart);
+  const [totalItemInCart, setTotalItemInCart] = useState(0);
+  const [totalMoney, setTotalMoney] = useState("");
+  /////// function
+
   useEffect(() => {
     console.log("product in cart", productList);
-    console.log("product lenght", productList.length);
+    const _calculatingCartItemAmount = () => {
+      let totalFigureInCart = 0;
+      productList.map((product) => {
+        totalFigureInCart = totalFigureInCart + product.quantity;
+      });
+      setTotalItemInCart(totalFigureInCart);
+    };
+    const _calculatingCartTotalMoney = () => {
+      let money = 0;
+      productList.map((product) => {
+        money += parseInt(product.price.split(".").join("")) * product.quantity;
+      });
+      const moneyToStr = money
+        .toString()
+        .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+      setTotalMoney(moneyToStr);
+    };
+    _calculatingCartItemAmount();
+    _calculatingCartTotalMoney();
   }, [productList]);
   return (
     <View style={styles.whole_screen}>
@@ -26,10 +47,12 @@ export default function CartScreen() {
           <View style={styles.payment_area}>
             <View style={styles.price_container}>
               <View style={[{ flex: 1 }, styles.into_money]}>
-                <Text style={styles.intoMoney}>Thành tiền (5)</Text>
+                <Text style={styles.intoMoney}>
+                  Thành tiền ({totalItemInCart})
+                </Text>
               </View>
               <View style={[{ flex: 1 }, styles.total_amount]}>
-                <Text style={styles.money}>200.000.000₫</Text>
+                <Text style={styles.money}>{totalMoney}₫</Text>
               </View>
             </View>
             <View style={styles.proceed_buying}>
@@ -43,7 +66,9 @@ export default function CartScreen() {
         </View>
       ) : (
         <View>
-          <Text>trong gio hang khong co gi</Text>
+          <TouchableOpacity>
+            <Text>trong gio hang khong co gi</Text>
+          </TouchableOpacity>
         </View>
       )}
     </View>

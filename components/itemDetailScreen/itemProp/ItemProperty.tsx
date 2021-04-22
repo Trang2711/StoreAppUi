@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -15,6 +15,7 @@ const ItemProperty = ({
   IsLoadingMoreCmt,
   specifiedProduct,
 }: any) => {
+  const [addingToCartTimeOut, setAddingToCartTimeOut] = useState(true);
   const dispatch = useAppDispatch();
   const productList = useAppSelector(productsInsideCart);
 
@@ -33,8 +34,12 @@ const ItemProperty = ({
   }
   useEffect(() => {
     console.log("product in cart", productList);
-    console.log("product length", productList.length);
   }, [productList]);
+  useEffect(() => {
+    setTimeout(() => {
+      setAddingToCartTimeOut(false);
+    }, 1000);
+  }, []);
   return (
     <View>
       <View>
@@ -47,15 +52,17 @@ const ItemProperty = ({
         <Text style={{ fontSize: 18 }}>Cấu hình</Text>
       </View>
       <View>
-        <TouchableOpacity>
-          <Text
-            style={[styles.text20, styles.addingToCart]}
-            onPress={_addingAnItemToCart}
-          >
-            Thêm vào giỏ hàng
-            <Ionicons name="cart-outline" size={20}></Ionicons>
-          </Text>
-        </TouchableOpacity>
+        {!addingToCartTimeOut && (
+          <TouchableOpacity>
+            <Text
+              style={[styles.text20, styles.addingToCart]}
+              onPress={_addingAnItemToCart}
+            >
+              Thêm vào giỏ hàng
+              <Ionicons name="cart-outline" size={20}></Ionicons>
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
       <View style={styles.commentSection}>
         <Text>Nhận xét: ({amountOfCmt})</Text>
