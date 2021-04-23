@@ -21,7 +21,10 @@ export default function LoginScreen({ navigation }: any) {
         email: email
       }
       console.log("sign up")
-      // const responce = await UserApi.signIn(form)
+      const responce = await UserApi.signIn(form)
+      const {token} = responce as any
+      console.log('token' + token)
+      localStorage.setItem('token', token)
       // if(...) {
       //   navigation.navigate('HomeScreen')
       // }

@@ -12,7 +12,13 @@ const AxiosClient = axios.create({
 });
 
 AxiosClient.interceptors.request.use(async (config) => {
-  //config.headers.common['Authorization'] = AUTH_TOKEN;
+  if(localStorage.token){
+    if (jwtDecode(token).exp < Date.now() / 1000) {
+      localStorage.clear();
+    }
+    config.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
+  }
+  
   return config;
 });
 
