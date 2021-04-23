@@ -54,9 +54,7 @@ const ProductItem = ({ itemId }: any) => {
     }
     sliceCmt();
   }, [extraCmt]);
-  useEffect(() => {
-    console.log("imgs", itemImg);
-  }, [itemImg]);
+  useEffect(() => {}, [itemImg]);
   return (
     <View>
       <ImgSlider itemImg={itemImg} />
