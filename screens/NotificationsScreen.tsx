@@ -21,20 +21,21 @@ export default function NotificationsScreen({ route }: any) {
 
   useEffect(() => {
     let mounted = true;
-    async function fetchProductByPage() {
-      try {
-        const response = await ProductApi.getProductByPagination(CurrentPage);
-        const temp = response as any;
-        setAllProducts((prev): any => [...prev, ...temp]);
-      } catch (error) {
-        console.log(error);
-      }
-    }
+    // async function fetchProductByPage() {
+    //   try {
+    //     const response = await ProductApi.getProductByPagination(CurrentPage);
+    //     const temp = response as any;
+    //     setAllProducts((prev): any => [...prev, ...temp]);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // }
     async function fetchAllProducts() {
       try {
         const response = await ProductApi.getAllProducts();
         const temp = response as any;
         setAmountOfPage(temp.length);
+        setAllProducts(temp);
       } catch (error) {
         console.log(error);
       }
@@ -47,7 +48,7 @@ export default function NotificationsScreen({ route }: any) {
     if (mounted) {
       handlingLoadingMoreItemSpinner();
       fetchAllProducts();
-      fetchProductByPage();
+      // fetchProductByPage();
       setInterval(() => {
         setLoadingWhileFetchData(false);
       }, 1000);
@@ -58,12 +59,9 @@ export default function NotificationsScreen({ route }: any) {
   }, [CurrentPage]);
 
   useEffect(() => {
-    console.log("route param", route.params.itemId);
+    // console.log("route param", route.params.itemId);
   }, []);
-  const _clickedToItem = () => {
-    alert("ah ah ahaa");
-    dispatch(incrementByAmount(6));
-  };
+  const splicedProduct = allProducts.splice(0, 11);
   return (
     <ScrollView
       onMomentumScrollEnd={(e) => {
@@ -84,10 +82,7 @@ export default function NotificationsScreen({ route }: any) {
         ) : (
           <View>
             <ProductItem itemId={route.params.itemId} />
-            <RelatedItems
-              allProducts={allProducts}
-              clickedToItem={_clickedToItem}
-            />
+            <RelatedItems allProducts={splicedProduct} />
             {IsloadingMoreItem ? (
               <ActivityIndicator size="large" color="black" />
             ) : null}

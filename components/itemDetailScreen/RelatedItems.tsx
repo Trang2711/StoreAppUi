@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Text, Image, View, TouchableOpacity } from "react-native";
 import DisplayItems from "./DisplayItems";
 
-const RelatedItems = ({ allProducts, clickedToItem }: any) => {
+const RelatedItems = ({ allProducts }: any) => {
   return (
     <View>
       <View>

@@ -5,11 +5,12 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 
 const DisplayItems = ({ product }: any) => {
+  const baseUrl = "http://13.55.8.176:8080";
   const navigation = useNavigation();
   const handleClickedToSpecifiedItem = () => {
     navigation.navigate("TopNav", {
       screen: "NotificationsScreen",
-      params: { itemId: product.id },
+      params: { itemId: product.product_code },
     });
   };
   return (
@@ -18,7 +19,7 @@ const DisplayItems = ({ product }: any) => {
         <View style={styles.eachPost}>
           <Image
             style={styles.moreItemImg}
-            source={{ uri: product.lapUrl[1] }}
+            source={{ uri: baseUrl + product.image }}
           ></Image>
           <Text>Giá: 1 triệu</Text>
         </View>

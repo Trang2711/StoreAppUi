@@ -14,19 +14,21 @@ const ItemProperty = ({
   handlingUserPressingWatchMoreCmt,
   IsLoadingMoreCmt,
   specifiedProduct,
+  itemId,
 }: any) => {
+  //////////state
   const [addingToCartTimeOut, setAddingToCartTimeOut] = useState(true);
   const dispatch = useAppDispatch();
   const productList = useAppSelector(productsInsideCart);
-
+  //////////////function
   function _addingAnItemToCart() {
     const actionResult = dispatch(
       addingNewProductToCart({
-        id: specifiedProduct.id,
-        productName: specifiedProduct.laptopName,
+        id: itemId,
+        productName: specifiedProduct.title,
         quantity: 1,
         price: specifiedProduct.price,
-        imgUrl: specifiedProduct.lapUrl[0],
+        imgUrl: specifiedProduct.product_thumbnail,
       })
     );
     console.log("unwarp", unwrapResult(actionResult));
@@ -38,15 +40,17 @@ const ItemProperty = ({
   useEffect(() => {
     setTimeout(() => {
       setAddingToCartTimeOut(false);
-    }, 1000);
+    }, 2000);
   }, []);
   return (
     <View>
       <View>
         <View style={styles.productNamePrice}>
-          <Text style={{ fontSize: 20 }}>{specifiedProduct.laptopName}</Text>
+          <Text numberOfLines={1} style={[{ fontSize: 20 }, styles.title]}>
+            {specifiedProduct.title}
+          </Text>
           <Text style={{ fontSize: 20 }}>
-            Giá: <Text style={styles.boldText}>{specifiedProduct.price}d</Text>
+            Giá: <Text style={styles.boldText}>{specifiedProduct.price}đ</Text>
           </Text>
         </View>
         <Text style={{ fontSize: 18 }}>Cấu hình</Text>
@@ -98,7 +102,9 @@ const styles = StyleSheet.create({
   text20: {
     fontSize: 20,
   },
-
+  title: {
+    width: 200,
+  },
   addingToCart: {
     width: "auto",
     padding: 10,

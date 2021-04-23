@@ -23,7 +23,7 @@ export default function CartScreen() {
     const _calculatingCartTotalMoney = () => {
       let money = 0;
       productList.map((product) => {
-        money += parseInt(product.price.split(".").join("")) * product.quantity;
+        money += parseInt(product.price) * product.quantity;
       });
       const moneyToStr = money
         .toString()

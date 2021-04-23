@@ -12,6 +12,11 @@ const ProductItem = ({ productItem }: any) => {
   ///////////property
   const dispatch = useAppDispatch();
   const [confirmDeleting, setConfirmDeleting] = useState(false);
+  const baseUrl = "http://13.55.8.176:8080";
+  const realPrice = "";
+  const moneyToStr = productItem.price
+    .toString()
+    .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
   //////////function
 
   const showAlert = () => {
@@ -50,7 +55,7 @@ const ProductItem = ({ productItem }: any) => {
         <View style={styles.img_area}>
           <Image
             style={styles.image}
-            source={require("../../assets/images/window-desk-watches-notebook-smartphone-headphones.jpg")}
+            source={{ uri: baseUrl + productItem.imgUrl }}
           />
         </View>
         <View style={styles.content_area}>
@@ -68,9 +73,7 @@ const ProductItem = ({ productItem }: any) => {
                 <Text style={[styles.text15, { fontWeight: "bold" }]}>
                   Giá: {"  "}
                 </Text>
-                <Text style={[styles.text18, styles.price]}>
-                  {productItem.price}₫
-                </Text>
+                <Text style={[styles.text18, styles.price]}>{moneyToStr}₫</Text>
               </View>
             </View>
             <View style={styles.discardIcon}>

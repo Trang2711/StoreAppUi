@@ -29,7 +29,7 @@ export default function HomeScreen() {
     }
     async function fetchProductByPage() {
       try {
-        const response = await ProductApi.getProductByPagination(1);
+        const response = await ProductApi.getAllProducts();
         const temp = response as any;
         setDataByPage(temp);
       } catch (error) {
@@ -40,6 +40,7 @@ export default function HomeScreen() {
     fetchFlashSale();
   }, []);
   console.log("databypage", DataByPage);
+  const displaySplicedData = DataByPage.splice(0, 11);
   return (
     <View>
       <ScrollView>
@@ -58,7 +59,7 @@ export default function HomeScreen() {
           </TouchableOpacity>
         </View>
         <FlashSale list={flashSale} />
-        <RelatedItems allProducts={DataByPage} />
+        <RelatedItems allProducts={displaySplicedData} />
       </ScrollView>
     </View>
   );

@@ -8,7 +8,11 @@ const ProductItem = ({ itemId }: any) => {
   const [amountOfCmt, setAmountOfCmt] = useState();
   const [DisPlayCmt, setDisPlayCmt] = useState<any[]>([]);
   const [IsLoadingMoreCmt, setIsLoadingMoreCmt] = useState(false);
-  const [itemImg, setItemImg] = useState([]);
+  const [itemImg, setItemImg] = useState([
+    "/media/15d-700x530_kHFIYGS.jpg",
+    "/media/15d-700x530_kHFIYGS.jpg",
+    "/media/15d-700x530_kHFIYGS.jpg",
+  ]);
   const [extraCmt, setExtraCmt] = useState(0);
   const [specifiedProduct, setSpecifiedProduct] = useState({});
   function handlingUserPressingWatchMoreCmt() {
@@ -18,7 +22,6 @@ const ProductItem = ({ itemId }: any) => {
       setIsLoadingMoreCmt(false);
     }, 1000);
   }
-
   useEffect(() => {
     let mounted = true;
     async function fetchSpecifiedProduct() {
@@ -26,7 +29,7 @@ const ProductItem = ({ itemId }: any) => {
         const response = await ProductApi.getSpecifiedProduct(itemId);
         setSpecifiedProduct(response);
         const temp = response as any;
-        setItemImg(temp.lapUrl);
+        setItemImg((prev): any => [...prev, temp.product_thumbnail]);
       } catch (error) {
         console.log(error);
       }
@@ -52,8 +55,8 @@ const ProductItem = ({ itemId }: any) => {
     sliceCmt();
   }, [extraCmt]);
   useEffect(() => {
-    console.log("id in productItem", itemId);
-  }, []);
+    console.log("imgs", itemImg);
+  }, [itemImg]);
   return (
     <View>
       <ImgSlider itemImg={itemImg} />
@@ -63,6 +66,7 @@ const ProductItem = ({ itemId }: any) => {
         handlingUserPressingWatchMoreCmt={handlingUserPressingWatchMoreCmt}
         IsLoadingMoreCmt={IsLoadingMoreCmt}
         specifiedProduct={specifiedProduct}
+        itemId={itemId}
       />
     </View>
   );
