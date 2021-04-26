@@ -12,6 +12,7 @@ const { width } = Dimensions.get("window");
 const height = (width * 100) / 60;
 
 const ImgSlider = ({ itemImg }: any) => {
+  const baseUrl = "http://13.55.8.176:8080";
   const [activePage, setActivePage] = useState(0);
   function change({ nativeEvent }: any) {
     const slide = Math.ceil(
@@ -36,7 +37,7 @@ const ImgSlider = ({ itemImg }: any) => {
               <Image
                 style={[styles.image, { width }]}
                 resizeMode={"contain"}
-                source={{ uri: item }}
+                source={{ uri: baseUrl + item }}
               ></Image>
             </View>
           ))}

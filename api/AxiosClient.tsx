@@ -1,5 +1,6 @@
 import axios from "axios";
 import queryString from "query-string";
+import jwtDecode from "jsonwebtoken";
 
 export const baseUrl = 'http://13.55.8.176:8080'
 
@@ -12,7 +13,13 @@ const AxiosClient = axios.create({
 });
 
 AxiosClient.interceptors.request.use(async (config) => {
-  //config.headers.common['Authorization'] = AUTH_TOKEN;
+  // if(localStorage.token){
+  //   // if (jwtDecode(localStorage.token).exp < Date.now() / 1000) {
+      
+  //   // }
+  //   config.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token');
+  // }
+  
   return config;
 });
 

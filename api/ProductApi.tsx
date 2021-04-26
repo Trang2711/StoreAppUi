@@ -2,7 +2,7 @@ import AxiosClient from "./AxiosClient";
 
 const ProductApi = {
   getAllProducts: () => {
-    const url = `/products`;
+    const url = `/api/all_products`;
     return AxiosClient.get(url);
   },
   getProductDetails: (id: any) => {
@@ -14,6 +14,14 @@ const ProductApi = {
     return AxiosClient.get(url)
   },
   
+  getSpecifiedProduct: (id: any) => {
+    const url = `/api/product/${id}`;
+    return AxiosClient.get(url);
+  },
+  // getProductByPagination: (id: any) => {
+  //   const url = `/api/products?_page=${id}&_limit=10`;
+  //   return AxiosClient.get(url);
+  // },
 };
 
 export default ProductApi;
