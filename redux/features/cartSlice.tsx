@@ -58,7 +58,7 @@ export const cartSlice = createSlice({
     },
   },
 });
-
+s
 export const {
   addingItemQuantity,
   addingNewProductToCart,
