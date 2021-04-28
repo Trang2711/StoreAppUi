@@ -7,7 +7,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import Header from '../components/filterScreen/Header'
 import Tag from '../components/filterScreen/Tag'
-import ColorCircle from '../components/filterScreen/ColorCircle'
+import ColorCircle from '../components/common/ColorCircle'
 import CardItem from '../components/common/cardItem/CardItem'
 import Pagination from '../components/common/Pagination'
 import SearchAndFiltersApi from '../api/SearchAndFiltersApi'
@@ -21,18 +21,18 @@ const configurations = {
 }
 const colors = [
   {
-    name: 'Grey',
-    displayName: "Xám",
+    value: 'Grey',
+    label: "Xám",
     colorCode: "#b3b3b3"
   },
   {
-    name: 'Yellow',
-    displayName: "Vàng",
+    value: 'Yellow',
+    label: "Vàng",
     colorCode: "#fccc1e"
   },
   {
-    name: 'Silver',
-    displayName: "Bạc",
+    value: 'Silver',
+    label: "Bạc",
     colorCode: "#eaeaea"
   }
 ]
@@ -299,9 +299,9 @@ export default function FilterScreen({ route, navigation }: any) {
 
   const handleSelectColor = (flag: 'ADD' | 'REMOVE', color: any) => {
     if (flag === 'ADD')
-      setColorSelected([...colorSelected, color.name])
+      setColorSelected([...colorSelected, color.value])
     else if (flag === 'REMOVE') {
-      const newArr = colorSelected.filter((value: any) => color.name !== value)
+      const newArr = colorSelected.filter((value: any) => color.value !== value)
       setColorSelected(newArr)
     }
   }
@@ -313,7 +313,7 @@ export default function FilterScreen({ route, navigation }: any) {
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           {
             colors.map((item, index) => (
-              <ColorCircle key={index} item={item} onSelect={handleSelectColor} />
+              <ColorCircle key={index} item={item} onPress={handleSelectColor} />
             ))
           }
         </View>

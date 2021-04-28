@@ -10,7 +10,7 @@ import CardItemFlashSale from '../common/cardItem/CardItemFlashSale'
 import { ScrollView } from 'react-native-gesture-handler';
 
 
-export default function FlashSale({ list }: any) {
+export default function FlashSale({ list, navigation }: any) {
 
     return (
         <View>
@@ -23,6 +23,7 @@ export default function FlashSale({ list }: any) {
                     list&&list.map((item: { id: any; }) => (<CardItemFlashSale
                         key={item.id}
                         props={item}
+                        navigation={navigation}
                     />)
                     )
                 }

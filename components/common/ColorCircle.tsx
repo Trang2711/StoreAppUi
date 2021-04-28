@@ -2,33 +2,22 @@ import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, Pressable, View } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 
-export interface ColorCircle {
-    item: ColorItem,
-    onSelect: Function,
-    key: any
-}
-
-interface ColorItem {
-    name: string,
-    colorCode: string,
-    displayName: string,
-}
-
-const ColorCircle = ({ item, onSelect, key }: ColorCircle) => {
+const ColorCircle = ({ item, _key, onPress }: any) => {
     const [isSelected, setIsSelected] = useState<boolean>(false)
 
     useEffect(() => {
-        if (!onSelect) return
+        if (!onPress) return
         if (isSelected)
-            onSelect("ADD", item)
+            onPress("ADD", item)
         else
-            onSelect("REMOVE", item)
+            onPress("REMOVE", item)
     }, [isSelected])
+
 
     return (
         <Pressable 
             onPress={() => setIsSelected(!isSelected)} 
-            key={key} 
+            key={_key} 
             style={{ flexDirection: "row" }}
         >
             <View style={
@@ -38,7 +27,7 @@ const ColorCircle = ({ item, onSelect, key }: ColorCircle) => {
             >
                 {isSelected && <Ionicons name="ios-checkmark-sharp" size={15} color="#137ee8" />}
             </View>
-            <Text style={{ fontSize: 15 }}>{item.displayName}</Text>
+            <Text style={{ fontSize: 15, color: 'black' }}>{item.label}</Text>
         </Pressable>
     )
 }
@@ -52,8 +41,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "#e0e0e0",
         marginRight: 5,
-      },
-      circleActive: {
+    },
+    circleActive: {
         width: 20,
         height: 20,
         borderRadius: 10,
@@ -62,5 +51,5 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         alignItems: "center",
         justifyContent: "center"
-      },
+    },
 })

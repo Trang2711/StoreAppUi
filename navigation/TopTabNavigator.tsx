@@ -16,7 +16,7 @@ export default function TopTabNavigator() {
       <TopTabStack.Screen name="SearchScreen" component={SearchScreen} options={{headerShown:false}}/>
       <TopTabStack.Screen name="FilterScreen" component={FilterScreen} options={{headerShown:false}}/>
       <TopTabStack.Screen name="NotificationsScreen" component={NotificationsScreen} />
-      <TopTabStack.Screen name="CartScreen" component={CartScreen} />
+      <TopTabStack.Screen name="CartScreen" component={CartScreen} options={{ title: 'Giỏ hàng' }}/>
       <TopTabStack.Screen name="ItemDetailScreen" component={ItemDetailScreen} options={{ headerShown: false }}
       />
     </TopTabStack.Navigator>

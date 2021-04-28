@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Image, Text, View, Alert } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { StyleSheet, Image, Text, View, Alert, ImageBackground } from "react-native";
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useAppDispatch } from "../../redux/app/hook";
+import { baseUrl } from '../../api/AxiosClient'
+import { AntDesign } from '@expo/vector-icons';
 import {
   addingItemQuantity,
   deleteAnItemFromCart,
   subtractItemQuantity,
 } from "../../redux/features/cartSlice";
+
 const ProductItem = ({ productItem }: any) => {
-  ///////////property
+  const { id, title, product_thumbnail, price, discount_price, sold, rating_average, quantity } = productItem
   const dispatch = useAppDispatch();
   const [confirmDeleting, setConfirmDeleting] = useState(false);
-  const baseUrl = "http://13.55.8.176:8080";
-  const realPrice = "";
   const moneyToStr = productItem.price
     .toString()
     .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-  //////////function
 
   const showAlert = () => {
     Alert.alert(
@@ -49,67 +49,50 @@ const ProductItem = ({ productItem }: any) => {
     }
   }, [confirmDeleting]);
 
+  const _fomatNumber1 = (num: number) => {
+    const formatter = new Intl.NumberFormat('us')
+    return formatter.format(num)
+  }
+
   return (
     <View style={styles.container}>
-      <View style={styles.product_container}>
-        <View style={styles.img_area}>
-          <Image
-            style={styles.image}
-            source={{ uri: baseUrl + productItem.imgUrl }}
-          />
+      <ImageBackground style={styles.image} source={{ uri: `${baseUrl}${product_thumbnail}` }} >
+      </ImageBackground>
+
+      <View style={styles.content_area}>
+        <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: 'bold' }}>
+          {title}
+        </Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 3 }}>
+          <Text style={styles.priceSale} >{_fomatNumber1(discount_price)}đ</Text>
+          <Text style={styles.price} >{_fomatNumber1(price)}đ</Text>
         </View>
-        <View style={styles.content_area}>
-          <View style={styles.title_price_assurence_discardIcon}>
-            <View style={styles.title_price_assurence}>
-              <View>
-                <Text numberOfLines={1} style={[styles.text22, styles.title]}>
-                  {productItem.productName}
-                </Text>
-              </View>
-              <View>
-                <Text style={[styles.text18]}>Hàng chính hãng</Text>
-              </View>
-              <View style={styles.price_area}>
-                <Text style={[styles.text15, { fontWeight: "bold" }]}>
-                  Giá: {"  "}
-                </Text>
-                <Text style={[styles.text18, styles.price]}>{moneyToStr}₫</Text>
-              </View>
-            </View>
-            <View style={styles.discardIcon}>
-              <TouchableOpacity onPress={_deleteThisItemFromCart}>
-                <Ionicons
-                  name="trash-outline"
-                  size={35}
-                  color="#cc0000"
-                ></Ionicons>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={styles.quantity_area}>
-            <Text style={styles.text18}>Số lượng:{"     "} </Text>
+        <View style={styles.quantity_area}>
+          <Text style={{ fontSize: 14, marginRight: 5 }}>Số lượng:</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <TouchableOpacity
-              style={styles.icon}
               onPress={_subtractThisItemQuantity}
             >
-              <View style={styles.addingQuantity}>
-                <Text style={styles.text40}>-</Text>
-              </View>
+              <MaterialCommunityIcons style={styles.countBtn} name="minus" size={15} color="black" />
             </TouchableOpacity>
-            <View style={styles.quantity_outerContainer}>
-              <Text style={styles.text22}> {productItem.quantity} </Text>
-            </View>
+            <Text style={{paddingHorizontal: 3}}> {quantity} </Text>
             <TouchableOpacity
-              style={styles.icon}
               onPress={_increaseThisItemQuantity}
             >
-              <View style={styles.subtractQuantity}>
-                <Text style={styles.text30}>+</Text>
-              </View>
+              <AntDesign name="plus" style={styles.countBtn} size={15} color="black" />
             </TouchableOpacity>
           </View>
         </View>
+
       </View>
+
+      <TouchableOpacity onPress={_deleteThisItemFromCart} style={{marginLeft: 5}}>
+        <Ionicons
+          name="trash-outline"
+          size={22}
+          color="#cc0000"
+        ></Ionicons>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -118,118 +101,42 @@ export default ProductItem;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#f2f2f2",
+    backgroundColor: "white",
     marginBottom: 10,
-    marginLeft: 10,
-    marginRight: 10,
-    borderRadius: 10,
-  },
-
-  product_container: {
-    marginTop: 10,
-    width: "95%",
-    height: 165,
-    marginLeft: "auto",
-    marginRight: "auto",
-    display: "flex",
+    paddingHorizontal: 10,
+    paddingVertical: 3,
     flexDirection: "row",
-  },
-  img_area: {
-    flex: 3,
-    display: "flex",
-    alignItems: "center",
+    alignItems: 'center',
+    marginTop: 10
   },
   image: {
     resizeMode: "cover",
-    width: "90%",
-    height: "95%",
-    borderRadius: 5,
+    width: 120,
+    height: 100,
+    marginRight: 5
   },
   content_area: {
-    flex: 5,
-    marginLeft: 10,
-  },
-  title_price_assurence_discardIcon: {
-    width: "100%",
-    height: "70%",
-    display: "flex",
-    flexDirection: "row",
-  },
-  title_price_assurence: {
-    flex: 5,
-    display: "flex",
-    marginTop: 10,
-    marginBottom: 10,
-    justifyContent: "space-between",
-  },
-  discardIcon: {
     flex: 1,
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  text22: {
-    fontSize: 22,
-  },
-  text30: {
-    fontSize: 32,
-  },
-  text40: {
-    fontSize: 40,
-  },
-  text18: {
-    fontSize: 18,
-  },
-  text15: {
-    fontSize: 15,
-  },
-  price_area: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  price: {
-    color: "red",
-  },
-  title: {
-    fontWeight: "bold",
   },
   quantity_area: {
-    display: "flex",
-    width: "100%",
-    height: "30%",
     flexDirection: "row",
-    justifyContent: "center",
     alignItems: "center",
+    marginTop: 7
   },
-  subtractQuantity: {
-    width: "100%",
-    height: "100%",
-    borderColor: "black",
-    backgroundColor: "#bfbfbf",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+  countBtn: {
+    backgroundColor: '#DDDDDD',
+    paddingHorizontal: 6,
+    paddingVertical: 5,
   },
-  quantity_outerContainer: {
-    height: "50%",
-    width: "20%",
-    backgroundColor: "#e6e6e6",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+  price: {
+    fontSize: 11,
+    color: 'gray',
+    textDecorationLine: "line-through"
   },
-  addingQuantity: {
-    width: "100%",
-    height: "100%",
-    borderColor: "black",
-    backgroundColor: "#bfbfbf",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  icon: {
-    width: 30,
-    height: 30,
+  priceSale: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: "#d53332",
+    marginRight: 6
   },
 });

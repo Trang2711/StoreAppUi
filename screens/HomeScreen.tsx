@@ -74,7 +74,7 @@ export default function HomeScreen() {
       const { data } = responce as any
       setBestsellerProduct(data as any)
     } catch (error) {
-      console.log("" + error)
+      console.log("Failed to fetch bestseller: " + error)
     }
   }
 
@@ -98,7 +98,7 @@ export default function HomeScreen() {
           <Text style={styles.slogan}>Đắm chìm trong các sản phẩm công nghệ</Text>
         </ImageBackground>
       
-      <FlashSale list={flashSale} />
+      <FlashSale list={flashSale} navigation={navigation}/>
 
       <View style={{ marginTop: 20 }}>
         <Carousel list={carousel} width={windowWidth} height={150} />

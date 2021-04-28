@@ -8,6 +8,8 @@ import { RootStackParamList, StackParamList } from '../types';
 import BottomTabNavigator from './BottomTabNavigator';
 import TopTabNavigator from './TopTabNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
+import ItemDetailScreen from '../screens/ItemDetailScreen';
+import CommentsScreen from '../screens/CommentsScreen'
 
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
@@ -38,16 +40,27 @@ function RootNavigator() {
 const RootStack = createStackNavigator<StackParamList>();
 
 function RootStackTabNavigator() {
-    return (
-        <RootStack.Navigator>
-            <RootStack.Screen
-              name="BottomNav" 
-              component={BottomTabNavigator}
-              options={{ headerShown: false }} />
-            <RootStack.Screen
-              name="TopNav"
-              component={TopTabNavigator}
-              options={{ headerShown: false }} />
-        </RootStack.Navigator>
-    )
+  return (
+    <RootStack.Navigator>
+      <RootStack.Screen
+        name="BottomNav"
+        component={BottomTabNavigator}
+        options={{ headerShown: false }} />
+      <RootStack.Screen
+        name="TopNav"
+        component={TopTabNavigator}
+        options={{ headerShown: false }} />
+
+      <RootStack.Screen
+        name="ItemDetailScreen"
+        component={ItemDetailScreen}
+        options={{ headerShown: false }}
+      />
+      <RootStack.Screen
+        name="CommentsScreen"
+        options={{ title: 'Bình luận' }}
+        component={CommentsScreen}
+      />
+    </RootStack.Navigator>
+  )
 }

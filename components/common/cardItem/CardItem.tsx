@@ -7,8 +7,6 @@ const CardItem = ({ props, navigation }: any) => {
     const { id, title, product_thumbnail, price, discount_price, sold, rating_average } = props
     const dealDiscount = Math.round((price - discount_price) * 100.0 / price)
 
-    // console.log(props)
-
     const _fomatNumber = (num: number) => {
         const formatter = new Intl.NumberFormat('en', {
             notation: 'compact'
@@ -26,7 +24,7 @@ const CardItem = ({ props, navigation }: any) => {
         <TouchableOpacity
             style={styles.container}
             onPress={() =>
-                navigation.navigate("ItemDetailScreen")
+                navigation.navigate('Root', {screen: "ItemDetailScreen", params: {id: id}})
             }
         >
             <ImageBackground style={styles.image} source={{ uri: `${baseUrl}${product_thumbnail}` }} >

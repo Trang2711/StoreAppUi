@@ -3,14 +3,16 @@ import type { RootState } from "../app/store";
 
 // Define a type for the slice state
 interface product {
-  id: number;
-  productName: string;
+  id: string;
+  title: string;
   quantity: number;
-  price: string;
-  imgUrl: string;
+  price: number;
+  discount_price: number;
+  product_thumbnail: string;
+  color: string
 }
 interface Number {
-  id: number;
+  id: string;
 }
 interface ProductState {
   products: Array<product>;

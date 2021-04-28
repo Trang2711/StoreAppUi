@@ -18,6 +18,7 @@ import NewsScreen from "../screens/NewsScreen";
 import ChatScreen from "../screens/ChatScreen";
 import AccountScreen from "../screens/AccountScreen";
 import ItemDetailScreen from "../screens/ItemDetailScreen";
+import CommentsScreen from "../screens/CommentsScreen"
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -104,11 +105,6 @@ function HomeTabNavigator() {
         component={HomeScreen}
         options={{ headerShown: false }}
       />
-      <HomeTabStack.Screen
-        name="ItemDetailScreen"
-        component={ItemDetailScreen}
-        options={{ headerShown: false }}
-      />
     </HomeTabStack.Navigator>
   );
 }
@@ -121,11 +117,6 @@ function CategoriesTabNavigator() {
       <CategoriesTabStack.Screen
         name="CategoriesScreen"
         component={CategoriesScreen}
-        options={{ headerShown: false }}
-      />
-      <CategoriesTabStack.Screen
-        name="ItemDetailScreen"
-        component={ItemDetailScreen}
         options={{ headerShown: false }}
       />
     </CategoriesTabStack.Navigator>

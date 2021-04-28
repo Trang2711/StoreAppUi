@@ -4,12 +4,11 @@ import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { useAppSelector } from "../redux/app/hook";
 import ProductItem from "../components/cartScreen/ProductItem";
 import { productsInsideCart } from "../redux/features/cartSlice";
+import { withTheme } from "react-native-elements";
 export default function CartScreen() {
-  ////////state
   const productList = useAppSelector(productsInsideCart);
   const [totalItemInCart, setTotalItemInCart] = useState(0);
-  const [totalMoney, setTotalMoney] = useState("");
-  /////// function
+  const [totalMoney, setTotalMoney] = useState<number>(0);
 
   useEffect(() => {
     console.log("product in cart", productList);
@@ -23,55 +22,45 @@ export default function CartScreen() {
     const _calculatingCartTotalMoney = () => {
       let money = 0;
       productList.map((product) => {
-        money += parseInt(product.price) * product.quantity;
+        money += product.price * product.quantity;
       });
-      const moneyToStr = money
-        .toString()
-        .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
-      setTotalMoney(moneyToStr);
+      setTotalMoney(money);
     };
     _calculatingCartItemAmount();
     _calculatingCartTotalMoney();
   }, [productList]);
+
+  const _fomatNumber1 = (num: number) => {
+    const formatter = new Intl.NumberFormat('us')
+    return formatter.format(num)
+  }
+  
   return (
     <View style={styles.whole_screen}>
       {productList.length > 0 ? (
-        <View style={styles.wrapper}>
+        <>
           <ScrollView>
-            <View>
-              {productList.map((productItem, index) => (
-                <ProductItem key={index} productItem={productItem} />
-              ))}
-            </View>
+            {productList.map((productItem, index) => (
+              <ProductItem key={index} productItem={productItem} />
+            ))}
           </ScrollView>
           <View style={styles.payment_area}>
-            <View style={styles.price_container}>
-              <View style={[{ flex: 1 }, styles.into_money]}>
-                <Text style={styles.intoMoney}>
-                  Thành tiền ({totalItemInCart})
-                </Text>
-              </View>
-              <View style={[{ flex: 1 }, styles.total_amount]}>
-                <Text style={styles.money}>{totalMoney}₫</Text>
-              </View>
+            <View style={styles.moneyContainer}>
+              <Text style={{fontSize: 15}}>
+                Thành tiền ({totalItemInCart})
+              </Text>
+              <Text style={{fontSize: 17, color: '#d53332', fontWeight: 'bold'}}>{_fomatNumber1(totalMoney)}₫</Text>
             </View>
-            <View style={styles.proceed_buying}>
-              <View style={styles.outer_box}>
-                <Text style={styles.proceed_buying_text}>
-                  Tiến hành đặt hàng
-                </Text>
-              </View>
-            </View>
+            <Text style={styles.paymentBtn}>Đặt hàng</Text>
           </View>
-        </View>
+        </>
       ) : (
-        <View>
-          <TouchableOpacity>
-            <Text>trong gio hang khong co gi</Text>
-          </TouchableOpacity>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={{ fontSize: 17, color: '#9f9a9a', fontWeight: 'bold' }}>Giỏ hàng trống</Text>
         </View>
-      )}
-    </View>
+      )
+      }
+    </View >
   );
 }
 
@@ -79,72 +68,25 @@ const styles = StyleSheet.create({
   whole_screen: {
     flex: 1,
   },
-  wrapper: {
-    height: "100%",
-    width: "100%",
-  },
   payment_area: {
-    height: "20%",
-    width: "95%",
-    backgroundColor: "red",
-    marginLeft: 10,
-    marginRight: 10,
+    backgroundColor: 'white',
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
   },
-  price_container: {
-    height: "45%",
-    width: "100%",
-    display: "flex",
-    flexDirection: "row",
+  moneyContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    flex: 1,
   },
-  into_money: {
-    display: "flex",
-    justifyContent: "center",
-    backgroundColor: "#e6e6e6",
-  },
-  total_amount: {
-    display: "flex",
-    justifyContent: "center",
-    backgroundColor: "#e6e6e6",
-  },
-  intoMoney: {
-    marginLeft: 15,
-    fontSize: 19,
-  },
-  money: {
-    marginRight: 10,
-    marginLeft: "auto",
-    fontSize: 22,
-    color: "red",
-  },
-  proceed_buying: {
-    height: "55%",
-    width: "100%",
-    backgroundColor: "#e6e6e6",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  outer_box: {
-    width: "80%",
-    height: "80%",
-    backgroundColor: "red",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 5,
-    marginBottom: 20,
-  },
-  proceed_buying_text: {
-    fontSize: 20,
-    color: "white",
-  },
-  text22: {
-    fontSize: 22,
-  },
-  text18: {
-    fontSize: 18,
-  },
-  text15: {
+  paymentBtn: {
+    backgroundColor: 'black',
+    color: 'white',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
     fontSize: 15,
-  },
+    marginLeft: 10
+  }
 });

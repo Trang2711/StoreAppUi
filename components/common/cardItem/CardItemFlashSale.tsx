@@ -1,9 +1,9 @@
 import React from 'react'
-import { View, Text, ImageBackground, StyleSheet } from 'react-native'
+import { View, Text, ImageBackground, StyleSheet, TouchableOpacity } from 'react-native'
 import { Fontisto } from '@expo/vector-icons'
 import {baseUrl} from '../../../api/AxiosClient'
 
-const CardItemFlashSale = ({ props }: any) => {
+const CardItemFlashSale = ({ props, navigation }: any) => {
     const { id, product_thumbnail, price, discount_price, } = props
 
     const _fomatNumber1 = (num: number) => {
@@ -12,17 +12,21 @@ const CardItemFlashSale = ({ props }: any) => {
     }
 
     return (
-        <View nativeID={id} style={styles.container}>
+        <TouchableOpacity 
+            style={styles.container}
+            onPress={() =>
+                navigation.navigate('Root', {screen: "ItemDetailScreen", params: {id: id}})
+            }
+        >
             <ImageBackground style={styles.image} source={{ uri: `${baseUrl}${product_thumbnail}` }} >
                 <View style={styles.flash}>
                     <Fontisto name="flash" size={15} color="black" />
                     <Text style={styles.dealsDiscount}>-{Math.round((price - discount_price) * 100.0 / price)}%</Text>
-                    {/* <Text style={styles.dealsDiscount}>-{Math.round(30.54)}%</Text> */}
                 </View>
             </ImageBackground>
             <Text numberOfLines={1} style={styles.priceSale}>{_fomatNumber1(discount_price)}đ</Text>
                 <Text numberOfLines={1} style={styles.retialPrice}>{_fomatNumber1(price)}đ</Text>
-        </View>
+        </TouchableOpacity>
     )
 }
 
