@@ -106,7 +106,6 @@ export default function CategoriesScreen() {
   };
 
   const renderItem = (item: any) => <CardItemSmall props={item} />;
-
   return (
     <View>
       <Header quantityOfItemsInCart={updatedQuantity} />
