@@ -9,17 +9,20 @@ interface product {
   price: number;
   discount_price: number;
   product_thumbnail: string;
-  color: string
+  color: string;
 }
 interface Number {
   id: string;
 }
+
 interface ProductState {
   products: Array<product>;
+  quantity: any;
 }
 // Define the initial state using that type
 const initialCart: ProductState = {
   products: [],
+  quantity: 0,
 };
 
 export const cartSlice = createSlice({
@@ -27,6 +30,9 @@ export const cartSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState: initialCart,
   reducers: {
+    setTotalQuantityInCart: (state, action: PayloadAction<any>) => {
+      state.quantity = action.payload;
+    },
     addingItemQuantity: (state, action: PayloadAction<Number>) => {
       const index = state.products.findIndex(
         (product) => product.id == action.payload.id
@@ -64,9 +70,11 @@ export const {
   addingNewProductToCart,
   deleteAnItemFromCart,
   subtractItemQuantity,
+  setTotalQuantityInCart,
 } = cartSlice.actions;
 
 // Other code such as selectors can use the imported `RootState` type
 export const productsInsideCart = (state: RootState) => state.cart.products;
-
+export const amountOfItemsInCart = (state: RootState) => state.cart.quantity;
+export const subQuan = (state: RootState) => state.cart.subQuantity;
 export default cartSlice.reducer;
