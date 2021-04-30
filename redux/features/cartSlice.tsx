@@ -76,5 +76,4 @@ export const {
 // Other code such as selectors can use the imported `RootState` type
 export const productsInsideCart = (state: RootState) => state.cart.products;
 export const amountOfItemsInCart = (state: RootState) => state.cart.quantity;
-export const subQuan = (state: RootState) => state.cart.subQuantity;
 export default cartSlice.reducer;

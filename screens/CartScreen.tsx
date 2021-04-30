@@ -7,7 +7,6 @@ import {
   productsInsideCart,
   amountOfItemsInCart,
   setTotalQuantityInCart,
-  subQuan,
 } from "../redux/features/cartSlice";
 import { withTheme } from "react-native-elements";
 import "intl";
@@ -18,7 +17,6 @@ export default function CartScreen() {
   const [totalItemInCart, setTotalItemInCart] = useState(0);
   const [totalMoney, setTotalMoney] = useState<number>(0);
   const quantityOfItemsInCart = useAppSelector(amountOfItemsInCart);
-  const sub_quan = useAppSelector(subQuan);
   const dispatch = useAppDispatch();
   useEffect(() => {
     // console.log("product in cart", productList);
@@ -39,7 +37,6 @@ export default function CartScreen() {
     };
     _calculatingCartItemAmount();
     _calculatingCartTotalMoney();
-    console.log("subquan", sub_quan);
   }, [productList]);
   // console.log("quan in cart", quantityOfItemsInCart);
   const _fomatNumber1 = (num: number) => {
