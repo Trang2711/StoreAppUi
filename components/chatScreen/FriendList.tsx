@@ -1,14 +1,20 @@
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
-const FriendList = () => {
+const FriendList = ({ navigation }: any) => {
   const friends = ["1", "2", "3", "4", "5", "6", "7"];
   return (
     <View>
       {friends.map((friend, index) => {
         return (
-          <View style={styles.friendArea} key={index}>
-            <View style={styles.friendImg}>
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("ChatDetailScreen");
+            }}
+          >
+            <View style={styles.friendArea} key={index}>
+              {/* <View style={styles.friendImg}> */}
               <Image
                 style={{ width: 70, height: 70, borderRadius: 200 }}
                 resizeMode={"cover"}
@@ -17,14 +23,16 @@ const FriendList = () => {
                     "https://taimienphi.vn/tmp/cf/aut/mAKI-top-anh-dai-dien-dep-chat-1.jpg",
                 }}
               ></Image>
+              <View style={styles.friendNameAndLastMsg}>
+                <Text style={styles.friendName} numberOfLines={1}>
+                  Ten ban befaewfwaefweafweafweafweafweafweafwefwefwae
+                </Text>
+                <Text style={styles.message} numberOfLines={1}>
+                  Tin nhaasdasdasdasdasdasdasdasdsadsadasasdasdsan
+                </Text>
+              </View>
             </View>
-            <View style={styles.friendNameAndLastMsg}>
-              <Text style={styles.friendName}>Ten ban be</Text>
-              <Text style={styles.message} numberOfLines={1}>
-                Tin nhaasdasdasdasdasdasdasdasdsadsadasasdasdsan
-              </Text>
-            </View>
-          </View>
+          </TouchableOpacity>
         );
       })}
     </View>
@@ -36,28 +44,25 @@ export default FriendList;
 const styles = StyleSheet.create({
   friendArea: {
     width: "100%",
-    height: 80,
     display: "flex",
     flexDirection: "row",
-    marginBottom: 20,
+    marginTop: 20,
   },
   friendImg: {
-    flex: 2,
-    display: "flex",
+    marginRight: 5,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "yellowgreen",
   },
   friendNameAndLastMsg: {
-    flex: 5,
+    flex: 1,
+    justifyContent: "center",
   },
   friendName: {
-    height: 40,
-    paddingTop: 15,
     fontSize: 18,
+    marginBottom: 5,
   },
   message: {
-    height: 40,
-    paddingTop: 5,
     fontSize: 16,
   },
 });

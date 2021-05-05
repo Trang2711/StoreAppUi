@@ -8,7 +8,7 @@ export type StackParamList = {
   BottomNav: undefined;
   ItemDetailScreen: undefined;
   CommentsScreen: undefined;
-}
+};
 
 export type BottomTabParamList = {
   Home: undefined;
@@ -26,7 +26,7 @@ export type TopTabParamList = {
   CartScreen: undefined;
   ItemDetailScreen: undefined;
   CommentsScreen: undefined;
-}
+};
 
 export type HomeTabParamList = {
   HomeScreen: undefined;

@@ -4,9 +4,9 @@ import { Ionicons } from "@expo/vector-icons";
 import { Text, View } from "../components/Themed";
 import FriendToChat from "../components/chatScreen/FriendToChat";
 import FriendList from "../components/chatScreen/FriendList";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 
-export default function ChatScreen() {
+export default function ChatScreen({ navigation }: any) {
   const [searchText, setSearchText] = useState("Tim kiem");
   return (
     <View style={styles.container}>
@@ -42,40 +42,28 @@ export default function ChatScreen() {
                 </View>
               </View>
             </View>
-            <View style={styles.cameraAndPen}>
-              <View style={styles.icon_camAndPen}>
-                <Ionicons
-                  name="camera-outline"
-                  size={30}
-                  color="black"
-                ></Ionicons>
-              </View>
-              <View style={styles.icon_camAndPen}>
-                <Ionicons
-                  name="pencil-outline"
-                  size={20}
-                  color="black"
-                  style={styles.searchIcon}
-                ></Ionicons>
-              </View>
-            </View>
           </View>
         </View>
         <ScrollView
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
         >
-          <View style={styles.searchBarContainer}>
-            <Ionicons name="search-outline" size={27} color="black"></Ionicons>
-            <TextInput
-              style={styles.search_input}
-              placeholder="Tim kiem"
-              // value={searchText}
-            />
+          <View style={{ flexDirection: "row", justifyContent: "center" }}>
+            <View style={styles.searchBarContainer}>
+              <Ionicons
+                name="search-outline"
+                size={22}
+                color="black"
+              ></Ionicons>
+              <TextInput
+                style={styles.search_input}
+                placeholder="Tim kiem"
+                // value={searchText}
+              />
+            </View>
           </View>
           {/* Component */}
-          <FriendToChat />
-          <FriendList />
+          <FriendList navigation={navigation} />
         </ScrollView>
       </View>
     </View>
@@ -85,7 +73,7 @@ export default function ChatScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
+    padding: 20,
   },
   subContainer: {
     width: "100%",
@@ -124,7 +112,7 @@ const styles = StyleSheet.create({
   },
   searchBarContainer: {
     marginTop: 10,
-    width: "100%",
+    width: "95%",
     height: 40,
     backgroundColor: "#e0e0e0",
     display: "flex",
@@ -133,6 +121,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 20,
     padding: 10,
+    paddingLeft: 20,
+    paddingRight: 20,
   },
   searchIcon: {},
   search_input: {
