@@ -12,8 +12,9 @@ import {
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import * as Google from "expo-google-app-auth";
-
+import * as Facebook from "expo-facebook";
 import UserApi from "../api/UserApi";
+import axios from "axios";
 
 export default function LoginScreen({ navigation }: any) {
   const [username, setUsername] = useState<string>("");
@@ -39,7 +40,6 @@ export default function LoginScreen({ navigation }: any) {
       setIsError(true);
     }
   };
-
   const onEmailChange = (e: string) => {
     setIsError(false);
     setIsFailed(false);
@@ -50,11 +50,41 @@ export default function LoginScreen({ navigation }: any) {
     setIsFailed(false);
     setPassword(e);
   };
+  ////fb sign in
+  const facebookSignIn = async () => {
+    try {
+      await Facebook.initializeAsync({
+        appId: "2954637551478913",
+      });
+      const responseFromLoginFb: any = await Facebook.logInWithReadPermissionsAsync(
+        {
+          permissions: ["public_profile", "email", "user_photos"],
+        }
+      );
+      if (responseFromLoginFb.type === "success") {
+        // Get the user's name using Facebook's Graph API
+        fetch(
+          `https://graph.facebook.com/me?fields=id,email,name,picture&&access_token=${responseFromLoginFb.token}`
+        )
+          .then((res) => res.json())
+          .then((result) => {
+            console.log(result);
+            console.log("user token", responseFromLoginFb.token);
+          });
+      } else {
+        // type === 'cancel'
+      }
+      // console.log("response from db", responseFromLoginFb);
+    } catch ({ message }) {
+      alert(`Facebook Login Error: ${message}`);
+    }
+  };
 
-  const signInAsync = async () => {
+  ///////////gg sign in
+  const googleSignIn = async () => {
     console.log("LoginScreen.js 6 | loggin in");
     try {
-      const { type, user }: any = await Google.logInAsync({
+      const { type, user, idToken }: any = await Google.logInAsync({
         iosClientId: `<YOUR_IOS_CLIENT_ID>`,
         androidClientId: `802017006894-sr41m2q8ahnrg4h9vbbug9lqslujr9bk.apps.googleusercontent.com`,
       });
@@ -62,6 +92,7 @@ export default function LoginScreen({ navigation }: any) {
       if (type === "success") {
         // Then you can use the Google REST API
         console.log("user", user);
+        console.log("token", idToken);
         // navigation.navigate("Profile", { user });
       }
     } catch (error) {
@@ -159,16 +190,34 @@ export default function LoginScreen({ navigation }: any) {
 
       <View style={{ alignItems: "center", flex: 1, marginTop: 50 }}>
         <Text>Hoặc tham gia bằng</Text>
-        {/* <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
-          <TouchableOpacity>
-            <Entypo style={{ marginRight: 12 }} name="facebook-with-circle" size={42} color="#1877f2" />
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: 10,
+          }}
+        >
+          <TouchableOpacity onPress={facebookSignIn}>
+            <Entypo
+              style={{ marginRight: 12 }}
+              name="facebook-with-circle"
+              size={42}
+              color="#1877f2"
+            />
           </TouchableOpacity>
-          <TouchableOpacity>
-            <Image style={{ width: 45, height: 45 }} source={{ uri: 'https://androidbunker.com/wp-content/uploads/2015/09/nexus2cee_new_google_icon_thumb.png' }}></Image>
+          <TouchableOpacity onPress={googleSignIn}>
+            <Image
+              style={{ width: 45, height: 45 }}
+              source={{
+                uri:
+                  "https://androidbunker.com/wp-content/uploads/2015/09/nexus2cee_new_google_icon_thumb.png",
+              }}
+            ></Image>
           </TouchableOpacity>
-
-        </View> */}
-        <Button title="Login with Google" onPress={signInAsync} />
+        </View>
+        {/* <Button title="Login with Google" onPress={signInAsync} />
+        <Button title="Login with FB" onPress={logIn} /> */}
       </View>
     </View>
   );
