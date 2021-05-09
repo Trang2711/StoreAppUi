@@ -1,8 +1,12 @@
 import AxiosClient from "./AxiosClient";
 
 const ProductApi = {
+  getAllProducts: () => {
+    const url = `/api/products`;
+    return AxiosClient.get(url);
+  },
   getProductDetails: (id: any) => {
-    const url = `/api/product/${id}`;
+    const url = `/api/product/${id}/`;
     return AxiosClient.get(url);
   },
   getFlashProducts: () => {
@@ -10,6 +14,15 @@ const ProductApi = {
     return AxiosClient.get(url)
   },
   
+  getSpecifiedProduct: (id: any) => {
+    const url = `/api/product/${id}`;
+    return AxiosClient.get(url);
+  },
+  
+  getCommentsOfProduct: (data: any) => {
+    const url = `/api/comments`
+    return AxiosClient.post(url, data)
+  },
 };
 
 export default ProductApi;

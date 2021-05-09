@@ -3,16 +3,12 @@ import { useState, useEffect } from "react";
 import { StyleSheet, Image, ActivityIndicator } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Text, View } from "../components/Themed";
-import { Ionicons } from "@expo/vector-icons";
 import ProductApi from "../api/ProductApi";
-import ImgSlider from "../components/itemDetailScreen/ImgSlider";
-import ItemProperty from "../components/itemDetailScreen/ItemProperty";
-import RelatedItems from "../components/itemDetailScreen/RelatedItems";
 import { useAppSelector, useAppDispatch } from "../redux/app/hook";
 import { incrementByAmount, selectCount } from "../redux/features/counterSlice";
 // import Pagination from "../components/common/Pagination"
 
-export default function NotificationsScreen() {
+export default function NotificationsScreen({ route }: any) {
   const count = useAppSelector(selectCount);
   const dispatch = useAppDispatch();
   const [amountOfCmt, setAmountOfCmt] = useState();
@@ -22,7 +18,6 @@ export default function NotificationsScreen() {
   const [itemImg, setItemImg] = useState([]);
   const [loadingWhileFetchData, setLoadingWhileFetchData] = useState(true);
   const [CurrentPage, setCurrentPage] = useState(1);
-  const [IsLoadingMoreCmt, setIsLoadingMoreCmt] = useState(false);
 
   useEffect(() => {
     fetchSpecifiedProduct();
@@ -47,13 +42,13 @@ export default function NotificationsScreen() {
     }
   }
 
-  function handlingUserPressingWatchMoreCmt() {
-    setExtraCmt((prev) => prev + 5);
-    setIsLoadingMoreCmt(true);
-    setTimeout(() => {
-      setIsLoadingMoreCmt(false);
-    }, 1000);
-  }
+  // function handlingUserPressingWatchMoreCmt() {
+  //   setExtraCmt((prev) => prev + 5);
+  //   setIsLoadingMoreCmt(true);
+  //   setTimeout(() => {
+  //     setIsLoadingMoreCmt(false);
+  //   }, 1000);
+  // }
   async function sliceCmt() {
     try {
       const response = await ProductApi.getProductDetails(3);
@@ -79,38 +74,7 @@ export default function NotificationsScreen() {
 
   return (
     <>
-      {
-        loadingWhileFetchData ?
-          <View style={[styles.loadingContainer, styles.loadingHorizontal]} >
-            <ActivityIndicator size="large" color="#00ff00" />
-          </View>
-          :
-          <View>
-          {/* // <Pagination renderItem={_renderProduct}> */}
-            <View>
-              <ImgSlider itemImg={itemImg} />
-              <ItemProperty
-                amountOfCmt={amountOfCmt}
-                comment={DisPlayCmt}
-                handlingUserPressingWatchMoreCmt={
-                  handlingUserPressingWatchMoreCmt
-                }
-                IsLoadingMoreCmt={IsLoadingMoreCmt}
-              />
-            </View>
-            <Text
-              style={[
-                styles.centerItem,
-                styles.text16,
-                { backgroundColor: "#4287f5" },
-                styles.mayBeUlike,
-              ]}
-            >
-              Có thể bạn cũng thích
-        </Text>
-          {/* // </Pagination> */}
-          </View>
-      }
+     
     </>
   )
 }

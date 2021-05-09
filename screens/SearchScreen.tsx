@@ -112,9 +112,7 @@ export default function SearchScreen({ navigation }: any) {
           handleSearchSubmit={handleSearchSubmit}
           searchValueInit={searchValue}
         />
-        {
-          _renderSuggestedValues()
-        }
+        {_renderSuggestedValues()}
       </View>
     </SafeAreaView>
   );

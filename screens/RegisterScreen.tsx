@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Pressable, Modal } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
+import { GoogleLogin } from 'react-google-login';
 import UserApi from '../api/UserApi'
 
 export default function LoginScreen({ navigation }: any) {
@@ -12,6 +13,17 @@ export default function LoginScreen({ navigation }: any) {
     const [isEmailError, setIsEmailError] = useState(false)
     const [isUsernameError, setIsUsernameError] = useState(false)
     const [modalVisible, setModalVisible] = useState<boolean>(false)
+
+    const responseGoogle = (response: any) => {
+        console.log(response);
+    }
+
+    // useEffect(() => {
+    //     effect
+    //     return () => {
+    //         cleanup
+    //     }
+    // }, [modalVisible])
 
     var usernameRegex = /^[a-zA-Z0-9]+$/
 
@@ -120,14 +132,37 @@ export default function LoginScreen({ navigation }: any) {
             <View style={{ alignItems: 'center', flex: 1, marginTop: 50 }}>
                 <Text>Hoặc tham gia bằng</Text>
                 <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
+                   
+                    {/* <GoogleLogin
+                        clientId={clientId}
+                        buttonText="Login"
+                        onSuccess={responseGoogle}
+                        onFailure={responseGoogle}
+                        cookiePolicy={'single_host_origin'}
+                        isSignedIn={true}
+                    /> */}
                     <TouchableOpacity>
                         <Entypo style={{ marginRight: 12 }} name="facebook-with-circle" size={42} color="#1877f2" />
                     </TouchableOpacity>
-                    <TouchableOpacity>
+                    {/* <TouchableOpacity>
                         <Image style={{ width: 45, height: 45 }} source={{ uri: 'https://androidbunker.com/wp-content/uploads/2015/09/nexus2cee_new_google_icon_thumb.png' }}></Image>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
+
                 </View>
             </View>
+            <GoogleLogin
+                        clientId="887873710911-uucfs6tcunm05qjdvg7mcltpd9p8gnjr.apps.googleusercontent.com"
+                        // render={renderProps => (
+                        //     <TouchableOpacity onPress={renderProps.onClick} disabled={renderProps.disabled}>
+                        //         <Image style={{ width: 45, height: 45 }} source={{ uri: 'https://androidbunker.com/wp-content/uploads/2015/09/nexus2cee_new_google_icon_thumb.png' }}></Image>
+                        //     </TouchableOpacity>
+                        // )}
+                        buttonText="Login"
+                        onSuccess={responseGoogle}
+                        onFailure={responseGoogle}
+                        cookiePolicy={'single_host_origin'}
+                        isSignedIn={true}
+                    />
 
             <Modal
                 animationType={"slide"}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import {
   Ionicons,
@@ -6,34 +6,39 @@ import {
   AntDesign,
 } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { useAppSelector } from "../../redux/app/hook";
+import { amountOfItemsInCart } from "../../redux/features/cartSlice";
 
 const itemsList = ["cart, search, notification"];
-export default function Header({ quantityOfItemsInCart }: any) {
+export default function Header({
+  temporaryQuantityDisplayInItemDetailScreem,
+}: any) {
   const navigation = useNavigation();
+  useEffect(() => {}, []);
   return (
     <View style={styles.container}>
       <View style={styles.leftSide}>
         <Ionicons
           style={styles.item}
-          name="search-outline"
+          name="chevron-back-outline"
           size={24}
           color="black"
           onPress={() => {
-            navigation.navigate("TopNav", { screen: "SearchScreen" });
+            navigation.goBack();
           }}
         />
       </View>
       <Text style={styles.appName}>Ponzi</Text>
       <View style={styles.rightSide}>
-        <AntDesign
-          style={styles.item}
-          name="bells"
-          size={21}
-          color="black"
-          onPress={() => {
-            navigation.navigate("TopNav", { screen: "NotificationsScreen" });
-          }}
-        />
+        {/* <AntDesign
+                    style={styles.item}
+                    name="bells"
+                    size={21}
+                    color="black"
+                    onPress={() => {
+                        navigation.navigate("TopNav", { screen: "NotificationsScreen" })
+                    }}
+                /> */}
         <Ionicons
           style={styles.item}
           name="cart-outline"
@@ -43,9 +48,9 @@ export default function Header({ quantityOfItemsInCart }: any) {
             navigation.navigate("TopNav", { screen: "CartScreen" });
           }}
         />
-        {quantityOfItemsInCart > 0 ? (
+        {temporaryQuantityDisplayInItemDetailScreem > 0 ? (
           <View style={styles.quantityIcon}>
-            <Text>{quantityOfItemsInCart}</Text>
+            <Text>{temporaryQuantityDisplayInItemDetailScreem}</Text>
           </View>
         ) : null}
       </View>
@@ -61,8 +66,9 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     paddingBottom: 10,
     paddingHorizontal: 5,
-    backgroundColor: "white",
     marginBottom: 10,
+    zIndex: 10,
+    backgroundColor: "white",
   },
 
   leftSide: {
