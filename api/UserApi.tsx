@@ -21,9 +21,9 @@ const UserApi = {
         return AxiosClient.get(url);
     },
 
-    signUp: (data: any) => {
-        const url = 'auth/signup'
-        return AxiosClient.post(url, data)
+    getNewToken: () => {
+        const url = 'auth/new_token'
+        return AxiosClient.get(url)
     }
 }
 

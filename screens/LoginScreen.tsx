@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Pressable } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
-
+import { useAppDispatch } from "../redux/app/hook";
+import { setToken } from "../redux/features/loginSlice";
 import UserApi from '../api/UserApi'
 
 export default function LoginScreen({ navigation }: any) {
+  const dispatch = useAppDispatch();
+
   const [username, setUsername] = useState<string>('')
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
@@ -21,10 +24,20 @@ export default function LoginScreen({ navigation }: any) {
         email: email
       }
       console.log("sign up")
-      const responce = await UserApi.signIn(form)
-      const {token} = responce as any
-      console.log('token' + token)
-      localStorage.setItem('token', token)
+      // const responce = await UserApi.signIn(form)
+      // const { jwt_token, jwt_token_expiry } = responce as any
+      // dispatch(setToken({
+      //   token: jwt_token as string,
+      //   expiry: jwt_token_expiry as string
+      // }
+      // ))
+      // if (!jwt_token) {
+      //   navigation.navigate("BottomNav", {
+      //     screen: "home"
+      //   })
+      // }
+      // console.log('token' + token)
+      // localStorage.setItem('token', token)
       // if(...) {
       //   navigation.navigate('HomeScreen')
       // }
