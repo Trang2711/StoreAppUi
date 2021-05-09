@@ -54,21 +54,32 @@ export default function LoginScreen({ navigation }: any) {
     }
 
     const onEmailChange = (e: string) => {
-        setIsEmailError(false)
-        setEmail(e)
-    }
+        setIsEmailError(false);
+        setEmail(e);
+    };
 
     const onUsernameChange = (e: string) => {
-        setIsUsernameError(false)
-        setUsername(e)
-    }
+        setIsUsernameError(false);
+        setUsername(e);
+    };
 
-    const clientId = "887873710911-uucfs6tcunm05qjdvg7mcltpd9p8gnjr.apps.googleusercontent.com"
+    const clientId =
+        "887873710911-uucfs6tcunm05qjdvg7mcltpd9p8gnjr.apps.googleusercontent.com";
 
     return (
         <View style={styles.container}>
-            <View style={{ flexDirection: 'row', justifyContent: 'flex-end', paddingHorizontal: 20 }}>
-                <Pressable onPress={() => { navigation.goBack() }}>
+            <View
+                style={{
+                    flexDirection: "row",
+                    justifyContent: "flex-end",
+                    paddingHorizontal: 20,
+                }}
+            >
+                <Pressable
+                    onPress={() => {
+                        navigation.goBack();
+                    }}
+                >
                     <AntDesign name="close" size={24} color="black" />
                 </Pressable>
             </View>
@@ -82,8 +93,14 @@ export default function LoginScreen({ navigation }: any) {
                     placeholder="Username"
                     maxLength={32}
                 />
-                {username !== '' && !username?.match(usernameRegex) && <Text style={styles.errorMess}>Username chỉ bao gồm chữ cái và số.</Text>}
-                {isUsernameError && <Text style={styles.errorMess}>Username đã được sử dụng</Text>}
+                {username !== "" && !username?.match(usernameRegex) && (
+                    <Text style={styles.errorMess}>
+                        Username chỉ bao gồm chữ cái và số.
+                    </Text>
+                )}
+                {isUsernameError && (
+                    <Text style={styles.errorMess}>Username đã được sử dụng</Text>
+                )}
                 <TextInput
                     style={styles.input}
                     onChangeText={onEmailChange}
@@ -92,7 +109,9 @@ export default function LoginScreen({ navigation }: any) {
                     textContentType="emailAddress"
                     maxLength={32}
                 />
-                {isEmailError && <Text style={styles.errorMess}>Email này đã được sủ dụng</Text>}
+                {isEmailError && (
+                    <Text style={styles.errorMess}>Email này đã được sủ dụng</Text>
+                )}
 
                 <TextInput
                     style={styles.input}
@@ -102,7 +121,9 @@ export default function LoginScreen({ navigation }: any) {
                     secureTextEntry={true}
                     maxLength={32}
                 />
-                {password !== '' && password!.length < 6 && <Text style={styles.errorMess}>Mật khẩu gồm ý nhất 6 chữ số</Text>}
+                {password !== "" && password!.length < 6 && (
+                    <Text style={styles.errorMess}>Mật khẩu gồm ý nhất 6 chữ số</Text>
+                )}
 
                 <TextInput
                     style={styles.input}
@@ -112,62 +133,75 @@ export default function LoginScreen({ navigation }: any) {
                     secureTextEntry={true}
                     maxLength={32}
                 />
-                {password !== cfpassword && <Text style={styles.errorMess}>Mật khẩu xác nhận không khớp</Text>}
+                {password !== cfpassword && (
+                    <Text style={styles.errorMess}>Mật khẩu xác nhận không khớp</Text>
+                )}
 
-                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 30 }}>
-                    <Text style={{ fontSize: 14, color: 'black' }}>Bạn chưa có tài khoản?</Text>
-                    <Pressable onPress={() => { navigation.navigate("LoginScreen") }}>
-                        <Text style={{ color: '#0A75AD', textDecorationLine: "underline", fontSize: 14 }}> Đăng kí ngay</Text>
+                <View
+                    style={{ flexDirection: "row", alignItems: "center", marginTop: 30 }}
+                >
+                    <Text style={{ fontSize: 14, color: "black" }}>
+                        Bạn đã có tài khoản?
+          </Text>
+                    <Pressable
+                        onPress={() => {
+                            navigation.navigate("LoginScreen");
+                        }}
+                    >
+                        <Text
+                            style={{
+                                color: "#0A75AD",
+                                textDecorationLine: "underline",
+                                fontSize: 14,
+                            }}
+                        >
+                            {" "}
+              Đăng nhập
+            </Text>
                     </Pressable>
                 </View>
 
-                <TouchableOpacity
-                    style={styles.btnSubmit}
-                    onPress={onSubmit}
-                >
-                    <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'white', textAlign: 'center' }}>Đăng ký</Text>
+                <TouchableOpacity style={styles.btnSubmit} onPress={onSubmit}>
+                    <Text
+                        style={{
+                            fontSize: 15,
+                            fontWeight: "bold",
+                            color: "white",
+                            textAlign: "center",
+                        }}
+                    >
+                        Đăng ký
+          </Text>
                 </TouchableOpacity>
             </View>
 
-            <View style={{ alignItems: 'center', flex: 1, marginTop: 50 }}>
+            {/* <View style={{ alignItems: 'center', flex: 1, marginTop: 50 }}>
                 <Text>Hoặc tham gia bằng</Text>
                 <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
-                   
-                    {/* <GoogleLogin
+
+                    <GoogleLogin
                         clientId={clientId}
                         buttonText="Login"
                         onSuccess={responseGoogle}
                         onFailure={responseGoogle}
                         cookiePolicy={'single_host_origin'}
                         isSignedIn={true}
-                    /> */}
+                    />
                     <TouchableOpacity>
                         <Entypo style={{ marginRight: 12 }} name="facebook-with-circle" size={42} color="#1877f2" />
                     </TouchableOpacity>
-                    {/* <TouchableOpacity>
+                    <TouchableOpacity>
                         <Image style={{ width: 45, height: 45 }} source={{ uri: 'https://androidbunker.com/wp-content/uploads/2015/09/nexus2cee_new_google_icon_thumb.png' }}></Image>
-                    </TouchableOpacity> */}
+                    </TouchableOpacity>
 
                 </View>
-            </View>
-            <GoogleLogin
-                        clientId="887873710911-uucfs6tcunm05qjdvg7mcltpd9p8gnjr.apps.googleusercontent.com"
-                        // render={renderProps => (
-                        //     <TouchableOpacity onPress={renderProps.onClick} disabled={renderProps.disabled}>
-                        //         <Image style={{ width: 45, height: 45 }} source={{ uri: 'https://androidbunker.com/wp-content/uploads/2015/09/nexus2cee_new_google_icon_thumb.png' }}></Image>
-                        //     </TouchableOpacity>
-                        // )}
-                        buttonText="Login"
-                        onSuccess={responseGoogle}
-                        onFailure={responseGoogle}
-                        cookiePolicy={'single_host_origin'}
-                        isSignedIn={true}
-                    />
+            </View> */}
 
             <Modal
                 animationType={"slide"}
                 transparent={false}
-                visible={modalVisible}></Modal>
+                visible={modalVisible}
+            ></Modal>
         </View>
     );
 }
@@ -179,28 +213,28 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 25,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        marginTop: 20
+        fontWeight: "bold",
+        textAlign: "center",
+        marginTop: 20,
     },
     input: {
-        borderBottomColor: '#DDDDDD',
+        borderBottomColor: "#DDDDDD",
         borderBottomWidth: 0.5,
-        marginTop: 25
+        marginTop: 25,
     },
     inputError: {
-        borderBottomColor: '#db0505',
-        borderBottomWidth: 0.5
+        borderBottomColor: "#db0505",
+        borderBottomWidth: 0.5,
     },
     btnSubmit: {
         paddingVertical: 7,
-        backgroundColor: 'black',
-        color: 'white',
+        backgroundColor: "black",
+        color: "white",
         marginTop: 20,
     },
     errorMess: {
-        color: '#db0505',
+        color: "#db0505",
         paddingTop: 5,
-        fontSize: 13
-    }
+        fontSize: 13,
+    },
 });

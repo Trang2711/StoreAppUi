@@ -1011,7 +1011,7 @@
   dependencies:
     "@types/hammerjs" "^2.0.36"
 
-"@expo/config-plugins@1.0.29":
+"@expo/config-plugins@^1.0.18", "@expo/config-plugins@1.0.29":
   "integrity" "sha512-dKtb4dTRiyWmCr/HyMFqt1tHIFpuuvIPnmvakOrg012sY7be81W9WOXjsr6WP7uLT2BfSLFhj1A9EAUzpl6sJw=="
   "resolved" "https://registry.npmjs.org/@expo/config-plugins/-/config-plugins-1.0.29.tgz"
   "version" "1.0.29"
@@ -3624,6 +3624,14 @@
     "jest-message-util" "^25.5.0"
     "jest-regex-util" "^25.2.6"
 
+"expo-app-auth@~10.1.2":
+  "integrity" "sha512-scYsgp+PIcM1zq+tOK6gpeuPsC0FnbMHfvRx5KxiY5Z+0M2dG/ehkgw9aOHuZD+v+TVBRUEfd6HAapI3e63gIw=="
+  "resolved" "https://registry.npmjs.org/expo-app-auth/-/expo-app-auth-10.1.2.tgz"
+  "version" "10.1.2"
+  dependencies:
+    "@expo/config-plugins" "^1.0.18"
+    "invariant" "^2.2.4"
+
 "expo-application@~2.4.1":
   "integrity" "sha512-VHDvXz55LIYdLoE1aR0AFycB1jz4ggbMToUbKAbCEjro+PdUNm/Gj8gQeFgH6wL2oAztQH4qJ+uiOwrw8SFK+Q=="
   "resolved" "https://registry.npmjs.org/expo-application/-/expo-application-2.4.1.tgz"
@@ -3656,6 +3664,11 @@
   dependencies:
     "fbjs" "1.0.0"
 
+"expo-facebook@~9.1.0":
+  "integrity" "sha512-DoqzqAQkEYVViAShV122Cll2WWubEKLyOxRO8yDYFMbst4EH7Ep8NPCKcHKgXFYh8Oi+JYSdhsdpMraahmcX8A=="
+  "resolved" "https://registry.npmjs.org/expo-facebook/-/expo-facebook-9.1.0.tgz"
+  "version" "9.1.0"
+
 "expo-file-system@~9.3.0":
   "integrity" "sha512-x83IVep6PVfzGLpzR5fhWgKGlDaF95vfRzvmLyOMnbSuM8gY9a8C92taxZxfitryy9+D46lbRcnxPvBqFkXMNg=="
   "resolved" "https://registry.npmjs.org/expo-file-system/-/expo-file-system-9.3.0.tgz"
@@ -3670,6 +3683,13 @@
   dependencies:
     "fbjs" "1.0.0"
     "fontfaceobserver" "^2.1.0"
+
+"expo-google-app-auth@^8.1.7":
+  "integrity" "sha512-BHYZPmry/Mqdti8VZa6b5KsyP/t34J8kKjHXSqznZzdR2UnzfLkPc53w2f0csNUwCD1C3jP8whtsLqIXV+ynkA=="
+  "resolved" "https://registry.npmjs.org/expo-google-app-auth/-/expo-google-app-auth-8.1.7.tgz"
+  "version" "8.1.7"
+  dependencies:
+    "expo-app-auth" "~10.1.2"
 
 "expo-keep-awake@~8.4.0":
   "integrity" "sha512-gozpL5Azfaht/YIMFOHRHjHuJ9KT6hJH4y71Al+/YfQSwHS5sqhoKGPgSxaktqbxRrWVUH9q7wSl3EXRK9bYjA=="
