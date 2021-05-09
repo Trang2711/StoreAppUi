@@ -1,351 +1,488 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, ScrollView, Dimensions, View, Text, TouchableOpacity, Modal } from 'react-native';
-import { Table, TableWrapper, Row, Rows, Col } from 'react-native-table-component'
-import Carousel from '../components/common/Carousel'
-import Header from '../components/itemDetailScreen/header'
-import StarRating from '../components/common/StarRating'
-import ColorCircle from '../components/common/ColorCircle'
-import Comment from '../components/common/Comment'
+import React, { useState, useEffect } from "react";
 import {
-    addingNewProductToCart,
-    productsInsideCart,
-  } from "../redux/features/cartSlice";
+  StyleSheet,
+  ScrollView,
+  Dimensions,
+  View,
+  Text,
+  TouchableOpacity,
+  Modal,
+} from "react-native";
+import {
+  Table,
+  TableWrapper,
+  Row,
+  Rows,
+  Col,
+} from "react-native-table-component";
+import Carousel from "../components/common/Carousel";
+import Header from "../components/itemDetailScreen/header";
+import StarRating from "../components/common/StarRating";
+import ColorCircle from "../components/common/ColorCircle";
+import Comment from "../components/common/Comment";
+import {
+  addingNewProductToCart,
+  amountOfItemsInCart,
+  productsInsideCart,
+} from "../redux/features/cartSlice";
 import { useAppSelector, useAppDispatch } from "../redux/app/hook";
-import ProductApi from '../api/ProductApi'
-import AddingToCartModal from '../components/itemDetailScreen/addingToCartModal';
-
+import ProductApi from "../api/ProductApi";
+import AddingToCartModal from "../components/itemDetailScreen/addingToCartModal";
+import "intl";
+import "intl/locale-data/jsonp/en";
 const cards = [
   {
-    imgUrl: 'https://images.pexels.com/photos/3236733/pexels-photo-3236733.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+    imgUrl:
+      "https://images.pexels.com/photos/3236733/pexels-photo-3236733.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
   },
   {
-    imgUrl: 'https://images.pexels.com/photos/6553054/pexels-photo-6553054.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+    imgUrl:
+      "https://images.pexels.com/photos/6553054/pexels-photo-6553054.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
   },
   {
-    imgUrl: 'https://images.pexels.com/photos/5845336/pexels-photo-5845336.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
+    imgUrl:
+      "https://images.pexels.com/photos/5845336/pexels-photo-5845336.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
   },
   {
-    imgUrl: 'https://images.pexels.com/photos/5651673/pexels-photo-5651673.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500',
-  }
-]
+    imgUrl:
+      "https://images.pexels.com/photos/5651673/pexels-photo-5651673.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+  },
+];
 
 const colorMap = [
   {
-    value: 'Grey',
+    value: "Grey",
     label: "Xám",
-    colorCode: "#b3b3b3"
+    colorCode: "#b3b3b3",
   },
   {
-    value: 'Yellow',
+    value: "Yellow",
     label: "Vàng",
-    colorCode: "#fccc1e"
+    colorCode: "#fccc1e",
   },
   {
-    value: 'Silver',
+    value: "Silver",
     label: "Bạc",
-    colorCode: "#eaeaea"
-  }
-]
+    colorCode: "#eaeaea",
+  },
+];
 
 const comments = [
   {
-    id: '1',
-    avatar: 'https://images.pexels.com/photos/4006151/pexels-photo-4006151.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+    id: "1",
+    avatar:
+      "https://images.pexels.com/photos/4006151/pexels-photo-4006151.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
     username: "trang trinh",
     star: 4,
-    create_date: '28/03/2020',
-    content: 'Giao hàng nhanh, sản phẩm chính hãng và có bảo hành nên rất yên tâm, shop tư vấn rất nhiệt tình, ',
+    create_date: "28/03/2020",
+    content:
+      "Giao hàng nhanh, sản phẩm chính hãng và có bảo hành nên rất yên tâm, shop tư vấn rất nhiệt tình, ",
     images: [
-      'https://images.pexels.com/photos/4006151/pexels-photo-4006151.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-      'https://images.pexels.com/photos/1113804/pexels-photo-1113804.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-      'https://images.pexels.com/photos/2047904/pexels-photo-2047904.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-      'https://images.pexels.com/photos/1038628/pexels-photo-1038628.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-    ]
+      "https://images.pexels.com/photos/4006151/pexels-photo-4006151.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+      "https://images.pexels.com/photos/1113804/pexels-photo-1113804.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+      "https://images.pexels.com/photos/2047904/pexels-photo-2047904.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+      "https://images.pexels.com/photos/1038628/pexels-photo-1038628.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+    ],
   },
 
   {
-    id: '2',
-    avatar: 'https://images.pexels.com/photos/4006151/pexels-photo-4006151.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+    id: "2",
+    avatar:
+      "https://images.pexels.com/photos/4006151/pexels-photo-4006151.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
     username: "Phạm Tuấn Nghĩa",
     star: 4,
-    create_date: '28/03/2020',
-    content: 'Giao hàng nhanh, sản phẩm chính hãng và có bảo hành nên rất yên tâm, shop tư vấn rất nhiệt tình, ',
+    create_date: "28/03/2020",
+    content:
+      "Giao hàng nhanh, sản phẩm chính hãng và có bảo hành nên rất yên tâm, shop tư vấn rất nhiệt tình, ",
     images: [
-      'https://images.pexels.com/photos/4006151/pexels-photo-4006151.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-      'https://images.pexels.com/photos/1113804/pexels-photo-1113804.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-      'https://images.pexels.com/photos/2047904/pexels-photo-2047904.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-    ]
+      "https://images.pexels.com/photos/4006151/pexels-photo-4006151.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+      "https://images.pexels.com/photos/1113804/pexels-photo-1113804.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+      "https://images.pexels.com/photos/2047904/pexels-photo-2047904.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+    ],
   },
 
   {
-    id: '3',
-    avatar: 'https://images.pexels.com/photos/4006151/pexels-photo-4006151.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+    id: "3",
+    avatar:
+      "https://images.pexels.com/photos/4006151/pexels-photo-4006151.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
     username: "Nguyễn Hữu Hùng",
     star: 4,
-    create_date: '28/03/2020',
-    content: 'Giao hàng nhanh, sản phẩm chính hãng và có bảo hành nên rất yên tâm, shop tư vấn rất nhiệt tình, ',
+    create_date: "28/03/2020",
+    content:
+      "Giao hàng nhanh, sản phẩm chính hãng và có bảo hành nên rất yên tâm, shop tư vấn rất nhiệt tình, ",
     images: [
-      'https://images.pexels.com/photos/4006151/pexels-photo-4006151.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-      'https://images.pexels.com/photos/1113804/pexels-photo-1113804.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-    ]
-  }
-]
+      "https://images.pexels.com/photos/4006151/pexels-photo-4006151.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+      "https://images.pexels.com/photos/1113804/pexels-photo-1113804.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+    ],
+  },
+];
 
 const configurationsMap = [
   {
-    value: 'RAM',
-    label: 'RAM'
+    value: "RAM",
+    label: "RAM",
   },
   {
-    value: 'CPU',
-    label: 'CPU'
-  }, {
-    value: 'SSD',
-    label: 'SSD'
-  }
-  , {
-    value: 'HDD',
-    label: 'HDD'
+    value: "CPU",
+    label: "CPU",
   },
   {
-    value: 'GPU',
-    label: 'GPU'
+    value: "SSD",
+    label: "SSD",
   },
   {
-    value: 'screen',
-    label: 'Màn hình'
+    value: "HDD",
+    label: "HDD",
   },
   {
-    value: 'status',
-    label: 'Trạng thái'
-  }
-]
+    value: "GPU",
+    label: "GPU",
+  },
+  {
+    value: "screen",
+    label: "Màn hình",
+  },
+  {
+    value: "status",
+    label: "Trạng thái",
+  },
+];
 
-const windowWidth = Dimensions.get('window').width;
+const windowWidth = Dimensions.get("window").width;
 
 const mapValueTolabel = (map: any, values: Array<string>) => {
   const labels = values.map((key: any) => {
-    const result = map.filter((item: any) => (key === item.value))
-    return result[0].label
-  })
-  return labels
-}
+    const result = map.filter((item: any) => key === item.value);
+    return result[0].label;
+  });
+  return labels;
+};
 
 const dataForConfigurationsTable = (keys: any, data: any) => {
-  const table = keys.map((key: any) => ([data[key]]))
-  return table
-}
+  const table = keys.map((key: any) => [data[key]]);
+  return table;
+};
 
 export default function ItemDetailScreen({ navigation, route }: any) {
-  const { id } = route.params
-  const [productDetail, setProductDetail] = useState<any>()
+  const { id } = route.params;
+  const idOfParticularProduct = id;
+  const [productDetail, setProductDetail] = useState<any>();
 
-  const [tableTitle, setTableTitle] = useState([])
-  const [tableData, setTableData] = useState([])
-  const [colors, setColors] = useState([])
+  const [tableTitle, setTableTitle] = useState([]);
+  const [tableData, setTableData] = useState([]);
+  const [colors, setColors] = useState([]);
 
   const dispatch = useAppDispatch();
+  const quantityInCart = useAppSelector(amountOfItemsInCart);
 
+  const [
+    temporaryQuantityDisplayInItemDetailScreem,
+    setTemporaryQuantityDisplayInItemDetailScreem,
+  ] = useState(0);
   useEffect(() => {
     const fetchDetailProduct = async () => {
       try {
-        const data = await ProductApi.getProductDetails(id)
-        const _data = data as any
-        console.log(_data)
-        setProductDetail(_data)
+        const data = await ProductApi.getProductDetails(id);
+        const _data = data as any;
+        console.log(_data);
+        setProductDetail(_data);
 
-        const _configTitle = mapValueTolabel(configurationsMap, Object.keys(_data.configurations))
-        setTableTitle(_configTitle as any)
+        const _configTitle = mapValueTolabel(
+          configurationsMap,
+          Object.keys(_data.configurations)
+        );
+        setTableTitle(_configTitle as any);
 
-        const _configData = dataForConfigurationsTable(Object.keys(_data.configurations), _data.configurations)
-        setTableData(_configData as any)
+        const _configData = dataForConfigurationsTable(
+          Object.keys(_data.configurations),
+          _data.configurations
+        );
+        setTableData(_configData as any);
 
         const _colors = _data.colors.map((color: any) => {
-          return colorMap.filter(item => (item.value === color))[0]
-        })
+          return colorMap.filter((item) => item.value === color)[0];
+        });
 
-        console.log(_colors)
-        setColors(_colors as any)
-
+        console.log(_colors);
+        setColors(_colors as any);
       } catch (error) {
-        console.log("Failed to fetch flashsale product in item detail screen" + error)
+        console.log(
+          "Failed to fetch flashsale product in item detail screen" + error
+        );
       }
-    }
-
-    fetchDetailProduct()
-  }, [])
-
+    };
+    fetchDetailProduct();
+    console.log("product detail", productDetail);
+  }, []);
+  useEffect(() => {
+    setTemporaryQuantityDisplayInItemDetailScreem(quantityInCart);
+  }, [quantityInCart]);
   const _fomatNumber = (num: number) => {
-    const formatter = new Intl.NumberFormat('en', {
-      notation: 'compact'
-    })
+    const formatter = new Intl.NumberFormat("en", {
+      notation: "compact",
+    });
 
-    return formatter.format(num)
-  }
+    return formatter.format(num);
+  };
 
   const _fomatNumber1 = (num: number) => {
-    const formatter = new Intl.NumberFormat('us')
-    return formatter.format(num)
-  }
+    const formatter = new Intl.NumberFormat("us");
+    return formatter.format(num);
+  };
 
   const _renderTitle = () => {
     return (
-      productDetail && <View style={styles.wrapper}>
-        <Text numberOfLines={1} style={{ fontSize: 15, color: "gray" }}>{productDetail!.title}</Text>
+      productDetail && (
+        <View style={styles.wrapper}>
+          <Text numberOfLines={1} style={{ fontSize: 15, color: "gray" }}>
+            {productDetail!.title}
+          </Text>
 
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={styles.priceSale} >{_fomatNumber1(productDetail.discount_price)}đ</Text>
-            <Text style={styles.price} >{_fomatNumber1(productDetail.price)}đ</Text>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              marginTop: 8,
+            }}
+          >
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Text style={styles.priceSale}>
+                {_fomatNumber1(productDetail.discount_price)}đ
+              </Text>
+              <Text style={styles.price}>
+                {_fomatNumber1(productDetail.price)}đ
+              </Text>
+            </View>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <StarRating num={4.5} fontSize={18} />
+              <Text
+                style={{ ...styles.textSmall, marginLeft: 5 }}
+              >{`(${_fomatNumber(12354)})`}</Text>
+            </View>
           </View>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <StarRating num={4.5} fontSize={18} />
-            <Text style={{ ...styles.textSmall, marginLeft: 5 }}>{`(${_fomatNumber(12354)})`}</Text>
+
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginTop: 3,
+            }}
+          >
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Text style={{ fontSize: 12, color: "#d53332", marginRight: 7 }}>
+                Tiết kiệm{" "}
+                {_fomatNumber1(
+                  productDetail.price - productDetail.discount_price
+                )}
+                đ
+              </Text>
+              <Text style={styles.dealDiscount}>
+                -
+                {Math.round(
+                  ((productDetail.price - productDetail.discount_price) *
+                    100.0) /
+                    productDetail.price
+                )}
+                %
+              </Text>
+            </View>
+
+            <Text style={styles.textSmall}>
+              Đã bán {_fomatNumber(productDetail.price)}
+            </Text>
           </View>
-        </View>
 
-        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 3 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={{ fontSize: 12, color: "#d53332", marginRight: 7 }}>Tiết kiệm {_fomatNumber1(productDetail.price - productDetail.discount_price)}đ</Text>
-            <Text style={styles.dealDiscount}>-{Math.round((productDetail.price - productDetail.discount_price) * 100.0 / productDetail.price)}%</Text>
-          </View>
-
-
-          <Text style={styles.textSmall}>Đã bán {_fomatNumber(productDetail.price)}</Text>
-        </View>
-
-        <View style={{ marginTop: 12 }}>
-          <Text style={{ fontWeight: 'bold' }}>Màu sắc</Text>
-          <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 5, width: '60%' }}>
-            {
-              colors.map((item, index) => (
+          <View style={{ marginTop: 12 }}>
+            <Text style={{ fontWeight: "bold" }}>Màu sắc</Text>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginTop: 5,
+                width: "60%",
+              }}
+            >
+              {colors.map((item, index) => (
                 <ColorCircle key={index} item={item} />
-              ))
-            }
+              ))}
+            </View>
           </View>
         </View>
-
-      </View>
-    )
-  }
+      )
+    );
+  };
 
   const _renderConfigurations = () => {
     return (
       <View style={{ ...styles.wrapper, marginTop: 10 }}>
-        <Text style={{ fontSize: 15, fontWeight: 'bold', marginBottom: 10 }}>Cấu hình</Text>
+        <Text style={{ fontSize: 15, fontWeight: "bold", marginBottom: 10 }}>
+          Cấu hình
+        </Text>
         <Table borderStyle={{ borderWidth: 1 }}>
-          <TableWrapper style={{ flexDirection: 'row' }}>
-            <Col data={tableTitle} heightArr={[32, 32]} textStyle={styles.tableTitle} />
-            <Rows data={tableData} flexArr={[2]} style={{ height: 32 }} textStyle={styles.dataTitle} />
+          <TableWrapper style={{ flexDirection: "row" }}>
+            <Col
+              data={tableTitle}
+              heightArr={[32, 32]}
+              textStyle={styles.tableTitle}
+            />
+            <Rows
+              data={tableData}
+              flexArr={[2]}
+              style={{ height: 32 }}
+              textStyle={styles.dataTitle}
+            />
           </TableWrapper>
         </Table>
       </View>
-    )
-  }
+    );
+  };
 
   const _renderDescription = () => {
     return (
-      productDetail &&
-      <View style={{ ...styles.wrapper, marginTop: 10 }}>
-        <Text style={styles.title}>Giới thiệu</Text>
-        <Text style={{ fontSize: 15, marginTop: 5, textAlign: 'justify', lineHeight: 22 }}>{productDetail.description}</Text>
-
-      </View>
-    )
-  }
+      productDetail && (
+        <View style={{ ...styles.wrapper, marginTop: 10 }}>
+          <Text style={styles.title}>Giới thiệu</Text>
+          <Text
+            style={{
+              fontSize: 15,
+              marginTop: 5,
+              textAlign: "justify",
+              lineHeight: 22,
+            }}
+          >
+            {productDetail.description}
+          </Text>
+        </View>
+      )
+    );
+  };
 
   const handleShowMoreComments = () => {
-    navigation.navigate('CommentsScreen', {
-      product_id: productDetail.id
-    })
-  }
+    navigation.navigate("CommentsScreen", {
+      product_id: productDetail.id,
+    });
+  };
 
   const handleAddToCart = (color: string, quantity: number) => {
-    
-    const actionResult = dispatch(
+    dispatch(
       addingNewProductToCart({
-        id: productDetail.id,
+        id: idOfParticularProduct,
         title: productDetail.title,
-        quantity: quantity,
+        quantity: 1,
         price: productDetail.price,
         discount_price: productDetail.discount_price,
         product_thumbnail: productDetail.product_thumbnail,
-        color: color
+        color: color,
       })
     );
-  }
+    setTemporaryQuantityDisplayInItemDetailScreem((prev) => prev + 1);
+  };
 
   const _renderComment = () => {
     return (
-      productDetail &&
-      <View style={{ ...styles.wrapper, marginTop: 10 }}>
-        <Text style={styles.title}>Đánh giá </Text>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderBottomColor: '#DDDDDD', borderBottomWidth: 0.5, paddingBottom: 10 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5 }}>
-            <StarRating num={4.5} fontSize={20} />
-            <Text style={{ color: 'gray', fontSize: 12, marginLeft: 5 }}>4.9/5</Text>
+      productDetail && (
+        <View style={{ ...styles.wrapper, marginTop: 10 }}>
+          <Text style={styles.title}>Đánh giá </Text>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              borderBottomColor: "#DDDDDD",
+              borderBottomWidth: 0.5,
+              paddingBottom: 10,
+            }}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginTop: 5,
+              }}
+            >
+              <StarRating num={4.5} fontSize={20} />
+              <Text style={{ color: "gray", fontSize: 12, marginLeft: 5 }}>
+                4.9/5
+              </Text>
+            </View>
+            <Text style={styles.textSmall}>{`(1.9k đánh giá)`}</Text>
           </View>
-          <Text style={styles.textSmall}>{`(1.9k đánh giá)`}</Text>
-        </View>
 
-        <View>
-          {
-            comments.map((item: any) => {
-              return (
-                <Comment item={item} />
-              )
-            })
-          }
-        </View>
+          <View>
+            {comments.map((item: any) => {
+              return <Comment item={item} />;
+            })}
+          </View>
 
-        <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 10 }}>
-          <TouchableOpacity onPress={handleShowMoreComments}>
-            <Text style={{ paddingHorizontal: 10, paddingVertical: 5, borderColor: 'black', borderWidth: 1 }}>Xem tất cả</Text>
-          </TouchableOpacity>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              marginTop: 10,
+            }}
+          >
+            <TouchableOpacity onPress={handleShowMoreComments}>
+              <Text
+                style={{
+                  paddingHorizontal: 10,
+                  paddingVertical: 5,
+                  borderColor: "black",
+                  borderWidth: 1,
+                }}
+              >
+                Xem tất cả
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-    )
-  }
+      )
+    );
+  };
 
   return (
     <View style={{ flex: 1 }}>
       <ScrollView style={styles.container}>
-        <Header />
+        <Header
+          temporaryQuantityDisplayInItemDetailScreem={
+            temporaryQuantityDisplayInItemDetailScreem
+          }
+        />
         <Carousel list={cards} width={windowWidth} height={250} />
         {_renderTitle()}
         {_renderConfigurations()}
         {_renderDescription()}
         {_renderComment()}
       </ScrollView>
-      <AddingToCartModal colors={colors} onClick={handleAddToCart}/>
+      <AddingToCartModal colors={colors} onClick={handleAddToCart} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   wrapper: {
     paddingVertical: 15,
     paddingHorizontal: 10,
-    backgroundColor: 'white',
-    flex: 1
+    backgroundColor: "white",
+    flex: 1,
   },
   title: {
     fontSize: 15,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   price: {
     fontSize: 11,
-    color: 'gray',
-    textDecorationLine: "line-through"
+    color: "gray",
+    textDecorationLine: "line-through",
   },
   priceSale: {
     fontSize: 17,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: "#d53332",
-    marginRight: 6
+    marginRight: 6,
   },
   dealDiscount: {
     fontSize: 12,
@@ -354,14 +491,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#fbc217",
   },
   dataTitle: {
-    paddingLeft: 10
+    paddingLeft: 10,
   },
   tableTitle: {
-    paddingLeft: 10
+    paddingLeft: 10,
   },
   textSmall: {
-    color: 'gray',
-    fontSize: 12
+    color: "gray",
+    fontSize: 12,
   },
 });
 
