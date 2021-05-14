@@ -92,6 +92,7 @@ export default function LoginScreen({ navigation }: any) {
                     value={username}
                     placeholder="Username"
                     maxLength={32}
+                    autoCapitalize="none"
                 />
                 {username !== "" && !username?.match(usernameRegex) && (
                     <Text style={styles.errorMess}>
@@ -108,6 +109,7 @@ export default function LoginScreen({ navigation }: any) {
                     placeholder="Địa chỉ email"
                     textContentType="emailAddress"
                     maxLength={32}
+                    autoCapitalize="none"
                 />
                 {isEmailError && (
                     <Text style={styles.errorMess}>Email này đã được sủ dụng</Text>
@@ -120,6 +122,7 @@ export default function LoginScreen({ navigation }: any) {
                     placeholder="Mật khẩu"
                     secureTextEntry={true}
                     maxLength={32}
+                    autoCapitalize="none"
                 />
                 {password !== "" && password!.length < 6 && (
                     <Text style={styles.errorMess}>Mật khẩu gồm ý nhất 6 chữ số</Text>
@@ -132,6 +135,7 @@ export default function LoginScreen({ navigation }: any) {
                     placeholder="Nhập lại mật khẩu"
                     secureTextEntry={true}
                     maxLength={32}
+                    autoCapitalize="none"
                 />
                 {password !== cfpassword && (
                     <Text style={styles.errorMess}>Mật khẩu xác nhận không khớp</Text>
