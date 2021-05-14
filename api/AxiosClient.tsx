@@ -1,12 +1,12 @@
 import axios from "axios";
 import queryString from "query-string";
 import UserApi from './UserApi'
-import { token, expiry, setToken } from '../redux/features/loginSlice'
+import { token, setToken } from '../redux/features/loginSlice'
 
 import { useAppSelector, useAppDispatch } from "../redux/app/hook";
 import ImgSlider from "../components/itemDetailScreen/itemProp/ImgSlider";
 
-export const baseUrl = "http://13.55.8.176:8080";
+export const baseUrl = "http://117.5.114.116:8120";
 
 const refreshToken = () => {
   console.log("Refesh token\n")

@@ -12,17 +12,17 @@ const UserApi = {
     },
 
     signIn: (data : any) => {
-        const url = '/auth/login';
+        const url = '/api/login/';
         return AxiosClient.post(url, data);
     },
 
     signOut: () => {
-        const url = '/auth/logout';
+        const url = '/api/logout/';
         return AxiosClient.get(url);
     },
 
     getNewToken: () => {
-        const url = 'auth/new_token'
+        const url = 'api/new_token'
         return AxiosClient.get(url)
     }
 }

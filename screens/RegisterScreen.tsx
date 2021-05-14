@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Pressable, Modal } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Pressable, Modal, Alert } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { GoogleLogin } from 'react-google-login';
@@ -36,8 +36,12 @@ export default function LoginScreen({ navigation }: any) {
                 password: password,
                 email: email
             }
-            console.log("sign up")
-            const responce = await UserApi.signUp(form)
+            const responce = await UserApi.signUp(form) as any
+            // if(responce === 'Successfully') {
+               
+            // } else {
+
+            // }
             console.log(responce)
             const { username_existed, email_existed } = responce as any
             if (username_existed) setIsUsernameError(true)
