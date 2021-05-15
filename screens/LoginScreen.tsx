@@ -26,9 +26,10 @@ export default function LoginScreen({ navigation }: any) {
   const dispatch = useAppDispatch()
 
   const handleLoginSuccessfully = async (token: string) => {
-    navigation.goBack()
+    navigation.navigate("BottomNav", { screen: "HomeScreen" });
     await AsyncStorage.setItem('token', token);
     dispatch(setIsLogged(true))
+    navigation.navigate("BottomNav", { screen: "HomeScreen" });
   }
 
   const onSubmit = async () => {
@@ -142,6 +143,7 @@ export default function LoginScreen({ navigation }: any) {
         <TextInput
           style={styles.input}
           onChangeText={onPasswordChange}
+          secureTextEntry={true}
           value={password}
           placeholder="Mật khẩu"
           textContentType="password"
@@ -179,7 +181,9 @@ export default function LoginScreen({ navigation }: any) {
           </Pressable>
         </View>
 
-        <TouchableOpacity style={styles.btnSubmit} onPress={onSubmit}>
+        <TouchableOpacity style={styles.btnSubmit} 
+        onPress={onSubmit}
+        >
           <Text
             style={{
               fontSize: 15,

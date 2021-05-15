@@ -20,6 +20,10 @@ const UserApi = {
         const url = '/api/logout/';
         return AxiosClient.get(url);
     },
+    facebookPost: (data: any) => {
+        const url = 'rest-auth/facebook/'
+        return AxiosClient.post(url, data);
+    }
 }
 
 export default UserApi;
