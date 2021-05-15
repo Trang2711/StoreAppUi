@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Pressable, Modal, Alert } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
@@ -36,19 +36,23 @@ export default function LoginScreen({ navigation }: any) {
                 password: password,
                 email: email
             }
+            console.log('hú')
             const responce = await UserApi.signUp(form) as any
-            // if(responce === 'Successfully') {
-               
-            // } else {
-
-            // }
-            console.log(responce)
+            if (responce === 'Successfully') {
+                Alert.alert(
+                    "",
+                    "Một email xác thực đã được gửi đến hòm thư của bạn",
+                    [
+                        { text: "OK"}
+                    ]
+                );
+            }
+            console.log('responce:', responce)
             const { username_existed, email_existed } = responce as any
             if (username_existed) setIsUsernameError(true)
             if (email_existed) setIsEmailError(true)
 
             if (!username_existed && !email_existed) {
-                // navigation.navigate("LoginScreen")
                 setModalVisible(true)
                 setTimeout(() => {
                     setModalVisible(false)

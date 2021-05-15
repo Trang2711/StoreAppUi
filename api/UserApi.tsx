@@ -20,11 +20,6 @@ const UserApi = {
         const url = '/api/logout/';
         return AxiosClient.get(url);
     },
-
-    getNewToken: () => {
-        const url = 'api/new_token'
-        return AxiosClient.get(url)
-    }
 }
 
 export default UserApi;

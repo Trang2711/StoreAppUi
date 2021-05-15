@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   Image,
   Pressable,
-  Button,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
@@ -16,16 +15,22 @@ import * as Facebook from "expo-facebook";
 import UserApi from "../api/UserApi";
 import axios from "axios";
 import { useAppSelector, useAppDispatch } from "../redux/app/hook";
-import {setToken} from '../redux/features/loginSlice'
+import { setIsLogged } from '../redux/features/loginSlice'
+import { AsyncStorage } from 'react-native';
 
 export default function LoginScreen({ navigation }: any) {
   const [username, setUsername] = useState<string>("");
-  // const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [cfpassword, setCfpassword] = useState<string>("");
   const [isError, setIsError] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
   const dispatch = useAppDispatch()
+
+  const handleLoginSuccessfully = async (token: string) => {
+    navigation.goBack()
+    console.log('token', token)
+    await AsyncStorage.setItem('token', token);
+    dispatch(setIsLogged(true))
+  }
 
   const onSubmit = async () => {
     if (username !== "" && password !== "") {
@@ -35,27 +40,23 @@ export default function LoginScreen({ navigation }: any) {
       };
       console.log("sign up");
       const responce = await UserApi.signIn(form)
-      const { jwt_token } = responce as any
-      dispatch(setToken({
-        token: jwt_token as string
+      const { token } = responce as any
+
+      if (!token) {
+        handleLoginSuccessfully(token)
       }
-      ))
-      if (!jwt_token) {
-        navigation.navigate("BottomNav", {
-          screen: "home"
-        })
-      }
-      console.log('token' + jwt_token)
-      localStorage.setItem('token', jwt_token)
+
     } else {
       setIsError(true);
     }
   };
-  const onEmailChange = (e: string) => {
+
+  const onUserNameChange = (e: string) => {
     setIsError(false);
     setIsFailed(false);
-    // setEmail(e);
+    setUsername(e)
   };
+
   const onPasswordChange = (e: string) => {
     setIsError(false);
     setIsFailed(false);
@@ -133,19 +134,11 @@ export default function LoginScreen({ navigation }: any) {
       <View style={{ paddingHorizontal: 40, marginTop: 20 }}>
         <TextInput
           style={styles.input}
-          onChangeText={setUsername}
+          onChangeText={onUserNameChange}
           value={username}
           placeholder="User name"
           autoCapitalize="none"
         />
-
-        {/* <TextInput
-          style={styles.input}
-          onChangeText={onEmailChange}
-          value={email}
-          placeholder="Địa chỉ email"
-          textContentType="emailAddress"
-        /> */}
 
         <TextInput
           style={styles.input}
@@ -156,11 +149,11 @@ export default function LoginScreen({ navigation }: any) {
           autoCapitalize="none"
         />
         {isFailed && (
-          <Text style={styles.errorMess}>Mật khẩu hoặc email không đúng</Text>
+          <Text style={styles.errorMess}>Mật khẩu hoặc tên tài khoản không đúng</Text>
         )}
         {isError && (
           <Text style={styles.errorMess}>
-            Vui lòng điền đầy đủ mật khẩu và email
+            Vui lòng điền đầy đủ mật khẩu và tên tài khoản
           </Text>
         )}
 
