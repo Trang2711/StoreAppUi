@@ -36,7 +36,6 @@ export default function LoginScreen({ navigation }: any) {
                 password: password,
                 email: email
             }
-            console.log('hú')
             const responce = await UserApi.signUp(form) as any
             if (responce === 'Successfully') {
                 Alert.alert(

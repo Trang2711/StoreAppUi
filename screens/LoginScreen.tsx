@@ -27,7 +27,6 @@ export default function LoginScreen({ navigation }: any) {
 
   const handleLoginSuccessfully = async (token: string) => {
     navigation.goBack()
-    console.log('token', token)
     await AsyncStorage.setItem('token', token);
     dispatch(setIsLogged(true))
   }
@@ -42,7 +41,7 @@ export default function LoginScreen({ navigation }: any) {
       const responce = await UserApi.signIn(form)
       const { token } = responce as any
 
-      if (!token) {
+      if (token) {
         handleLoginSuccessfully(token)
       }
 
