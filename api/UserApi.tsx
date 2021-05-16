@@ -1,11 +1,6 @@
 import AxiosClient from "./AxiosClient";
 
 const UserApi = {
-  getUser: (id: any) => {
-    const url = `users/${id}`;
-    return AxiosClient.get(url);
-  },
-
   signUp: (data: any) => {
     const url = "/api/register/";
     return AxiosClient.post(url, data);
@@ -35,6 +30,10 @@ const UserApi = {
   getMsgHistory: (data: any) => {
     const url = "api/chat_history/";
     return AxiosClient.post(url, data);
+  },
+  getUsername: () => {
+    const url = "/api/get_username/";
+    return AxiosClient.get(url);
   },
 };
 

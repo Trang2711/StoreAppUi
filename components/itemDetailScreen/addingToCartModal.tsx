@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
 import ColorCircle from "../common/ColorCircle";
+import UserAPI from "../../api/UserApi";
 
 export default function AddingToCartModal({
   colors,
@@ -19,7 +20,6 @@ export default function AddingToCartModal({
   const { height, width } = Dimensions.get("window");
   const [modalVisible, setModalVisible] = useState(false);
   const [colorSelected, setColorSelected] = useState<string>();
-
   const handleSelectColor = (flag: "ADD" | "REMOVE", color: any) => {
     if (flag === "ADD") setColorSelected(color.value);
     else if (flag === "REMOVE") {
@@ -39,10 +39,16 @@ export default function AddingToCartModal({
       <View style={styles.footer}>
         <TouchableOpacity
           style={styles.chatBtn}
-          onPress={() =>
+          onPress={async () =>
             navigation.navigate("BottomNav", {
               screen: "Chat",
-              params: { seller: seller, screen: "ChatDetailScreen" },
+              params: {
+                screen: "ChatDetailScreen",
+                params: {
+                  seller: seller,
+                  customer: (await UserAPI.getUsername()) as any,
+                },
+              },
             })
           }
         >

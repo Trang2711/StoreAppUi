@@ -22,21 +22,23 @@ interface ref {
 }
 
 const ChatDetailScreen = ({ navigation, route }: any) => {
-  // const { seller } = route.params;
-  // console.log("seller from detai screen", seller);
+  const { seller, customer } = route.params;
+  // console.log("route param", route);
+  console.log("seller from detai screen", seller);
   // const chats = ["1aaa", "2aaa", "3aaa", "4aa", "5aaa", "6a", "7aa"];
   const [chatMessages, setChatMessages] = useState([]);
   const [inputMsg, setInputMsg] = useState("");
   const [received, setReceived] = useState(false);
   const scrollViewRef = useRef<ref | null>();
   ////////function
+  useEffect(() => {}, []);
   const _sendMsg = async () => {
     // setChatMessages([...chatMessages, inputMsg]);
     const res = await UserAPI.pushingChatMsg({
-      seller: "ngf",
-      isFromCustomer: false,
+      seller,
+      isFromCustomer: true,
       text: inputMsg,
-      customer: "hung",
+      customer,
     });
     console.log("post msg response received", res);
     setInputMsg("");
@@ -46,12 +48,17 @@ const ChatDetailScreen = ({ navigation, route }: any) => {
   useEffect(() => {
     const _getMsgHistory = async () => {
       const response = await UserAPI.getMsgHistory({
-        customer: "hung",
-        seller: "ngf",
+        customer,
+        seller,
       });
       console.log("chat history", response);
       setChatMessages(response as any);
     };
+    // const _getUserName = async () => {
+    //   const response = await UserAPI.getUsername();
+    //   setCustomer(response as any);
+    // };
+    // _getUserName();
     _getMsgHistory();
   }, []);
   console.log("chat msg history", chatMessages);
@@ -59,7 +66,7 @@ const ChatDetailScreen = ({ navigation, route }: any) => {
     const pusher = new Pusher("0d984425ec77e69c43f6", {
       cluster: "ap1",
     });
-    var channel = pusher.subscribe("hung-ngf");
+    var channel = pusher.subscribe(`${customer}-${seller}`);
     channel.bind("chat", (data: any) => {
       console.log("data from pusher", data);
       alert(JSON.stringify(data));
@@ -123,13 +130,13 @@ const ChatDetailScreen = ({ navigation, route }: any) => {
         >
           {/* Component */}
           {chatMessages.map((chatMsg, index) => {
-            // return (
-            //   <ChatSection
-            //     key={index}
-            //     chatMessage={chatMsg}
-            //     received={received}
-            //   />
-            // );
+            return (
+              <ChatSection
+                key={index}
+                chatMessage={chatMsg}
+                received={received}
+              />
+            );
           })}
         </ScrollView>
         {/* <Text>{inputMsg}</Text> */}
