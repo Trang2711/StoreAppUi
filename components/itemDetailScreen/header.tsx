@@ -50,7 +50,11 @@ export default function Header({
         />
         {temporaryQuantityDisplayInItemDetailScreem > 0 ? (
           <View style={styles.quantityIcon}>
-            <Text>{temporaryQuantityDisplayInItemDetailScreem}</Text>
+            <Text style={{ fontSize: 10, color: "white" }}>
+              {temporaryQuantityDisplayInItemDetailScreem < 99
+                ? temporaryQuantityDisplayInItemDetailScreem
+                : "99+"}
+            </Text>
           </View>
         ) : null}
       </View>
