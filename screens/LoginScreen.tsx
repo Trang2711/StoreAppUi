@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Image,
   Pressable,
-  Alert
+  Alert,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
@@ -16,36 +16,35 @@ import * as Facebook from "expo-facebook";
 import UserApi from "../api/UserApi";
 import axios from "axios";
 import { useAppSelector, useAppDispatch } from "../redux/app/hook";
-import { setIsLogged } from '../redux/features/loginSlice'
-import { AsyncStorage } from 'react-native';
+import { setIsLogged } from "../redux/features/loginSlice";
+import { AsyncStorage } from "react-native";
 
 export default function LoginScreen({ navigation }: any) {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isError, setIsError] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
   const handleLoginSuccessfully = async (token: string) => {
-    await AsyncStorage.setItem('token', token);
-    dispatch(setIsLogged(true))
+    await AsyncStorage.setItem("token", token);
+    dispatch(setIsLogged(true));
     navigation.navigate("BottomNav", { screen: "HomeScreen" });
-  }
+  };
 
   const onSubmit = async () => {
     if (username !== "" && password !== "") {
       const form = {
         username,
-        password
+        password,
       };
       console.log("sign up");
-      const responce = await UserApi.signIn(form)
-      const { token } = responce as any
+      const responce = await UserApi.signIn(form);
+      const { token } = responce as any;
 
       if (token) {
-        handleLoginSuccessfully(token)
+        handleLoginSuccessfully(token);
       }
-
     } else {
       setIsError(true);
     }
@@ -54,7 +53,7 @@ export default function LoginScreen({ navigation }: any) {
   const onUserNameChange = (e: string) => {
     setIsError(false);
     setIsFailed(false);
-    setUsername(e)
+    setUsername(e);
   };
 
   const onPasswordChange = (e: string) => {
@@ -68,24 +67,24 @@ export default function LoginScreen({ navigation }: any) {
       await Facebook.initializeAsync({
         appId: "2954637551478913",
       });
-      const responseFromLoginFb: any = await Facebook.logInWithReadPermissionsAsync(
-        {
+      const responseFromLoginFb: any =
+        await Facebook.logInWithReadPermissionsAsync({
           permissions: ["public_profile", "email", "user_photos"],
-        }
-      );
+        });
       if (responseFromLoginFb.type === "success") {
         // Get the user's name using Facebook's Graph API
         // const access_token = responseFromLoginFb.token;
         const access_token = responseFromLoginFb.token;
         const form = {
-          access_token
+          access_token,
         };
-        const response = await UserApi.facebookPost(form) as any;
+        const response = (await UserApi.facebookPost(form)) as any;
         if (response.key) {
-          handleLoginSuccessfully(access_token.key);
-        }
-        else{
-          Alert.alert("Một lỗi đã xảy ra trong quá trình đăng nhập. Vui lòng đăng nhập lại!");
+          handleLoginSuccessfully(response.key);
+        } else {
+          Alert.alert(
+            "Một lỗi đã xảy ra trong quá trình đăng nhập. Vui lòng đăng nhập lại!"
+          );
         }
       } else {
         // type === 'cancel'
@@ -100,16 +99,23 @@ export default function LoginScreen({ navigation }: any) {
   const googleSignIn = async () => {
     console.log("LoginScreen.js 6 | loggin in");
     try {
-      const { type, user, idToken }: any = await Google.logInAsync({
+      const response: any = await Google.logInAsync({
         iosClientId: `<YOUR_IOS_CLIENT_ID>`,
         androidClientId: `802017006894-sr41m2q8ahnrg4h9vbbug9lqslujr9bk.apps.googleusercontent.com`,
       });
 
-      if (type === "success") {
-        // Then you can use the Google REST API
-        console.log("user", user);
-        console.log("token", idToken);
-        // navigation.navigate("Profile", { user });
+      console.log(response);
+      if (response.type === "success") {
+        const response2: any = await UserApi.googlePost({
+          access_token: response.accessToken,
+        });
+        if (response2.key) {
+          handleLoginSuccessfully(response2.key);
+        } else {
+          Alert.alert(
+            "Một lỗi đã xảy ra trong quá trình đăng nhập. Vui lòng đăng nhập lại!"
+          );
+        }
       }
     } catch (error) {
       console.log("LoginScreen.js 19 | error with login", error);
@@ -154,7 +160,9 @@ export default function LoginScreen({ navigation }: any) {
           autoCapitalize="none"
         />
         {isFailed && (
-          <Text style={styles.errorMess}>Mật khẩu hoặc tên tài khoản không đúng</Text>
+          <Text style={styles.errorMess}>
+            Mật khẩu hoặc tên tài khoản không đúng
+          </Text>
         )}
         {isError && (
           <Text style={styles.errorMess}>
@@ -185,9 +193,7 @@ export default function LoginScreen({ navigation }: any) {
           </Pressable>
         </View>
 
-        <TouchableOpacity style={styles.btnSubmit} 
-        onPress={onSubmit}
-        >
+        <TouchableOpacity style={styles.btnSubmit} onPress={onSubmit}>
           <Text
             style={{
               fontSize: 15,
@@ -223,8 +229,7 @@ export default function LoginScreen({ navigation }: any) {
             <Image
               style={{ width: 45, height: 45 }}
               source={{
-                uri:
-                  "https://androidbunker.com/wp-content/uploads/2015/09/nexus2cee_new_google_icon_thumb.png",
+                uri: "https://androidbunker.com/wp-content/uploads/2015/09/nexus2cee_new_google_icon_thumb.png",
               }}
             ></Image>
           </TouchableOpacity>
