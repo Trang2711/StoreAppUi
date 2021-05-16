@@ -1,11 +1,24 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Pressable, Modal, Alert } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { GoogleLogin } from 'react-google-login';
 import UserApi from '../api/UserApi'
+import { AsyncStorage } from 'react-native';
 
 export default function LoginScreen({ navigation }: any) {
+
+    useEffect(() => {
+        const checkLogged = async () => {
+            await AsyncStorage.removeItem('token')
+            const token = await AsyncStorage.getItem('token')
+            console.log('token ', token)
+            if (token)
+                navigation.navigate("BottomNav", { screen: "HomeScreen" });
+        }
+        checkLogged()
+    }, [])
+
     const [username, setUsername] = useState<string>('')
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
@@ -13,17 +26,6 @@ export default function LoginScreen({ navigation }: any) {
     const [isEmailError, setIsEmailError] = useState(false)
     const [isUsernameError, setIsUsernameError] = useState(false)
     const [modalVisible, setModalVisible] = useState<boolean>(false)
-
-    const responseGoogle = (response: any) => {
-        console.log(response);
-    }
-
-    // useEffect(() => {
-    //     effect
-    //     return () => {
-    //         cleanup
-    //     }
-    // }, [modalVisible])
 
     var usernameRegex = /^[a-zA-Z0-9]+$/
 
@@ -42,7 +44,7 @@ export default function LoginScreen({ navigation }: any) {
                     "",
                     "Một email xác thực đã được gửi đến hòm thư của bạn",
                     [
-                        { text: "OK"}
+                        { text: "OK" }
                     ]
                 );
             }
@@ -75,24 +77,9 @@ export default function LoginScreen({ navigation }: any) {
 
     return (
         <View style={styles.container}>
-            <View
-                style={{
-                    flexDirection: "row",
-                    justifyContent: "flex-end",
-                    paddingHorizontal: 20,
-                }}
-            >
-                <Pressable
-                    onPress={() => {
-                        navigation.goBack();
-                    }}
-                >
-                    <AntDesign name="close" size={24} color="black" />
-                </Pressable>
-            </View>
             <Text style={styles.title}>PONZI</Text>
 
-            <View style={{ paddingHorizontal: 40, marginTop: 20 }}>
+            <View style={{ paddingHorizontal: 40, marginTop: 60 }}>
                 <TextInput
                     style={styles.input}
                     onChangeText={onUsernameChange}

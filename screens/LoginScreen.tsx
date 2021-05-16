@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   Pressable,
+  Alert
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
@@ -26,7 +27,6 @@ export default function LoginScreen({ navigation }: any) {
   const dispatch = useAppDispatch()
 
   const handleLoginSuccessfully = async (token: string) => {
-    navigation.navigate("BottomNav", { screen: "HomeScreen" });
     await AsyncStorage.setItem('token', token);
     dispatch(setIsLogged(true))
     navigation.navigate("BottomNav", { screen: "HomeScreen" });
@@ -75,14 +75,18 @@ export default function LoginScreen({ navigation }: any) {
       );
       if (responseFromLoginFb.type === "success") {
         // Get the user's name using Facebook's Graph API
-        fetch(
-          `https://graph.facebook.com/me?fields=id,email,name,picture&&access_token=${responseFromLoginFb.token}`
-        )
-          .then((res) => res.json())
-          .then((result) => {
-            console.log(result);
-            console.log("user token", responseFromLoginFb.token);
-          });
+        // const access_token = responseFromLoginFb.token;
+        const access_token = responseFromLoginFb.token;
+        const form = {
+          access_token
+        };
+        const response = await UserApi.facebookPost(form) as any;
+        if (response.key) {
+          handleLoginSuccessfully(access_token.key);
+        }
+        else{
+          Alert.alert("Một lỗi đã xảy ra trong quá trình đăng nhập. Vui lòng đăng nhập lại!");
+        }
       } else {
         // type === 'cancel'
       }
@@ -162,7 +166,7 @@ export default function LoginScreen({ navigation }: any) {
           style={{ flexDirection: "row", alignItems: "center", marginTop: 30 }}
         >
           <Text style={{ fontSize: 14, color: "black" }}>
-            Bạn chưa có tài khoản?
+            Bạn chưa có tài khoản?&nbsp;
           </Text>
           <Pressable
             onPress={() => {

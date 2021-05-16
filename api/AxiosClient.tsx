@@ -32,9 +32,7 @@ AxiosClient.interceptors.response.use(async (response) => {
       return response;
     }
 
-    if(response.status === 200) {
-      return response.data
-    }
+    return response.data
   }
   return response;
 },
