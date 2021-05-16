@@ -5,7 +5,7 @@ const ChatSection = ({ chatMessage, received }: any) => {
   return (
     <View
       style={[
-        received
+        !received
           ? styles.messageContainerReceived
           : styles.messageContainerSent,
       ]}
@@ -25,19 +25,19 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingRight: 10,
     paddingLeft: 10,
-    paddingTop: 15,
-    paddingBottom: 15,
+    paddingTop: 5,
+    paddingBottom: 5,
     marginBottom: 15,
   },
   messageContainerSent: {
-    backgroundColor: "blue",
+    backgroundColor: "#bdbdbd",
     justifyContent: "center",
     alignSelf: "flex-end",
     borderRadius: 10,
     paddingRight: 10,
     paddingLeft: 10,
-    paddingTop: 15,
-    paddingBottom: 15,
+    paddingTop: 10,
+    paddingBottom: 10,
     marginBottom: 15,
   },
   messageText: {

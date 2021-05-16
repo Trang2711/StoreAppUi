@@ -28,6 +28,14 @@ const UserApi = {
     const url = "/rest-auth/google/";
     return AxiosClient.post(url, data);
   },
+  pushingChatMsg: (data: any) => {
+    const url = "/api/send_message/";
+    return AxiosClient.post(url, data);
+  },
+  getMsgHistory: (data: any) => {
+    const url = "api/chat_history/";
+    return AxiosClient.post(url, data);
+  },
 };
 
 export default UserApi;

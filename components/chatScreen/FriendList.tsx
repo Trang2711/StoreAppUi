@@ -1,16 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { LogBox } from "react-native";
 
 const FriendList = ({ navigation }: any) => {
   const friends = ["1", "2", "3", "4", "5", "6", "7"];
+  // useEffect(() => {
+  //   LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
+  //   LogBox.ignoreAllLogs(); //Ignore all log notifications
+  // }, []);
   return (
     <View>
       {friends.map((friend, index) => {
         return (
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("ChatDetailScreen");
+              navigation.navigate("ChatDetailScreen", {});
             }}
           >
             <View style={styles.friendArea} key={index}>
@@ -19,8 +24,7 @@ const FriendList = ({ navigation }: any) => {
                 style={{ width: 70, height: 70, borderRadius: 200 }}
                 resizeMode={"cover"}
                 source={{
-                  uri:
-                    "https://taimienphi.vn/tmp/cf/aut/mAKI-top-anh-dai-dien-dep-chat-1.jpg",
+                  uri: "https://taimienphi.vn/tmp/cf/aut/mAKI-top-anh-dai-dien-dep-chat-1.jpg",
                 }}
               ></Image>
               <View style={styles.friendNameAndLastMsg}>

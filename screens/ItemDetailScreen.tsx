@@ -179,12 +179,14 @@ export default function ItemDetailScreen({ navigation, route }: any) {
     temporaryQuantityDisplayInItemDetailScreem,
     setTemporaryQuantityDisplayInItemDetailScreem,
   ] = useState(0);
+  const [seller, setSeller] = useState("");
   useEffect(() => {
     const fetchDetailProduct = async () => {
       try {
         const data = await ProductApi.getProductDetails(id);
         const _data = data as any;
-        console.log(_data);
+        console.log("ddddaata", _data);
+        setSeller(_data.seller);
         setProductDetail(_data);
 
         const _configTitle = mapValueTolabel(
@@ -203,7 +205,7 @@ export default function ItemDetailScreen({ navigation, route }: any) {
           return colorMap.filter((item) => item.value === color)[0];
         });
 
-        console.log(_colors);
+        // console.log(_colors);
         setColors(_colors as any);
       } catch (error) {
         console.log(
@@ -212,8 +214,8 @@ export default function ItemDetailScreen({ navigation, route }: any) {
       }
     };
     fetchDetailProduct();
-    console.log("product detail", productDetail);
   }, []);
+  console.log("product detail", productDetail);
   useEffect(() => {
     setTemporaryQuantityDisplayInItemDetailScreem(quantityInCart);
   }, [quantityInCart]);
@@ -454,7 +456,12 @@ export default function ItemDetailScreen({ navigation, route }: any) {
         {_renderDescription()}
         {_renderComment()}
       </ScrollView>
-      <AddingToCartModal colors={colors} onClick={handleAddToCart} />
+      <AddingToCartModal
+        colors={colors}
+        onClick={handleAddToCart}
+        navigation={navigation}
+        seller={seller}
+      />
     </View>
   );
 }

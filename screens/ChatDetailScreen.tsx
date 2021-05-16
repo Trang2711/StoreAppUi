@@ -8,33 +8,67 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Text, View } from "../components/Themed";
-import FriendToChat from "../components/chatScreen/FriendToChat";
-import FriendList from "../components/chatScreen/FriendList";
 import {
   ScrollView,
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native-gesture-handler";
 import ChatSection from "../components/chatDetailScreen/ChatSection";
+import Pusher from "pusher-js/react-native";
+import UserAPI from "../api/UserApi";
 
 interface ref {
   scrollToEnd: any;
 }
 
-const ChatDetailScreen = ({ navigation }: any) => {
-  const chats = ["1aaa", "2aaa", "3aaa", "4aa", "5aaa", "6a", "7aa"];
-  const [chatMessages, setChatMessages] = useState(chats);
+const ChatDetailScreen = ({ navigation, route }: any) => {
+  const { seller } = route.params;
+  console.log("seller from detai screen", seller);
+  // const chats = ["1aaa", "2aaa", "3aaa", "4aa", "5aaa", "6a", "7aa"];
+  const [chatMessages, setChatMessages] = useState([]);
   const [inputMsg, setInputMsg] = useState("");
   const [received, setReceived] = useState(false);
   const scrollViewRef = useRef<ref | null>();
   ////////function
-  const _sendMsg = () => {
-    setChatMessages([...chatMessages, inputMsg]);
+  const _sendMsg = async () => {
+    // setChatMessages([...chatMessages, inputMsg]);
+    const res = await UserAPI.pushingChatMsg({
+      seller: "ngf",
+      isFromCustomer: false,
+      text: inputMsg,
+      customer: "hung",
+    });
+    console.log("post msg response received", res);
     setInputMsg("");
     Keyboard.dismiss();
     scrollViewRef?.current?.scrollToEnd({ animated: true });
-    setReceived(!received);
   };
+  useEffect(() => {
+    const _getMsgHistory = async () => {
+      const response = await UserAPI.getMsgHistory({
+        customer: "hung",
+        seller: "ngf",
+      });
+      console.log("chat history", response);
+      setChatMessages(response as any);
+    };
+    _getMsgHistory();
+  }, []);
+  console.log("chat msg history", chatMessages);
+  useEffect(() => {
+    const pusher = new Pusher("0d984425ec77e69c43f6", {
+      cluster: "ap1",
+    });
+    var channel = pusher.subscribe("hung-ngf");
+    channel.bind("chat", (data: any) => {
+      console.log("data from pusher", data);
+      alert(JSON.stringify(data));
+    });
+    return () => {
+      channel.unbind_all();
+    };
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.subContainer}>
@@ -58,8 +92,7 @@ const ChatDetailScreen = ({ navigation }: any) => {
                   style={{ width: 60, height: 60, borderRadius: 50 }}
                   resizeMode={"contain"}
                   source={{
-                    uri:
-                      "https://taimienphi.vn/tmp/cf/aut/mAKI-top-anh-dai-dien-dep-chat-1.jpg",
+                    uri: "https://taimienphi.vn/tmp/cf/aut/mAKI-top-anh-dai-dien-dep-chat-1.jpg",
                   }}
                 />
                 <View
@@ -90,13 +123,13 @@ const ChatDetailScreen = ({ navigation }: any) => {
         >
           {/* Component */}
           {chatMessages.map((chatMsg, index) => {
-            return (
-              <ChatSection
-                key={index}
-                chatMessage={chatMsg}
-                received={received}
-              />
-            );
+            // return (
+            //   <ChatSection
+            //     key={index}
+            //     chatMessage={chatMsg}
+            //     received={received}
+            //   />
+            // );
           })}
         </ScrollView>
         {/* <Text>{inputMsg}</Text> */}
