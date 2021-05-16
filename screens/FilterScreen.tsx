@@ -137,7 +137,7 @@ export default function FilterScreen({ route, navigation }: any) {
   const validatePrice = () => {
     const _maxPrice = parseInt(maxPrice)
     const _minPrice = parseInt(minPrice)
-    if (Number.isInteger(maxPrice) && Number.isInteger(minPrice) && _maxPrice > 0 && _minPrice >= 0 && _maxPrice > _minPrice)
+    if (Number.isInteger(_maxPrice) && Number.isInteger(_minPrice) && _maxPrice > 0 && _minPrice >= 0 && _maxPrice > _minPrice)
       return true
     setPriceError(true)
     return false
