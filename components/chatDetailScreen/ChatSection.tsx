@@ -10,7 +10,7 @@ const ChatSection = ({ chatMessage, received }: any) => {
           : styles.messageContainerSent,
       ]}
     >
-      <Text style={styles.messageText}>{chatMessage}</Text>
+      <Text style={styles.messageText}>{chatMessage.text}</Text>
     </View>
   );
 };

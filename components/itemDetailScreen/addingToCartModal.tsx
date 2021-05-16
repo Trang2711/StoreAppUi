@@ -42,7 +42,7 @@ export default function AddingToCartModal({
           onPress={() =>
             navigation.navigate("BottomNav", {
               screen: "Chat",
-              params: { seller: seller },
+              params: { seller: seller, screen: "ChatDetailScreen" },
             })
           }
         >
