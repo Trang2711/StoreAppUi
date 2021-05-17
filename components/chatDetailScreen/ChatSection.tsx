@@ -1,11 +1,15 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-const ChatSection = ({ chatMessage, received }: any) => {
+const ChatSection = ({ chatMessage, seller, customer }: any) => {
+  console.log("chat", chatMessage);
+  console.log("custoemr", customer);
+  console.log("receiver", chatMessage.receiver);
+  const cusSending = customer === chatMessage.receiver ? true : false;
   return (
     <View
       style={[
-        !received
+        !cusSending
           ? styles.messageContainerReceived
           : styles.messageContainerSent,
       ]}

@@ -28,11 +28,10 @@ const ChatDetailScreen = ({ navigation, route }: any) => {
   // const chats = ["1aaa", "2aaa", "3aaa", "4aa", "5aaa", "6a", "7aa"];
   const [chatMessages, setChatMessages] = useState([]);
   const [inputMsg, setInputMsg] = useState("");
-  const [received, setReceived] = useState(false);
   const scrollViewRef = useRef<ref | null>();
   ////////function
-  useEffect(() => {}, []);
   const _sendMsg = async () => {
+    setInputMsg("");
     // setChatMessages([...chatMessages, inputMsg]);
     const res = await UserAPI.pushingChatMsg({
       seller,
@@ -41,9 +40,7 @@ const ChatDetailScreen = ({ navigation, route }: any) => {
       customer,
     });
     console.log("post msg response received", res);
-    setInputMsg("");
     Keyboard.dismiss();
-    scrollViewRef?.current?.scrollToEnd({ animated: true });
   };
   useEffect(() => {
     const _getMsgHistory = async () => {
@@ -54,14 +51,8 @@ const ChatDetailScreen = ({ navigation, route }: any) => {
       console.log("chat history", response);
       setChatMessages(response as any);
     };
-    // const _getUserName = async () => {
-    //   const response = await UserAPI.getUsername();
-    //   setCustomer(response as any);
-    // };
-    // _getUserName();
     _getMsgHistory();
   }, []);
-  console.log("chat msg history", chatMessages);
   useEffect(() => {
     const pusher = new Pusher("0d984425ec77e69c43f6", {
       cluster: "ap1",
@@ -69,12 +60,22 @@ const ChatDetailScreen = ({ navigation, route }: any) => {
     var channel = pusher.subscribe(`${customer}-${seller}`);
     channel.bind("chat", (data: any) => {
       console.log("data from pusher", data);
-      alert(JSON.stringify(data));
+      setChatMessages((chatMessages): any => {
+        return [...chatMessages, data];
+      });
+      setTimeout(() => {
+        scrollViewRef?.current?.scrollToEnd({ animated: true });
+      }, 500);
     });
     return () => {
       channel.unbind_all();
     };
   }, []);
+  useEffect(() => {
+    scrollViewRef?.current?.scrollToEnd({ animated: true });
+  }, [scrollViewRef]);
+  //////////////disable warining on screen
+  console.disableYellowBox = true;
 
   return (
     <View style={styles.container}>
@@ -90,7 +91,14 @@ const ChatDetailScreen = ({ navigation, route }: any) => {
                       size={27}
                       color="black"
                       onPress={() => {
-                        navigation.navigate("ChatScreen");
+                        // if (customer == "ngf") {
+                        //   return navigation.navigate("ChatScreen");
+                        // } else {
+                        navigation.navigate("BottomNav", {
+                          screen: "HomeScreen",
+                        });
+                        // return navigation.navigate("ChatScreen");
+                        // }
                       }}
                     ></Ionicons>
                   </TouchableOpacity>
@@ -116,7 +124,7 @@ const ChatDetailScreen = ({ navigation, route }: any) => {
                       fontWeight: "bold",
                     }}
                   >
-                    "ten nguoi ban"
+                    {seller}
                   </Text>
                 </View>
               </View>
@@ -125,8 +133,11 @@ const ChatDetailScreen = ({ navigation, route }: any) => {
         </View>
         <ScrollView
           ref={scrollViewRef as any}
-          showsVerticalScrollIndicator={false}
-          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={true}
+          showsHorizontalScrollIndicator={true}
+          onContentSizeChange={() =>
+            scrollViewRef?.current?.scrollToEnd({ animated: true })
+          }
         >
           {/* Component */}
           {chatMessages.map((chatMsg, index) => {
@@ -134,7 +145,8 @@ const ChatDetailScreen = ({ navigation, route }: any) => {
               <ChatSection
                 key={index}
                 chatMessage={chatMsg}
-                received={received}
+                seller={seller}
+                customer={customer}
               />
             );
           })}

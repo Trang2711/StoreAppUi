@@ -69,7 +69,7 @@ export default function LoginScreen({ navigation }: any) {
       });
       const responseFromLoginFb: any =
         await Facebook.logInWithReadPermissionsAsync({
-          permissions: ["public_profile", "email", "user_photos"],
+          permissions: ["public_profile", "email"],
         });
       if (responseFromLoginFb.type === "success") {
         // Get the user's name using Facebook's Graph API
@@ -109,6 +109,7 @@ export default function LoginScreen({ navigation }: any) {
         const response2: any = await UserApi.googlePost({
           access_token: response.accessToken,
         });
+        console.log("res2", response2);
         if (response2.key) {
           handleLoginSuccessfully(response2.key);
         } else {

@@ -30,6 +30,7 @@ import ProductApi from "../api/ProductApi";
 import AddingToCartModal from "../components/itemDetailScreen/addingToCartModal";
 import "intl";
 import "intl/locale-data/jsonp/en";
+
 const cards = [
   {
     imgUrl:
@@ -185,7 +186,6 @@ export default function ItemDetailScreen({ navigation, route }: any) {
       try {
         const data = await ProductApi.getProductDetails(id);
         const _data = data as any;
-        console.log("ddddaata", _data);
         setSeller(_data.seller);
         setProductDetail(_data);
 
@@ -215,7 +215,6 @@ export default function ItemDetailScreen({ navigation, route }: any) {
     };
     fetchDetailProduct();
   }, []);
-  console.log("product detail", productDetail);
   useEffect(() => {
     setTemporaryQuantityDisplayInItemDetailScreem(quantityInCart);
   }, [quantityInCart]);
@@ -441,6 +440,9 @@ export default function ItemDetailScreen({ navigation, route }: any) {
       )
     );
   };
+
+  //////////////disable warining on screen
+  console.disableYellowBox = true;
 
   return (
     <View style={{ flex: 1 }}>
