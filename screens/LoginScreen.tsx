@@ -38,12 +38,16 @@ export default function LoginScreen({ navigation }: any) {
         username,
         password,
       };
-      console.log("sign up");
-      const responce = await UserApi.signIn(form);
-      const { token } = responce as any;
+      try {
+        const responce = await UserApi.signIn(form);
+        const { token } = responce as any;
 
-      if (token) {
-        handleLoginSuccessfully(token);
+        console.log("sign up", token);
+        if (token) {
+          handleLoginSuccessfully(token);
+        }
+      } catch (error) {
+        console.log('Failed to fetch token: ', error)
       }
     } else {
       setIsError(true);
@@ -61,7 +65,7 @@ export default function LoginScreen({ navigation }: any) {
     setIsFailed(false);
     setPassword(e);
   };
-  ////fb sign in
+  
   const facebookSignIn = async () => {
     try {
       await Facebook.initializeAsync({
@@ -86,16 +90,12 @@ export default function LoginScreen({ navigation }: any) {
             "Một lỗi đã xảy ra trong quá trình đăng nhập. Vui lòng đăng nhập lại!"
           );
         }
-      } else {
-        // type === 'cancel'
       }
-      // console.log("response from db", responseFromLoginFb);
     } catch ({ message }) {
       alert(`Facebook Login Error: ${message}`);
     }
   };
 
-  ///////////gg sign in
   const googleSignIn = async () => {
     console.log("LoginScreen.js 6 | loggin in");
     try {
