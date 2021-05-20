@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   StyleSheet,
   ScrollView,
@@ -15,6 +15,7 @@ import {
   Rows,
   Col,
 } from "react-native-table-component";
+import { LinearGradient } from 'expo-linear-gradient';
 import Carousel from "../components/common/Carousel";
 import Header from "../components/itemDetailScreen/header";
 import StarRating from "../components/common/StarRating";
@@ -281,10 +282,10 @@ export default function ItemDetailScreen({ navigation, route }: any) {
               <Text style={styles.dealDiscount}>
                 -
                 {Math.round(
-                  ((productDetail.price - productDetail.discount_price) *
-                    100.0) /
-                    productDetail.price
-                )}
+                ((productDetail.price - productDetail.discount_price) *
+                  100.0) /
+                productDetail.price
+              )}
                 %
               </Text>
             </View>
@@ -339,21 +340,53 @@ export default function ItemDetailScreen({ navigation, route }: any) {
     );
   };
 
+  const [textShown, setTextShown] = useState(false); //To show ur remaining Text
+  const [lengthMore, setLengthMore] = useState(false); //to show the "Read more & Less Line"
+  const toggleNumberOfLines = () => { //To toggle the show text or hide it
+    setTextShown(!textShown);
+  }
+
+  const onTextLayout = useCallback(e => {
+    setLengthMore(e.nativeEvent.lines.length >= 4); //to check the text is more than 4 lines or not
+    // console.log(e.nativeEvent);
+  }, []);
+
   const _renderDescription = () => {
     return (
       productDetail && (
         <View style={{ ...styles.wrapper, marginTop: 10 }}>
           <Text style={styles.title}>Giới thiệu</Text>
-          <Text
-            style={{
-              fontSize: 15,
-              marginTop: 5,
-              textAlign: "justify",
-              lineHeight: 22,
-            }}
-          >
-            {productDetail.description}
-          </Text>
+          <View style={{ position: 'relative' }}>
+            <Text
+              style={{
+                fontSize: 15,
+                marginTop: 5,
+                textAlign: "justify",
+                lineHeight: 22,
+                color: 'black'
+              }}
+              onTextLayout={onTextLayout}
+              numberOfLines={textShown ? undefined : 4}
+            >
+              {productDetail.description}
+            </Text>
+            {
+              lengthMore ? <>
+                {
+                  !textShown && <LinearGradient colors={['rgba(255, 255, 255, 0)', 'rgba(255, 255, 255, 1)']} style={{ position: 'absolute', width: '100%', height: '100%' }}>
+                  </LinearGradient>
+                }
+                <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 10 }}>
+                  <Text
+                    onPress={toggleNumberOfLines}
+                    style={styles.showMoreBtn}>
+                    {textShown ? 'Read less' : 'Read more'}
+                  </Text>
+                </View>
+              </>
+                : null
+            }
+          </View>
         </View>
       )
     );
@@ -509,6 +542,12 @@ const styles = StyleSheet.create({
     color: "gray",
     fontSize: 12,
   },
+  showMoreBtn: {
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    backgroundColor: 'black',
+    color: 'white',
+  }
 });
 
 // const configurations = {
