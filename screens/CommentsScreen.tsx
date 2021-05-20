@@ -30,23 +30,23 @@ const filterOptions = [
     total: 1900,
   },
   {
-    label: "1 sao",
+    label: "1",
     total: 1900,
   },
   {
-    label: "2 sao",
+    label: "2",
     total: 1900,
   },
   {
-    label: "3 sao",
+    label: "3",
     total: 1900,
   },
   {
-    label: "4 sao",
+    label: "4",
     total: 1900,
   },
   {
-    label: "5 sao",
+    label: "5",
     total: 1900,
   },
 ];
@@ -55,6 +55,7 @@ export default function SearchScreen({ route, navigation }: any) {
   const { product_id } = route.params;
 
   const [comments, setComments] = useState([]);
+  const [filter, setFilter] = useState('all')
 
   const [pagination, setPagination] = useState({
     currentPage: 1,
@@ -146,12 +147,7 @@ export default function SearchScreen({ route, navigation }: any) {
         >
           <View style={{ ...styles.filterOption, width: "19%" }}>
             <View
-              style={{
-                backgroundColor: "#F1F3F",
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
+              style={styles.starContainer}
             >
               <Text>1</Text>
               <MaterialIcons name="star" size={16} color="#eec82c" />
@@ -161,11 +157,7 @@ export default function SearchScreen({ route, navigation }: any) {
 
           <View style={{ ...styles.filterOption, width: "19%" }}>
             <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
+              style={styles.starContainer}
             >
               <Text>2</Text>
               <MaterialIcons name="star" size={16} color="#eec82c" />
@@ -175,11 +167,7 @@ export default function SearchScreen({ route, navigation }: any) {
 
           <View style={{ ...styles.filterOption, width: "19%" }}>
             <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
+              style={styles.starContainer}
             >
               <Text>3</Text>
               <MaterialIcons name="star" size={16} color="#eec82c" />
@@ -189,11 +177,7 @@ export default function SearchScreen({ route, navigation }: any) {
 
           <View style={{ ...styles.filterOption, width: "19%" }}>
             <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
+              style={styles.starContainer}
             >
               <Text>4</Text>
               <MaterialIcons name="star" size={16} color="#eec82c" />
@@ -203,11 +187,7 @@ export default function SearchScreen({ route, navigation }: any) {
 
           <View style={{ ...styles.filterOption, width: "19%" }}>
             <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
+              style={styles.starContainer}
             >
               <Text>5</Text>
               <MaterialIcons name="star" size={16} color="#eec82c" />
@@ -233,4 +213,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#F1F3F4",
     borderWidth: 1,
   },
+  starContainer: {
+    backgroundColor: "#F1F3F4",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  }
 });

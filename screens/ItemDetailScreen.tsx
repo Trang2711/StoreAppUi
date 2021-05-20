@@ -29,6 +29,7 @@ import {
 import { useAppSelector, useAppDispatch } from "../redux/app/hook";
 import ProductApi from "../api/ProductApi";
 import AddingToCartModal from "../components/itemDetailScreen/addingToCartModal";
+import Comments from '../components/itemDetailScreen/Comments'
 import "intl";
 import "intl/locale-data/jsonp/en";
 
@@ -66,56 +67,6 @@ const colorMap = [
     value: "Silver",
     label: "Bạc",
     colorCode: "#eaeaea",
-  },
-];
-
-const comments = [
-  {
-    id: "1",
-    avatar:
-      "https://images.pexels.com/photos/4006151/pexels-photo-4006151.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-    username: "trang trinh",
-    star: 4,
-    create_date: "28/03/2020",
-    content:
-      "Giao hàng nhanh, sản phẩm chính hãng và có bảo hành nên rất yên tâm, shop tư vấn rất nhiệt tình, ",
-    images: [
-      "https://images.pexels.com/photos/4006151/pexels-photo-4006151.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-      "https://images.pexels.com/photos/1113804/pexels-photo-1113804.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-      "https://images.pexels.com/photos/2047904/pexels-photo-2047904.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-      "https://images.pexels.com/photos/1038628/pexels-photo-1038628.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-    ],
-  },
-
-  {
-    id: "2",
-    avatar:
-      "https://images.pexels.com/photos/4006151/pexels-photo-4006151.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-    username: "Phạm Tuấn Nghĩa",
-    star: 4,
-    create_date: "28/03/2020",
-    content:
-      "Giao hàng nhanh, sản phẩm chính hãng và có bảo hành nên rất yên tâm, shop tư vấn rất nhiệt tình, ",
-    images: [
-      "https://images.pexels.com/photos/4006151/pexels-photo-4006151.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-      "https://images.pexels.com/photos/1113804/pexels-photo-1113804.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-      "https://images.pexels.com/photos/2047904/pexels-photo-2047904.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-    ],
-  },
-
-  {
-    id: "3",
-    avatar:
-      "https://images.pexels.com/photos/4006151/pexels-photo-4006151.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-    username: "Nguyễn Hữu Hùng",
-    star: 4,
-    create_date: "28/03/2020",
-    content:
-      "Giao hàng nhanh, sản phẩm chính hãng và có bảo hành nên rất yên tâm, shop tư vấn rất nhiệt tình, ",
-    images: [
-      "https://images.pexels.com/photos/4006151/pexels-photo-4006151.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-      "https://images.pexels.com/photos/1113804/pexels-photo-1113804.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-    ],
   },
 ];
 
@@ -392,12 +343,6 @@ export default function ItemDetailScreen({ navigation, route }: any) {
     );
   };
 
-  const handleShowMoreComments = () => {
-    navigation.navigate("CommentsScreen", {
-      product_id: productDetail.id,
-    });
-  };
-
   const handleAddToCart = (color: string, quantity: number) => {
     dispatch(
       addingNewProductToCart({
@@ -416,66 +361,11 @@ export default function ItemDetailScreen({ navigation, route }: any) {
   const _renderComment = () => {
     return (
       productDetail && (
-        <View style={{ ...styles.wrapper, marginTop: 10 }}>
-          <Text style={styles.title}>Đánh giá </Text>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              borderBottomColor: "#DDDDDD",
-              borderBottomWidth: 0.5,
-              paddingBottom: 10,
-            }}
-          >
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                marginTop: 5,
-              }}
-            >
-              <StarRating num={4.5} fontSize={20} />
-              <Text style={{ color: "gray", fontSize: 12, marginLeft: 5 }}>
-                4.9/5
-              </Text>
-            </View>
-            <Text style={styles.textSmall}>{`(1.9k đánh giá)`}</Text>
-          </View>
-
-          <View>
-            {comments.map((item: any) => {
-              return <Comment item={item} />;
-            })}
-          </View>
-
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              marginTop: 10,
-            }}
-          >
-            <TouchableOpacity onPress={handleShowMoreComments}>
-              <Text
-                style={{
-                  paddingHorizontal: 10,
-                  paddingVertical: 5,
-                  borderColor: "black",
-                  borderWidth: 1,
-                }}
-              >
-                Xem tất cả
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+        <Comments comments={productDetail.comments} productId={productDetail.id} navigation={navigation}/>
       )
     );
   };
 
-  //////////////disable warining on screen
-  console.disableYellowBox = true;
 
   return (
     <View style={{ flex: 1 }}>

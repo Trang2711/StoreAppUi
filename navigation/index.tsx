@@ -13,6 +13,7 @@ import TopTabNavigator from './TopTabNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
 import ItemDetailScreen from '../screens/ItemDetailScreen';
 import CommentsScreen from '../screens/CommentsScreen'
+import ProductReviews from '../screens/ProductReviews'
 
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
@@ -73,6 +74,12 @@ function RootStackTabNavigator() {
         name="CommentsScreen"
         options={{ title: 'Bình luận' }}
         component={CommentsScreen}
+      />
+      
+      <RootStack.Screen
+        name="ProductReviewsScreen"
+        options={{ title: 'Bình luận' }}
+        component={ProductReviews}
       />
     </RootStack.Navigator>
   )

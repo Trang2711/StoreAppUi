@@ -10,6 +10,7 @@ export type StackParamList = {
   LoginScreen: undefined;
   ItemDetailScreen: undefined;
   CommentsScreen: undefined;
+  ProductReviewsScreen: undefined
 };
 
 export type BottomTabParamList = {
