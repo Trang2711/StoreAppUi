@@ -12,40 +12,61 @@ import {
     Platform
 } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
+import ProductApi from '../api/ProductApi'
 import { FontAwesome, Feather } from '@expo/vector-icons';
 
-export default function Comments({ navigation, productId }: any) {
+export default function Comments({ navigation, route }: any) {
+    const { productId } = route.params;
 
     const [star, setStar] = useState(0)
     const [comment, setComment] = useState('')
 
-    const [image, setImage] = useState(null);
+    const [images, setImages] = useState();
 
-  useEffect(() => {
-    (async () => {
-      if (Platform.OS !== 'web') {
-        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status !== 'granted') {
-          alert('Sorry, we need camera roll permissions to make this work!');
+    useEffect(() => {
+        (async () => {
+            if (Platform.OS !== 'web') {
+                const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+                if (status !== 'granted') {
+                    alert('Sorry, we need camera roll permissions to make this work!');
+                }
+            }
+        })();
+    }, []);
+
+    const pickImage = async () => {
+        
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: false,
+            aspect: [4, 3],
+            quality: 1,
+        }) as any
+
+        console.log(result);
+
+        if (!result.cancelled) {
+            const data = {uri: result.uri, type: result.type}
+            setImages(data as any);
         }
-      }
-    })();
-  }, []);
+    };
 
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    }) as any
-
-    console.log(result);
-
-    if (!result.cancelled) {
-      setImage(result.uri);
+    const onSubmit = () => {
+        try {
+            const data = {
+                star,
+                images,
+                content: comment,
+                product: productId
+            }
+            console.log('fjhvbkfdg')
+            console.log(data)
+            ProductApi.sendReview(data)
+            
+        } catch (error) {
+            console.log('Fail to post review: ', error)
+        }
     }
-  };
 
 
     return (
@@ -61,11 +82,13 @@ export default function Comments({ navigation, productId }: any) {
                 {
                     [...Array(5)].map((e, i) => (
                         <FontAwesome
+                            key={i}
                             style={{ marginHorizontal: 4 }}
-                            name={i <= star ? 'star' : 'star-o'}
+                            // name={i < star ? 'star' : 'star-o'}
+                            name={star === 0 ? 'star-o' : i + 1 <= star ? 'star' : 'star-o'}
                             size={40}
                             color="#eec82c"
-                            onPress={() => setStar(i)}
+                            onPress={() => setStar(i + 1)}
                         />
                     ))
                 }
@@ -73,7 +96,7 @@ export default function Comments({ navigation, productId }: any) {
 
             <View>
                 <View style={{ flexDirection: 'row', marginTop: 20, alignItems: 'center', justifyContent: 'space-between' }}>
-                    <TouchableOpacity  onPress={pickImage}>
+                    <TouchableOpacity onPress={pickImage}>
                         <Feather name="camera" size={25} color="black" />
                     </TouchableOpacity>
                     <Text style={{ marginLeft: 4 }}>{`(Tối đa 4 hình ảnh)`}</Text>
@@ -90,8 +113,10 @@ export default function Comments({ navigation, productId }: any) {
                 value={comment}
                 placeholder='Hãy chia sẻ những điều bạn thích về sản phẩm nhé.'
             />
-            <View style={{flexDirection: 'row', justifyContent: 'flex-end', marginTop: 40}}>
-                <Text style={styles.submitBtn}>Gửi</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 40 }}>
+                <TouchableOpacity onPress={onSubmit}>
+                    <Text style={styles.submitBtn}>Gửi</Text>
+                </TouchableOpacity>
             </View>
         </View>
     )

@@ -68,8 +68,9 @@ export default function Comments({ navigation, productId, comments }: any) {
     //   product_id: productId,
     // });
 
+    console.log("prodcut code:", productId)
     navigation.navigate("ProductReviewsScreen", {
-        product_id: productId,
+        productId: productId,
       });
   };
 

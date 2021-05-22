@@ -23,6 +23,11 @@ const ProductApi = {
     const url = `/api/get_review`
     return AxiosClient.post(url, data)
   },
+
+  sendReview: (data: any) => {
+    const url = '/api/send_review/'
+    return AxiosClient.post(url, data)
+  }
 };
 
 export default ProductApi;

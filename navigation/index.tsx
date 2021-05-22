@@ -78,7 +78,7 @@ function RootStackTabNavigator() {
       
       <RootStack.Screen
         name="ProductReviewsScreen"
-        options={{ title: 'Bình luận' }}
+        options={{ title: 'Gửi bình luận' }}
         component={ProductReviews}
       />
     </RootStack.Navigator>
