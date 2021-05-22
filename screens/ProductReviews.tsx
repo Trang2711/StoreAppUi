@@ -21,7 +21,7 @@ export default function Comments({ navigation, route }: any) {
     const [star, setStar] = useState(0)
     const [comment, setComment] = useState('')
 
-    const [images, setImages] = useState();
+    const [images, setImages] = useState([]);
 
     useEffect(() => {
         (async () => {
@@ -41,13 +41,14 @@ export default function Comments({ navigation, route }: any) {
             allowsEditing: false,
             aspect: [4, 3],
             quality: 1,
+            base64: true
         }) as any
 
-        console.log(result);
-
         if (!result.cancelled) {
-            const data = {uri: result.uri, type: result.type}
-            setImages(data as any);
+            const image = {uri: result.uri, type: result.type, base64: result.base64}
+            let _data = images as any
+            _data.push(image)
+            setImages(_data);
         }
     };
 
@@ -59,8 +60,7 @@ export default function Comments({ navigation, route }: any) {
                 content: comment,
                 product: productId
             }
-            console.log('fjhvbkfdg')
-            console.log(data)
+            console.log('send review: ', images.length)
             ProductApi.sendReview(data)
             
         } catch (error) {
