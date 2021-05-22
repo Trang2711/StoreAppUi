@@ -20,7 +20,7 @@ const ProductApi = {
   },
   
   getCommentsOfProduct: (data: any) => {
-    const url = `/api/comments`
+    const url = `/api/get_review`
     return AxiosClient.post(url, data)
   },
 };

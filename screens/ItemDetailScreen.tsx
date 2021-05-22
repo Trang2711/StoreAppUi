@@ -361,7 +361,7 @@ export default function ItemDetailScreen({ navigation, route }: any) {
   const _renderComment = () => {
     return (
       productDetail && (
-        <Comments comments={productDetail.comments} productId={productDetail.id} navigation={navigation}/>
+        <Comments comments={productDetail.reviews} productId={productDetail.id} navigation={navigation}/>
       )
     );
   };

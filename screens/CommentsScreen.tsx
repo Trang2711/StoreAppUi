@@ -88,6 +88,10 @@ export default function SearchScreen({ route, navigation }: any) {
   };
 
   useEffect(() => {
+    fetchComments(product_id)
+  }, [])
+
+  useEffect(() => {
     fetchComments(product_id);
   }, [_paging]);
 

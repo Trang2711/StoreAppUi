@@ -11,57 +11,57 @@ import StarRating from "../common/StarRating";
 import Comment from "../common/Comment";
 
 
-const comments = [
-    {
-      id: "1",
-      avatar:
-        "https://images.pexels.com/photos/4006151/pexels-photo-4006151.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-      username: "trang trinh",
-      star: 4,
-      create_date: "28/03/2020",
-      content:
-        "Giao hàng nhanh, sản phẩm chính hãng và có bảo hành nên rất yên tâm, shop tư vấn rất nhiệt tình, ",
-      images: [
-        "https://images.pexels.com/photos/4006151/pexels-photo-4006151.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-        "https://images.pexels.com/photos/1113804/pexels-photo-1113804.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-        "https://images.pexels.com/photos/2047904/pexels-photo-2047904.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-        "https://images.pexels.com/photos/1038628/pexels-photo-1038628.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-      ],
-    },
+// const comments = [
+//     {
+//       id: "1",
+//       avatar:
+//         "https://images.pexels.com/photos/4006151/pexels-photo-4006151.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+//       username: "trang trinh",
+//       star: 4,
+//       create_date: "28/03/2020",
+//       content:
+//         "Giao hàng nhanh, sản phẩm chính hãng và có bảo hành nên rất yên tâm, shop tư vấn rất nhiệt tình, ",
+//       images: [
+//         "https://images.pexels.com/photos/4006151/pexels-photo-4006151.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+//         "https://images.pexels.com/photos/1113804/pexels-photo-1113804.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+//         "https://images.pexels.com/photos/2047904/pexels-photo-2047904.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+//         "https://images.pexels.com/photos/1038628/pexels-photo-1038628.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+//       ],
+//     },
   
-    {
-      id: "2",
-      avatar:
-        "https://images.pexels.com/photos/4006151/pexels-photo-4006151.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-      username: "Phạm Tuấn Nghĩa",
-      star: 4,
-      create_date: "28/03/2020",
-      content:
-        "Giao hàng nhanh, sản phẩm chính hãng và có bảo hành nên rất yên tâm, shop tư vấn rất nhiệt tình, ",
-      images: [
-        "https://images.pexels.com/photos/4006151/pexels-photo-4006151.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-        "https://images.pexels.com/photos/1113804/pexels-photo-1113804.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-        "https://images.pexels.com/photos/2047904/pexels-photo-2047904.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-      ],
-    },
+//     {
+//       id: "2",
+//       avatar:
+//         "https://images.pexels.com/photos/4006151/pexels-photo-4006151.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+//       username: "Phạm Tuấn Nghĩa",
+//       star: 4,
+//       create_date: "28/03/2020",
+//       content:
+//         "Giao hàng nhanh, sản phẩm chính hãng và có bảo hành nên rất yên tâm, shop tư vấn rất nhiệt tình, ",
+//       images: [
+//         "https://images.pexels.com/photos/4006151/pexels-photo-4006151.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+//         "https://images.pexels.com/photos/1113804/pexels-photo-1113804.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+//         "https://images.pexels.com/photos/2047904/pexels-photo-2047904.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+//       ],
+//     },
   
-    {
-      id: "3",
-      avatar:
-        "https://images.pexels.com/photos/4006151/pexels-photo-4006151.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-      username: "Nguyễn Hữu Hùng",
-      star: 4,
-      create_date: "28/03/2020",
-      content:
-        "Giao hàng nhanh, sản phẩm chính hãng và có bảo hành nên rất yên tâm, shop tư vấn rất nhiệt tình, ",
-      images: [
-        "https://images.pexels.com/photos/4006151/pexels-photo-4006151.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-        "https://images.pexels.com/photos/1113804/pexels-photo-1113804.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
-      ],
-    },
-  ];
+//     {
+//       id: "3",
+//       avatar:
+//         "https://images.pexels.com/photos/4006151/pexels-photo-4006151.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+//       username: "Nguyễn Hữu Hùng",
+//       star: 4,
+//       create_date: "28/03/2020",
+//       content:
+//         "Giao hàng nhanh, sản phẩm chính hãng và có bảo hành nên rất yên tâm, shop tư vấn rất nhiệt tình, ",
+//       images: [
+//         "https://images.pexels.com/photos/4006151/pexels-photo-4006151.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+//         "https://images.pexels.com/photos/1113804/pexels-photo-1113804.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+//       ],
+//     },
+//   ];
 
-export default function Comments({ navigation, productId }: any) {
+export default function Comments({ navigation, productId, comments }: any) {
     
   const handleShowMoreComments = () => {
     // navigation.navigate("CommentsScreen", {
