@@ -16,6 +16,7 @@ export default function FlashSale({ list, navigation }: any) {
         {list &&
           list.map((item: { id: any }) => (
             <CardItemFlashSale
+              key={item.id}
               specialKey={item.id}
               props={item}
               navigation={navigation}

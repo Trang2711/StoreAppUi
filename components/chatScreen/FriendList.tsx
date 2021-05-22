@@ -14,11 +14,12 @@ const FriendList = ({ navigation }: any) => {
       {friends.map((friend, index) => {
         return (
           <TouchableOpacity
+            key={index}
             onPress={() => {
               navigation.navigate("ChatDetailScreen", {});
             }}
           >
-            <View style={styles.friendArea} key={index}>
+            <View style={styles.friendArea}>
               {/* <View style={styles.friendImg}> */}
               <Image
                 style={{ width: 70, height: 70, borderRadius: 200 }}
