@@ -4,7 +4,7 @@ import { useState } from "react";
 import { StyleSheet, FlatList } from "react-native";
 import Carousel from "../components/common/Carousel";
 
-import Header from "../components/homeScreen/Header";
+import Header from "../components/HomeScreen/Header";
 import CardItemSmall from "../components/common/cardItem/CardItemSmall";
 import CategoryApi from "../api/CategoryApi";
 

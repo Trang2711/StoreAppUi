@@ -16,8 +16,8 @@ import { useNavigation } from "@react-navigation/native";
 import ProductApi from "../api/ProductApi";
 import SearchAndFiltersApi from "../api/SearchAndFiltersApi";
 
-import Header from "../components/homeScreen/Header";
-import FlashSale from "../components/homeScreen/FlashSale";
+import Header from "../components/HomeScreen/Header";
+import FlashSale from "../components/HomeScreen/FlashSale";
 import CardItem from "../components/common/cardItem/CardItem";
 import Carousel from "../components/common/Carousel";
 import { useAppDispatch, useAppSelector } from "../redux/app/hook";
