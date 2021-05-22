@@ -18,7 +18,8 @@ export default function StarRating({num, fontSize}: any) {
     if(b > 0) jsx.push(<MaterialIcons name="star-half" size={fontSize} color="#eec82c" />)
 
     for (let i = 0; i < c; i++) {
-        jsx.push(<MaterialIcons name="star-border" size={fontSize} color="#eec82c" />)
+        if(i < 5)
+            jsx.push(<MaterialIcons name="star-border" size={fontSize} color="#eec82c" />)
     }
     return (
         <View style={{ flexDirection: 'row' }}>

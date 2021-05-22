@@ -46,14 +46,14 @@ const RootStack = createStackNavigator<StackParamList>();
 function RootStackTabNavigator() {
   return (
     <RootStack.Navigator>
-      <RootStack.Screen
-        name="RegisterScreen"
-        component={RegisterScreen}
-        options={{ headerShown: false }}
-      />
        <RootStack.Screen
         name="LoginScreen"
         component={LoginScreen}
+        options={{ headerShown: false }}
+      />
+      <RootStack.Screen
+        name="RegisterScreen"
+        component={RegisterScreen}
         options={{ headerShown: false }}
       />
       <RootStack.Screen
