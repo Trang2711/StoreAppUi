@@ -13,7 +13,13 @@ import {
 } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import ProductApi from '../api/ProductApi'
-import { FontAwesome, Feather } from '@expo/vector-icons';
+import { FontAwesome, Feather, AntDesign
+
+
+
+
+
+} from '@expo/vector-icons';
 
 export default function Comments({ navigation, route }: any) {
     const { productId } = route.params;
@@ -35,7 +41,7 @@ export default function Comments({ navigation, route }: any) {
     }, []);
 
     const pickImage = async () => {
-        
+
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: false,
@@ -45,9 +51,10 @@ export default function Comments({ navigation, route }: any) {
         }) as any
 
         if (!result.cancelled) {
-            const image = {uri: result.uri, type: result.type, base64: result.base64}
+            const image = { uri: result.uri, type: result.type, base64: result.base64 }
             let _data = images as any
             _data.push(image)
+            console.log(_data.length)
             setImages(_data);
         }
     };
@@ -62,7 +69,7 @@ export default function Comments({ navigation, route }: any) {
             }
             console.log('send review: ', images.length)
             ProductApi.sendReview(data)
-            
+
         } catch (error) {
             console.log('Fail to post review: ', error)
         }
@@ -84,7 +91,6 @@ export default function Comments({ navigation, route }: any) {
                         <FontAwesome
                             key={i}
                             style={{ marginHorizontal: 4 }}
-                            // name={i < star ? 'star' : 'star-o'}
                             name={star === 0 ? 'star-o' : i + 1 <= star ? 'star' : 'star-o'}
                             size={40}
                             color="#eec82c"
@@ -101,8 +107,18 @@ export default function Comments({ navigation, route }: any) {
                     </TouchableOpacity>
                     <Text style={{ marginLeft: 4 }}>{`(Tối đa 4 hình ảnh)`}</Text>
                 </View>
-                <ScrollView horizontal={true} style={{ marginTop: 12 }}>
-                    <ImageBackground style={styles.image} source={{ uri: "https://images.pexels.com/photos/4006151/pexels-photo-4006151.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" }}></ImageBackground>
+                <ScrollView horizontal={true} style={{ marginTop: 12}}>
+                    {
+                        images.map((image: any) => (
+                            <ImageBackground 
+                                style={styles.image} 
+                                source={{ uri: 'https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png' }}
+                            >
+                                <AntDesign name="closecircleo" size={24} color="black" />
+                            </ImageBackground>
+                        ))
+                    }
+
                 </ScrollView>
             </View>
             <TextInput
@@ -147,6 +163,7 @@ const styles = StyleSheet.create({
         width: 125,
         resizeMode: 'cover',
         backgroundColor: '#f1f3f4',
+        marginRight: 15,
     },
     submitBtn: {
         paddingVertical: 8,

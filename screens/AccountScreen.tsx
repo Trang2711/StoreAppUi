@@ -36,6 +36,7 @@ return (
         <TouchableOpacity onPress={() => navigation.navigate('InfoScreen', { info })}>
           <ImageBackground
             style={styles.avatar}
+            imageStyle={{ borderRadius: 50}}
             source={{ uri: info!.avatar }}
           ></ImageBackground>
         </TouchableOpacity>

@@ -38,6 +38,10 @@ const UserApi = {
   changeInfo: (data: any) => {
     const url = '/api/change_info/'
     return AxiosClient.post(url, data);
+  },
+  confirmPassword: (data: any) => {
+    const url = '/api/verify_password/'
+    return AxiosClient.post(url, data);
   }
 };
 
