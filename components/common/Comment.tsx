@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ImageBackground, FlatList, Image } from 'react-
 import { Ionicons, MaterialCommunityIcons, AntDesign } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { baseUrl } from "../../api/AxiosClient";
 
 import StarRating from './StarRating'
 
@@ -10,7 +11,7 @@ const numCol = 3
 
 const renderItem = ({ item }: any) => {
     return (
-        <ImageBackground style={styles.image} source={{ uri: item }}></ImageBackground>
+        <ImageBackground style={styles.image} source={{ uri: `${baseUrl}${item}` }}></ImageBackground>
     )
 }
 

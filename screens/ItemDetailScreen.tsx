@@ -32,6 +32,7 @@ import AddingToCartModal from "../components/itemDetailScreen/addingToCartModal"
 import Comments from '../components/itemDetailScreen/Comments'
 import "intl";
 import "intl/locale-data/jsonp/en";
+import { baseUrl } from "../api/AxiosClient";
 
 const cards = [
   {
@@ -120,6 +121,7 @@ export default function ItemDetailScreen({ navigation, route }: any) {
   const { id } = route.params;
   const idOfParticularProduct = id;
   const [productDetail, setProductDetail] = useState<any>();
+  const [thumbnails, setThumbnails] = useState([])
 
   const [tableTitle, setTableTitle] = useState([]);
   const [tableData, setTableData] = useState([]);
@@ -133,6 +135,7 @@ export default function ItemDetailScreen({ navigation, route }: any) {
     setTemporaryQuantityDisplayInItemDetailScreem,
   ] = useState(0);
   const [seller, setSeller] = useState("");
+
   useEffect(() => {
     const fetchDetailProduct = async () => {
       try {
@@ -157,8 +160,10 @@ export default function ItemDetailScreen({ navigation, route }: any) {
           return colorMap.filter((item) => item.value === color)[0];
         });
 
-        // console.log(_colors);
         setColors(_colors as any);
+
+        const images = getImages(_data.images)
+        setThumbnails(images)
       } catch (error) {
         console.log(
           "Failed to fetch flashsale product in item detail screen" + error
@@ -167,9 +172,20 @@ export default function ItemDetailScreen({ navigation, route }: any) {
     };
     fetchDetailProduct();
   }, []);
+
   useEffect(() => {
     setTemporaryQuantityDisplayInItemDetailScreem(quantityInCart);
   }, [quantityInCart]);
+
+  const getImages = (images: any) => {
+    console.log(images)
+      let _images = images.map((item: any) => {
+          const imgUrl = `${baseUrl}${item}`
+          return {imgUrl}
+      })
+      return _images
+  }
+
   const _fomatNumber = (num: number) => {
     const formatter = new Intl.NumberFormat("en", {
       notation: "compact",
@@ -375,7 +391,7 @@ export default function ItemDetailScreen({ navigation, route }: any) {
             temporaryQuantityDisplayInItemDetailScreem
           }
         />
-        <Carousel list={cards} width={windowWidth} height={250} />
+        <Carousel list={thumbnails} width={windowWidth} height={250} />
         {_renderTitle()}
         {_renderConfigurations()}
         {_renderDescription()}

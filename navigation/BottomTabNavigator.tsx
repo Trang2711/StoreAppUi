@@ -20,6 +20,7 @@ import AccountScreen from "../screens/AccountScreen";
 import ItemDetailScreen from "../screens/ItemDetailScreen";
 import CommentsScreen from "../screens/CommentsScreen";
 import ChatDetailScreen from "../screens/ChatDetailScreen";
+import ProfileScreen from "../screens/ProfileScreen";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -170,8 +171,8 @@ function AccountTabNavigator() {
 
       <AccountTabStack.Screen
         name="InfoScreen"
-        component={AccountScreen}
-        options={{ headerShown: false }}
+        options={{ title: 'Sửa hồ sơ' }}
+        component={ProfileScreen}
       />
     </AccountTabStack.Navigator>
   );
