@@ -7,38 +7,19 @@ import {
   productsInsideCart,
   amountOfItemsInCart,
   setTotalQuantityInCart,
+  totalPrice,
 } from "../redux/features/cartSlice";
 import { withTheme } from "react-native-elements";
 import "intl";
 import "intl/locale-data/jsonp/en";
+import CartApi from '../api/CartApi'
 
 export default function CartScreen() {
   const productList = useAppSelector(productsInsideCart);
-  const [totalItemInCart, setTotalItemInCart] = useState(0);
-  const [totalMoney, setTotalMoney] = useState<number>(0);
-  const quantityOfItemsInCart = useAppSelector(amountOfItemsInCart);
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    // console.log("product in cart", productList);
-    const _calculatingCartItemAmount = () => {
-      var totalFigureInCart = 0;
-      productList.map((product) => {
-        totalFigureInCart = totalFigureInCart + product.quantity;
-      });
-      setTotalItemInCart(totalFigureInCart);
-      dispatch(setTotalQuantityInCart(totalFigureInCart));
-    };
-    const _calculatingCartTotalMoney = () => {
-      let money = 0;
-      productList.map((product) => {
-        money += product.price * product.quantity;
-      });
-      setTotalMoney(money);
-    };
-    _calculatingCartItemAmount();
-    _calculatingCartTotalMoney();
-  }, [productList]);
-  // console.log("quan in cart", quantityOfItemsInCart);
+  const totalItemInCart = useAppSelector(amountOfItemsInCart);
+  const totalPriceOfProduct = useAppSelector(totalPrice)
+  console.log(totalItemInCart, totalPriceOfProduct)
+
   const _fomatNumber1 = (num: number) => {
     const formatter = new Intl.NumberFormat("us");
     return formatter.format(num);
@@ -61,7 +42,7 @@ export default function CartScreen() {
               <Text
                 style={{ fontSize: 17, color: "#d53332", fontWeight: "bold" }}
               >
-                {_fomatNumber1(totalMoney)}₫
+                {_fomatNumber1(totalPriceOfProduct)}₫
               </Text>
             </View>
             <Text style={styles.paymentBtn}>Đặt hàng</Text>

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import {
     StyleSheet,
     ScrollView,
-    Dimensions,
+    Image,
     View,
     Text,
     TouchableOpacity,
@@ -13,12 +13,10 @@ import {
 } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import ProductApi from '../api/ProductApi'
-import { FontAwesome, Feather, AntDesign
-
-
-
-
-
+import {
+    FontAwesome,
+    Feather,
+    AntDesign
 } from '@expo/vector-icons';
 
 export default function Comments({ navigation, route }: any) {
@@ -51,11 +49,9 @@ export default function Comments({ navigation, route }: any) {
         }) as any
 
         if (!result.cancelled) {
-            const image = { uri: result.uri, type: result.type, base64: result.base64 }
-            let _data = images as any
-            _data.push(image)
-            console.log(_data.length)
-            setImages(_data);
+            const newImage = { uri: result.uri, type: result.type, base64: result.base64 }
+            let _data = [...images, newImage]
+            setImages(_data as any);
         }
     };
 
@@ -67,7 +63,6 @@ export default function Comments({ navigation, route }: any) {
                 content: comment,
                 product: productId
             }
-            console.log('send review: ', images.length)
             ProductApi.sendReview(data)
 
         } catch (error) {
@@ -75,6 +70,11 @@ export default function Comments({ navigation, route }: any) {
         }
     }
 
+    const removeImage = (index: any) => {
+        let _images = [...images]
+        _images.splice(index, 1)
+        setImages(_images)
+    }
 
     return (
         <View style={styles.container}>
@@ -107,15 +107,28 @@ export default function Comments({ navigation, route }: any) {
                     </TouchableOpacity>
                     <Text style={{ marginLeft: 4 }}>{`(Tối đa 4 hình ảnh)`}</Text>
                 </View>
-                <ScrollView horizontal={true} style={{ marginTop: 12}}>
+                <ScrollView horizontal={true} style={{ marginTop: 12, padding: 10 }}>
                     {
-                        images.map((image: any) => (
-                            <ImageBackground 
-                                style={styles.image} 
-                                source={{ uri: 'https://i.pinimg.com/originals/51/f6/fb/51f6fb256629fc755b8870c801092942.png' }}
-                            >
-                                <AntDesign name="closecircleo" size={24} color="black" />
-                            </ImageBackground>
+                        images.map((image: any, index) => (
+                            <View style={styles.imageContainer}>
+                                {/* <ImageBackground
+                                    style={styles.image}
+                                    source={{ uri: image.uri }}
+                                >
+                                </ImageBackground> */}
+                                <Image
+                                    style={styles.image}
+                                    source={{ uri: image.uri }}
+                                />
+                                <View style={styles.backgroundIcon}></View>
+                                <AntDesign
+                                    style={styles.iconClose}
+                                    name="closecircle"
+                                    size={24}
+                                    color="black"
+                                    onPress={() => removeImage(index)}
+                                />
+                            </View>
                         ))
                     }
 
@@ -158,12 +171,29 @@ const styles = StyleSheet.create({
         backgroundColor: '#f1f3f4',
         marginTop: 20
     },
+    imageContainer: {
+        position: 'relative',
+    },
     image: {
         height: 90,
         width: 125,
         resizeMode: 'cover',
-        backgroundColor: '#f1f3f4',
         marginRight: 15,
+        marginTop: 10
+    },
+    backgroundIcon: {
+        position: 'absolute',
+        top: 0,
+        right: 5,
+        backgroundColor: 'white',
+        width: 24,
+        height: 24,
+        borderRadius: 15
+    },
+    iconClose: {
+        position: 'absolute',
+        top: 0,
+        right: 5
     },
     submitBtn: {
         paddingVertical: 8,
