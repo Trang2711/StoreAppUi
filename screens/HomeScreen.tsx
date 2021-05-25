@@ -26,7 +26,6 @@ import {
   productsInsideCart,
   setTotalQuantityInCart,
 } from "../redux/features/cartSlice";
-
 const carousel = [
   {
     imgUrl:
@@ -117,6 +116,9 @@ export default function HomeScreen() {
     <CardItem props={item} navigation={navigation} />
   );
 
+  //////////////disable warining on screen
+  console.disableYellowBox = true;
+
   return (
     <View>
       <Header quantityOfItemsInCart={updatedQuantityInCart} />
@@ -124,8 +126,7 @@ export default function HomeScreen() {
         <ImageBackground
           style={styles.image}
           source={{
-            uri:
-              "https://images.pexels.com/photos/4458554/pexels-photo-4458554.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+            uri: "https://images.pexels.com/photos/4458554/pexels-photo-4458554.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
           }}
         >
           <Text style={styles.slogan}>

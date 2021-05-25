@@ -18,7 +18,8 @@ import NewsScreen from "../screens/NewsScreen";
 import ChatScreen from "../screens/ChatScreen";
 import AccountScreen from "../screens/AccountScreen";
 import ItemDetailScreen from "../screens/ItemDetailScreen";
-import CommentsScreen from "../screens/CommentsScreen"
+import CommentsScreen from "../screens/CommentsScreen";
+import ChatDetailScreen from "../screens/ChatDetailScreen";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -145,6 +146,11 @@ function ChatTabNavigator() {
       <ChatTabStack.Screen
         name="ChatScreen"
         component={ChatScreen}
+        options={{ headerShown: false }}
+      />
+      <ChatTabStack.Screen
+        name="ChatDetailScreen"
+        component={ChatDetailScreen}
         options={{ headerShown: false }}
       />
     </ChatTabStack.Navigator>
