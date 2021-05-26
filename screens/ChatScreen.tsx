@@ -46,7 +46,7 @@ export default function ChatScreen({ navigation }: any) {
                 style={{ width: 60, height: 60, borderRadius: 50 }}
                 resizeMode={"contain"}
                 source={{
-                  uri: "https://taimienphi.vn/tmp/cf/aut/mAKI-top-anh-dai-dien-dep-chat-1.jpg",
+                  uri: currentUserInformation.avatar,
                 }}
               />
               <View style={styles.styleForDisplayFlexAndCenterThings}>

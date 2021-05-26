@@ -18,6 +18,8 @@ import Pusher from "pusher-js/react-native";
 import UserAPI from "../api/UserApi";
 import { useAppSelector } from "../redux/app/hook";
 import { currentLoggingInUser } from "../redux/features/userSlice";
+import UserApi from "../api/UserApi";
+import { baseUrl } from "../api/AxiosClient";
 
 interface ref {
   scrollToEnd: any;
@@ -29,6 +31,9 @@ const ChatDetailScreen = ({ navigation, route }: any) => {
   const [chatMessages, setChatMessages] = useState([]);
   const [inputMsg, setInputMsg] = useState("");
   const scrollViewRef = useRef<ref | null>();
+  const [currentChattingUserAvatar, setCurrentChattingUserAvatar] = useState({
+    avatar: "",
+  });
   const currentUserInformation = useAppSelector(currentLoggingInUser);
   ////////function
   const _sendMsg = async () => {
@@ -54,8 +59,17 @@ const ChatDetailScreen = ({ navigation, route }: any) => {
       console.log("chat history", response);
       setChatMessages(response as any);
     };
+
+    const _getCurrentUserChattingWithInfo = async () => {
+      const response = (await UserApi.getUserAvatar({
+        username: seller,
+      })) as any;
+      setCurrentChattingUserAvatar(response as any);
+    };
+    _getCurrentUserChattingWithInfo();
     _getMsgHistory();
   }, []);
+  console.log("user avater", currentChattingUserAvatar);
   useEffect(() => {
     const pusher = new Pusher("0d984425ec77e69c43f6", {
       cluster: "ap1",
@@ -94,12 +108,7 @@ const ChatDetailScreen = ({ navigation, route }: any) => {
                       size={27}
                       color="black"
                       onPress={() => {
-                        // if (customer == "ngf") {
-                        //   return navigation.navigate("ChatScreen");
-                        // } else {
                         navigation.goBack();
-                        // return navigation.navigate("ChatScreen");
-                        // }
                       }}
                     ></Ionicons>
                   </TouchableOpacity>
@@ -108,7 +117,9 @@ const ChatDetailScreen = ({ navigation, route }: any) => {
                   style={{ width: 60, height: 60, borderRadius: 50 }}
                   resizeMode={"contain"}
                   source={{
-                    uri: "https://taimienphi.vn/tmp/cf/aut/mAKI-top-anh-dai-dien-dep-chat-1.jpg",
+                    uri: currentChattingUserAvatar.avatar
+                      ? baseUrl + currentChattingUserAvatar.avatar
+                      : "https://www.gravatar.com/avatar/9de95c1fce91a3a5031507466e580744?s=328&d=identicon&r=PG",
                   }}
                 />
                 <View

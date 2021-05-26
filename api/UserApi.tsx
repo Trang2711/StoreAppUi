@@ -55,6 +55,10 @@ const UserApi = {
     const url = "api/chat_seller/";
     return AxiosClient.get(url);
   },
+  getUserAvatar: (data: any) => {
+    const url = "/api/get_avatar/";
+    return AxiosClient.post(url, data);
+  },
 };
 
 export default UserApi;
