@@ -1,11 +1,15 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { useAppSelector } from "../../redux/app/hook";
+import { currentLoggingInUser } from "../../redux/features/userSlice";
 
 const ChatSection = ({ chatMessage, customer }: any) => {
   console.log("chat", chatMessage);
   console.log("custoemr", customer);
   console.log("receiver", chatMessage.receiver);
-  const cusSending = customer === chatMessage.receiver ? true : false;
+  const currentUserInformation = useAppSelector(currentLoggingInUser);
+  const cusSending =
+    currentUserInformation.username === chatMessage.receiver ? true : false;
   return (
     <View
       style={[
