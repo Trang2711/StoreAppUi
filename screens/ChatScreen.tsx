@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { StyleSheet, Image, TextInput, SafeAreaView } from "react-native";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Image, TextInput, Modal } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Text, View } from "../components/Themed";
 import FriendToChat from "../components/chatScreen/FriendToChat";
@@ -7,42 +7,49 @@ import FriendList from "../components/chatScreen/FriendList";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { useAppDispatch, useAppSelector } from "../redux/app/hook";
 import { currentLoggingInUser } from "../redux/features/userSlice";
+import UserApi from "../api/UserApi";
 
 export default function ChatScreen({ navigation }: any) {
   const [searchText, setSearchText] = useState("Tim kiem");
-  const currentUserLoggingInInfo = useAppSelector(currentLoggingInUser);
-  console.log("current user", currentUserLoggingInInfo);
+  const [showChatWithBuyer, setShowChatWithBuyer] = useState<Boolean>();
+  const [listOfChattingUser, setListOfChattingUser] = useState([]);
+  //////// nếu showChatWithBuyer mà false thì tương đương với showChatWithSeller là true
+  useEffect(() => {
+    setShowChatWithBuyer(true);
+  }, []);
+  useEffect(() => {
+    const _setListOfChattingUserEqualToListOfBuyer = async () => {
+      const response = await UserApi.getListOfChatCustomer();
+      // console.log("res from chat list", response);
+      await setListOfChattingUser(response as any);
+    };
+    const _setListOfChattingUserEqualToListOfSeller = async () => {
+      const response = await UserApi.getListOfChatSeller();
+      console.log("res from chat with seller", response);
+      await setListOfChattingUser(response as any);
+    };
+    if (showChatWithBuyer) {
+      _setListOfChattingUserEqualToListOfBuyer();
+    } else if (showChatWithBuyer === false) {
+      _setListOfChattingUserEqualToListOfSeller();
+    }
+  }, [showChatWithBuyer]);
+  console.log("show chat with buyer", showChatWithBuyer);
   return (
     <View style={styles.container}>
       <View style={styles.subContainer}>
         <View style={styles.headerContainer}>
           <View style={styles.user}>
-            <View style={styles.userImgAndChat}>
-              <View style={{ display: "flex", flexDirection: "row" }}>
-                <Image
-                  style={{ width: 60, height: 60, borderRadius: 50 }}
-                  resizeMode={"contain"}
-                  source={{
-                    uri: "https://taimienphi.vn/tmp/cf/aut/mAKI-top-anh-dai-dien-dep-chat-1.jpg",
-                  }}
-                />
-                <View
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: 24,
-                      marginLeft: 5,
-                      fontWeight: "bold",
-                    }}
-                  >
-                    Chat
-                  </Text>
-                </View>
+            <View style={styles.styleForDisplayFlexAndCenterThings}>
+              <Image
+                style={{ width: 60, height: 60, borderRadius: 50 }}
+                resizeMode={"contain"}
+                source={{
+                  uri: "https://taimienphi.vn/tmp/cf/aut/mAKI-top-anh-dai-dien-dep-chat-1.jpg",
+                }}
+              />
+              <View style={styles.styleForDisplayFlexAndCenterThings}>
+                <Text style={{ fontSize: 28 }}>Chat</Text>
               </View>
             </View>
           </View>
@@ -51,6 +58,14 @@ export default function ChatScreen({ navigation }: any) {
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
         >
+          <View style={styles.styleForDisplayFlexAndCenterThings}>
+            <TouchableOpacity onPress={() => setShowChatWithBuyer(false)}>
+              <Text style={styles.chatWithBuyer}>Chat với người bán</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setShowChatWithBuyer(false)}>
+              <Text style={styles.chatWithSeller}>Chat với người mua</Text>
+            </TouchableOpacity>
+          </View>
           <View style={{ flexDirection: "row", justifyContent: "center" }}>
             <View style={styles.searchBarContainer}>
               <Ionicons
@@ -65,8 +80,12 @@ export default function ChatScreen({ navigation }: any) {
               />
             </View>
           </View>
+
           {/* Component */}
-          <FriendList navigation={navigation} />
+          <FriendList
+            navigation={navigation}
+            listOfChattingUser={listOfChattingUser}
+          />
         </ScrollView>
       </View>
     </View>
@@ -92,10 +111,10 @@ const styles = StyleSheet.create({
     height: 60,
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-between",
+    // justifyContent: "space-between",
+    alignItems: "center",
+    marginLeft: "30%",
   },
-  userImgAndChat: {},
-  userImgAndChat_img: {},
   cameraAndPen: {
     display: "flex",
     flexDirection: "row",
@@ -133,5 +152,34 @@ const styles = StyleSheet.create({
     height: 30,
     borderColor: "red",
     marginLeft: 10,
+  },
+  chatWithBuyer: {
+    fontSize: 17,
+    marginLeft: 0,
+    fontWeight: "bold",
+    color: "black",
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: "#c2c2c2",
+    lineHeight: 30,
+    paddingLeft: 5,
+    paddingRight: 5,
+  },
+  chatWithSeller: {
+    fontSize: 17,
+    marginLeft: 15,
+    fontWeight: "bold",
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: "#c2c2c2",
+    lineHeight: 30,
+    paddingLeft: 5,
+    paddingRight: 5,
+  },
+  styleForDisplayFlexAndCenterThings: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

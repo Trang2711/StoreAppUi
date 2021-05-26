@@ -9,7 +9,7 @@ const ChatSection = ({ chatMessage, seller, customer }: any) => {
   return (
     <View
       style={[
-        !cusSending
+        cusSending
           ? styles.messageContainerReceived
           : styles.messageContainerSent,
       ]}
@@ -23,7 +23,7 @@ export default ChatSection;
 
 const styles = StyleSheet.create({
   messageContainerReceived: {
-    backgroundColor: "#bdbdbd",
+    backgroundColor: "#e0e0e0",
     justifyContent: "center",
     alignSelf: "flex-start",
     borderRadius: 10,
@@ -31,10 +31,10 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingTop: 5,
     paddingBottom: 5,
-    marginBottom: 15,
+    marginBottom: 10,
   },
   messageContainerSent: {
-    backgroundColor: "#bdbdbd",
+    backgroundColor: "#027df7",
     justifyContent: "center",
     alignSelf: "flex-end",
     borderRadius: 10,
@@ -42,9 +42,9 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingTop: 10,
     paddingBottom: 10,
-    marginBottom: 15,
+    marginBottom: 10,
   },
   messageText: {
-    fontSize: 20,
+    fontSize: 18,
   },
 });

@@ -3,15 +3,17 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { LogBox } from "react-native";
 
-const FriendList = ({ navigation }: any) => {
-  const friends = ["1", "2", "3", "4", "5", "6", "7"];
-  // useEffect(() => {
-  //   LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
-  //   LogBox.ignoreAllLogs(); //Ignore all log notifications
-  // }, []);
+const FriendList = ({ navigation, listOfChattingUser }: any) => {
+  console.log("1");
+  console.log("chat list in friend list", listOfChattingUser);
+  console.log("1");
+  useEffect(() => {
+    LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
+    LogBox.ignoreAllLogs(); //Ignore all log notifications
+  }, []);
   return (
     <View>
-      {friends.map((friend, index) => {
+      {listOfChattingUser.map((chatuser: any, index: any) => {
         return (
           <TouchableOpacity
             key={index}
@@ -33,10 +35,10 @@ const FriendList = ({ navigation }: any) => {
               ></Image>
               <View style={styles.friendNameAndLastMsg}>
                 <Text style={styles.friendName} numberOfLines={1}>
-                  Ten ban befaewfwaefweafweafweafweafweafweafwefwefwae
+                  Ten ban befaewfw
                 </Text>
                 <Text style={styles.message} numberOfLines={1}>
-                  Tin nhaasdasdasdasdasdasdasdasdsadsadasasdasdsan
+                  Tin nhaa
                 </Text>
               </View>
             </View>

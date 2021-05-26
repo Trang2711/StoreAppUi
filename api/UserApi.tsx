@@ -47,6 +47,14 @@ const UserApi = {
     const url = "/api/verify_password/";
     return AxiosClient.post(url, data);
   },
+  getListOfChatCustomer: () => {
+    const url = "/api/chat_customer/";
+    return AxiosClient.get(url);
+  },
+  getListOfChatSeller: () => {
+    const url = "api/chat_seller/";
+    return AxiosClient.get(url);
+  },
 };
 
 export default UserApi;

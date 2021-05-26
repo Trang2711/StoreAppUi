@@ -30,16 +30,18 @@ const ChatDetailScreen = ({ navigation, route }: any) => {
   const scrollViewRef = useRef<ref | null>();
   ////////function
   const _sendMsg = async () => {
-    setInputMsg("");
     // setChatMessages([...chatMessages, inputMsg]);
-    const res = await UserAPI.pushingChatMsg({
-      seller,
-      isFromCustomer: true,
-      text: inputMsg,
-      customer,
-    });
-    console.log("post msg response received", res);
-    Keyboard.dismiss();
+    if (inputMsg.length > 0) {
+      setInputMsg("");
+      const res = await UserAPI.pushingChatMsg({
+        seller,
+        isFromCustomer: true,
+        text: inputMsg,
+        customer,
+      });
+      console.log("post msg response received", res);
+      Keyboard.dismiss();
+    }
   };
   useEffect(() => {
     const _getMsgHistory = async () => {
