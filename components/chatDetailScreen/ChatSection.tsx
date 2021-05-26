@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-const ChatSection = ({ chatMessage, seller, customer }: any) => {
+const ChatSection = ({ chatMessage, customer }: any) => {
   console.log("chat", chatMessage);
   console.log("custoemr", customer);
   console.log("receiver", chatMessage.receiver);
@@ -23,7 +23,7 @@ export default ChatSection;
 
 const styles = StyleSheet.create({
   messageContainerReceived: {
-    backgroundColor: "#e0e0e0",
+    backgroundColor: "#3b3b3b",
     justifyContent: "center",
     alignSelf: "flex-start",
     borderRadius: 10,
@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   messageText: {
+    color: "white",
     fontSize: 18,
   },
 });

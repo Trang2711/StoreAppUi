@@ -13,6 +13,7 @@ export default function ChatScreen({ navigation }: any) {
   const [searchText, setSearchText] = useState("Tim kiem");
   const [showChatWithBuyer, setShowChatWithBuyer] = useState<Boolean>();
   const [listOfChattingUser, setListOfChattingUser] = useState([]);
+  const currentUserInformation = useAppSelector(currentLoggingInUser);
   //////// nếu showChatWithBuyer mà false thì tương đương với showChatWithSeller là true
   useEffect(() => {
     setShowChatWithBuyer(true);
@@ -25,7 +26,7 @@ export default function ChatScreen({ navigation }: any) {
     };
     const _setListOfChattingUserEqualToListOfSeller = async () => {
       const response = await UserApi.getListOfChatSeller();
-      console.log("res from chat with seller", response);
+      // console.log("res from chat with seller", response);
       await setListOfChattingUser(response as any);
     };
     if (showChatWithBuyer) {
@@ -60,10 +61,10 @@ export default function ChatScreen({ navigation }: any) {
         >
           <View style={styles.styleForDisplayFlexAndCenterThings}>
             <TouchableOpacity onPress={() => setShowChatWithBuyer(false)}>
-              <Text style={styles.chatWithBuyer}>Chat với người bán</Text>
+              <Text style={styles.chatWithBuyer}>Người bán</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => setShowChatWithBuyer(false)}>
-              <Text style={styles.chatWithSeller}>Chat với người mua</Text>
+            <TouchableOpacity onPress={() => setShowChatWithBuyer(true)}>
+              <Text style={styles.chatWithSeller}>Người mua</Text>
             </TouchableOpacity>
           </View>
           <View style={{ flexDirection: "row", justifyContent: "center" }}>
@@ -85,6 +86,8 @@ export default function ChatScreen({ navigation }: any) {
           <FriendList
             navigation={navigation}
             listOfChattingUser={listOfChattingUser}
+            currentUserInformation={currentUserInformation}
+            isSeller={showChatWithBuyer}
           />
         </ScrollView>
       </View>
@@ -157,24 +160,23 @@ const styles = StyleSheet.create({
     fontSize: 17,
     marginLeft: 0,
     fontWeight: "bold",
-    color: "black",
-    borderWidth: 1,
     borderRadius: 10,
-    borderColor: "#c2c2c2",
-    lineHeight: 30,
-    paddingLeft: 5,
-    paddingRight: 5,
+    lineHeight: 40,
+    paddingLeft: 15,
+    paddingRight: 15,
+    backgroundColor: "#e0e0e0",
+    color: "#757575",
   },
   chatWithSeller: {
     fontSize: 17,
     marginLeft: 15,
     fontWeight: "bold",
-    borderWidth: 1,
     borderRadius: 10,
-    borderColor: "#c2c2c2",
-    lineHeight: 30,
-    paddingLeft: 5,
-    paddingRight: 5,
+    lineHeight: 40,
+    paddingLeft: 15,
+    paddingRight: 15,
+    backgroundColor: "#e0e0e0",
+    color: "#757575",
   },
   styleForDisplayFlexAndCenterThings: {
     display: "flex",

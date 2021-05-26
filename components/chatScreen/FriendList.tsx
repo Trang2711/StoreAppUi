@@ -2,11 +2,15 @@ import React, { useEffect } from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { LogBox } from "react-native";
+import { baseUrl } from "../../api/AxiosClient";
 
-const FriendList = ({ navigation, listOfChattingUser }: any) => {
-  console.log("1");
-  console.log("chat list in friend list", listOfChattingUser);
-  console.log("1");
+const FriendList = ({
+  navigation,
+  listOfChattingUser,
+  currentUserInformation,
+  isSeller,
+}: any) => {
+  // console.log("chat list in friend list", listOfChattingUser);
   useEffect(() => {
     LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
     LogBox.ignoreAllLogs(); //Ignore all log notifications
@@ -20,7 +24,15 @@ const FriendList = ({ navigation, listOfChattingUser }: any) => {
             onPress={() => {
               navigation.navigate("TopNav", {
                 screen: "ChatDetailScreen",
-                params: {},
+                params: !isSeller
+                  ? {
+                      seller: chatuser.user.username,
+                      customer: currentUserInformation?.username,
+                    }
+                  : {
+                      seller: currentUserInformation?.username,
+                      customer: chatuser.user.username,
+                    },
               });
             }}
           >
@@ -30,15 +42,17 @@ const FriendList = ({ navigation, listOfChattingUser }: any) => {
                 style={{ width: 70, height: 70, borderRadius: 200 }}
                 resizeMode={"cover"}
                 source={{
-                  uri: "https://taimienphi.vn/tmp/cf/aut/mAKI-top-anh-dai-dien-dep-chat-1.jpg",
+                  uri: chatuser.user.avatar
+                    ? baseUrl + chatuser.user.avatar
+                    : "https://www.gravatar.com/avatar/9de95c1fce91a3a5031507466e580744?s=328&d=identicon&r=PG",
                 }}
               ></Image>
               <View style={styles.friendNameAndLastMsg}>
                 <Text style={styles.friendName} numberOfLines={1}>
-                  Ten ban befaewfw
+                  {chatuser.user.username}
                 </Text>
                 <Text style={styles.message} numberOfLines={1}>
-                  Tin nhaa
+                  {chatuser.last_message.content}
                 </Text>
               </View>
             </View>
@@ -67,6 +81,7 @@ const styles = StyleSheet.create({
   friendNameAndLastMsg: {
     flex: 1,
     justifyContent: "center",
+    marginLeft: 20,
   },
   friendName: {
     fontSize: 18,
