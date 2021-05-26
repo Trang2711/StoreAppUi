@@ -29,20 +29,20 @@ export default function AddingToCartModal({
     }
   };
 
-  const [username, setUsername] = useState('')
+  const [username, setUsername] = useState("");
 
   useEffect(() => {
     const fetchUsername = async () => {
       try {
-        const info = await UserAPI.getInfo() as any
-        setUsername(info.username)
+        const info = (await UserAPI.getInfo()) as any;
+        setUsername(info.username);
       } catch (error) {
-        console.log('Failed to fetch info of user in adding to cart: ', error)
+        console.log("Failed to fetch info of user in adding to cart: ", error);
       }
-    }
+    };
 
-    fetchUsername()
-  }, [])
+    fetchUsername();
+  }, []);
 
   const onClickAddToCart = () => {
     setModalVisible(false);
@@ -55,15 +55,9 @@ export default function AddingToCartModal({
         <TouchableOpacity
           style={styles.chatBtn}
           onPress={async () =>
-            navigation.navigate("BottomNav", {
-              screen: "Chat",
-              params: {
-                screen: "ChatDetailScreen",
-                params: {
-                  seller: seller,
-                  customer: username,
-                },
-              },
+            navigation.navigate("ChatDetailScreen", {
+              seller: seller,
+              customer: username,
             })
           }
         >

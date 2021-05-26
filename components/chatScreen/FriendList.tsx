@@ -16,7 +16,9 @@ const FriendList = ({ navigation }: any) => {
           <TouchableOpacity
             key={index}
             onPress={() => {
-              navigation.navigate("ChatDetailScreen", {});
+              navigation.navigate("TopNav", {
+                screen: "ChatDetailScreen",
+              });
             }}
           >
             <View style={styles.friendArea}>

@@ -149,11 +149,11 @@ function ChatTabNavigator() {
         component={ChatScreen}
         options={{ headerShown: false }}
       />
-      <ChatTabStack.Screen
+      {/* <ChatTabStack.Screen
         name="ChatDetailScreen"
         component={ChatDetailScreen}
         options={{ headerShown: false }}
-      />
+      /> */}
     </ChatTabStack.Navigator>
   );
 }
@@ -171,7 +171,7 @@ function AccountTabNavigator() {
 
       <AccountTabStack.Screen
         name="InfoScreen"
-        options={{ title: 'Sửa hồ sơ' }}
+        options={{ title: "Sửa hồ sơ" }}
         component={ProfileScreen}
       />
     </AccountTabStack.Navigator>
