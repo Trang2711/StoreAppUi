@@ -14,11 +14,14 @@ import { baseUrl } from "../../api/AxiosClient";
 import { AntDesign } from "@expo/vector-icons";
 import {
   addingItemQuantity,
+  totalPrice,
   deleteAnItemFromCart,
   subtractItemQuantity,
+  setTotalPrice,
 } from "../../redux/features/cartSlice";
 import "intl";
 import "intl/locale-data/jsonp/en";
+import CartApi from "../../api/CartApi";
 const ProductItem = ({ productItem }: any) => {
   const {
     id,
@@ -28,7 +31,7 @@ const ProductItem = ({ productItem }: any) => {
     discount_price,
     sold,
     rating_average,
-    quantity,
+    count,
   } = productItem;
   const dispatch = useAppDispatch();
   const [confirmDeleting, setConfirmDeleting] = useState(false);
@@ -50,18 +53,29 @@ const ProductItem = ({ productItem }: any) => {
     );
   };
 
-  const _increaseThisItemQuantity = () => {
+  const _increaseThisItemQuantity = async() => {
     dispatch(addingItemQuantity({ id: productItem.id }));
+    // dispatch(setTotalPrice(totalPrice as any + discount_price))
+    await CartApi.changeCart({
+      product: id,
+      sign: 1
+    })
   };
-  const _subtractThisItemQuantity = () => {
+  const _subtractThisItemQuantity = async() => {
     dispatch(subtractItemQuantity({ id: productItem.id }));
+    await CartApi.changeCart({
+      product: id,
+      sign: -1
+    })
   };
+
   const _deleteThisItemFromCart = () => {
     showAlert();
   };
+
   useEffect(() => {
     if (confirmDeleting) {
-      dispatch(deleteAnItemFromCart({ id: productItem.id }));
+      dispatch(deleteAnItemFromCart(productItem));
       setConfirmDeleting(false);
     }
   }, [confirmDeleting]);
@@ -86,7 +100,7 @@ const ProductItem = ({ productItem }: any) => {
           style={{ flexDirection: "row", alignItems: "center", marginTop: 3 }}
         >
           <Text style={styles.priceSale}>{_fomatNumber1(discount_price)}đ</Text>
-          <Text style={styles.price}>{_fomatNumber1(price)}đ</Text>
+          {discount_price < price && <Text style={styles.price}>{_fomatNumber1(price)}đ</Text>}
         </View>
         <View style={styles.quantity_area}>
           <Text style={{ fontSize: 14, marginRight: 5 }}>Số lượng:</Text>
@@ -99,7 +113,7 @@ const ProductItem = ({ productItem }: any) => {
                 color="black"
               />
             </TouchableOpacity>
-            <Text style={{ paddingHorizontal: 3 }}> {quantity} </Text>
+            <Text style={{ paddingHorizontal: 3 }}> {count} </Text>
             <TouchableOpacity onPress={_increaseThisItemQuantity}>
               <AntDesign
                 name="plus"
@@ -161,7 +175,7 @@ const styles = StyleSheet.create({
   priceSale: {
     fontSize: 15,
     fontWeight: "bold",
-    color: "#d53332",
+    // color: "#d53332",
     marginRight: 6,
   },
 });

@@ -5,13 +5,10 @@ import {
   Dimensions,
   View,
   Text,
-  TouchableOpacity,
-  Modal,
 } from "react-native";
 import {
   Table,
   TableWrapper,
-  Row,
   Rows,
   Col,
 } from "react-native-table-component";
@@ -20,11 +17,9 @@ import Carousel from "../components/common/Carousel";
 import Header from "../components/itemDetailScreen/header";
 import StarRating from "../components/common/StarRating";
 import ColorCircle from "../components/common/ColorCircle";
-import Comment from "../components/common/Comment";
 import {
   addingNewProductToCart,
   amountOfItemsInCart,
-  productsInsideCart,
 } from "../redux/features/cartSlice";
 import { useAppSelector, useAppDispatch } from "../redux/app/hook";
 import ProductApi from "../api/ProductApi";
@@ -33,25 +28,6 @@ import Comments from '../components/itemDetailScreen/Comments'
 import "intl";
 import "intl/locale-data/jsonp/en";
 import { baseUrl } from "../api/AxiosClient";
-
-const cards = [
-  {
-    imgUrl:
-      "https://images.pexels.com/photos/3236733/pexels-photo-3236733.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-  },
-  {
-    imgUrl:
-      "https://images.pexels.com/photos/6553054/pexels-photo-6553054.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-  },
-  {
-    imgUrl:
-      "https://images.pexels.com/photos/5845336/pexels-photo-5845336.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-  },
-  {
-    imgUrl:
-      "https://images.pexels.com/photos/5651673/pexels-photo-5651673.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-  },
-];
 
 const colorMap = [
   {
@@ -364,7 +340,7 @@ export default function ItemDetailScreen({ navigation, route }: any) {
       addingNewProductToCart({
         id: idOfParticularProduct,
         title: productDetail.title,
-        quantity: 1,
+        count: 1,
         price: productDetail.price,
         discount_price: productDetail.discount_price,
         product_thumbnail: productDetail.product_thumbnail,
@@ -455,27 +431,3 @@ const styles = StyleSheet.create({
     color: 'white',
   }
 });
-
-// const configurations = {
-//   title: "frg",
-//   images: [
-//     "furghoti",
-//     "grughrig",
-//     "ufrirehg"
-//   ],
-//   price: 23454,
-//   discount_price: 14324,
-//   rating_average: 4.5,
-//   rating_total: 214,
-//   sold: 2344,
-//   colors: ["white", "gray"],
-//   address: "Cầu Giấy, Hà Nội",
-//   description: "fukhighoier",
-//   configurations: {
-//     screen: 13.3,
-//     RAM: "16",
-//     SSD: "512",
-//     GPU: "AMD 455 2GB",
-//     status: "U",
-//   }
-// }

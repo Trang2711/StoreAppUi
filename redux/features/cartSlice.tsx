@@ -1,11 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../app/store";
 
-// Define a type for the slice state
 interface product {
   id: string;
   title: string;
-  quantity: number;
+  count: number;
   price: number;
   discount_price: number;
   product_thumbnail: string;
@@ -18,63 +17,71 @@ interface Number {
 interface ProductState {
   products: Array<product>;
   quantity: any;
-  subQuantity: any;
+  totalPrice: number,
 }
-// Define the initial state using that type
+
 const initialCart: ProductState = {
   products: [],
   quantity: 0,
-  subQuantity: 0,
+  totalPrice: 0,
 };
 
 export const cartSlice = createSlice({
   name: "cart",
-  // `createSlice` will infer the state type from the `initialState` argument
   initialState: initialCart,
   reducers: {
     setTotalQuantityInCart: (state, action: PayloadAction<any>) => {
       state.quantity = action.payload;
     },
+
+    setProductsInCart: (state, aciton: PayloadAction<any>) => {
+      state.products = aciton.payload
+    },
+
+    setTotalPrice: (state, aciton: PayloadAction<number>) => {
+      state.totalPrice = aciton.payload
+    },
+
     addingItemQuantity: (state, action: PayloadAction<Number>) => {
       const index = state.products.findIndex(
         (product) => product.id == action.payload.id
       );
-      state.products[index].quantity = state.products[index].quantity + 1;
-      state.products.map((product): any => {
-        state.subQuantity += product.quantity;
-      });
+      state.products[index].count = state.products[index].count + 1;
+      state.totalPrice = state.totalPrice + state.products[index].discount_price
+      state.quantity = state.quantity + 1
     },
+
     subtractItemQuantity: (state, action: PayloadAction<Number>) => {
       const index = state.products.findIndex(
         (product) => product.id == action.payload.id
       );
-      if (state.products[index].quantity > 1) {
-        state.products[index].quantity = state.products[index].quantity - 1;
+      if (state.products[index].count > 1) {
+        state.products[index].count = state.products[index].count - 1;
+        state.totalPrice = state.totalPrice - state.products[index].discount_price
+        state.quantity = state.quantity - 1
       }
-      state.products.map((product): any => {
-        state.subQuantity += product.quantity;
-      });
     },
+
     addingNewProductToCart: (state, action: PayloadAction<product>) => {
       const index = state.products.findIndex(
         (product) => product.id == action.payload.id
       );
       if (index >= 0) {
-        state.products[index].quantity = state.products[index].quantity + 1;
+        state.products[index].count = state.products[index].count + 1;
       } else {
         state.products.push(action.payload);
       }
-      state.products.map((product): any => {
-        state.subQuantity += product.quantity;
-      });
+      
+      state.totalPrice = state.totalPrice + action.payload.discount_price
+      state.quantity = state.quantity + 1
     },
-    deleteAnItemFromCart: (state, action: PayloadAction<Number>) => {
+
+    deleteAnItemFromCart: (state, action: PayloadAction<product>) => {
       state.products = state.products.filter(
         (product) => product.id !== action.payload.id
       );
-      state.products.map((product): any => {
-        state.subQuantity += product.quantity;
-      });
+      state.totalPrice = state.totalPrice + action.payload.discount_price
+      state.quantity = state.quantity - action.payload.count
     },
   },
 });
@@ -84,10 +91,11 @@ export const {
   deleteAnItemFromCart,
   subtractItemQuantity,
   setTotalQuantityInCart,
+  setProductsInCart,
+  setTotalPrice
 } = cartSlice.actions;
 
-// Other code such as selectors can use the imported `RootState` type
 export const productsInsideCart = (state: RootState) => state.cart.products;
 export const amountOfItemsInCart = (state: RootState) => state.cart.quantity;
-export const subQuan = (state: RootState) => state.cart.quantity;
+export const totalPrice = (state: RootState) => state.cart.totalPrice;
 export default cartSlice.reducer;

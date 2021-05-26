@@ -14,6 +14,7 @@ import { AxiosResponse } from "axios";
 import { useNavigation } from "@react-navigation/native";
 
 import ProductApi from "../api/ProductApi";
+import CartApi from '../api/CartApi'
 import SearchAndFiltersApi from "../api/SearchAndFiltersApi";
 
 import Header from "../components/homeScreen/Header";
@@ -25,6 +26,8 @@ import {
   amountOfItemsInCart,
   productsInsideCart,
   setTotalQuantityInCart,
+  setProductsInCart,
+  setTotalPrice
 } from "../redux/features/cartSlice";
 const carousel = [
   {
@@ -53,8 +56,8 @@ export default function HomeScreen() {
   const [bestsellerProduct, setBestsellerProduct] = useState([]);
   const navigation = useNavigation();
   const quantityInCart = useAppSelector(amountOfItemsInCart);
-  const productList = useAppSelector(productsInsideCart);
-  const [updatedQuantityInCart, setUpdatedQuantityInCart] = useState(0);
+  // const productList = useAppSelector(productsInsideCart);
+  // const [updatedQuantityInCart, setUpdatedQuantityInCart] = useState(0);
   const fetchFlashSale = async () => {
     try {
       const data = await ProductApi.getFlashProducts();
@@ -63,6 +66,21 @@ export default function HomeScreen() {
       console.log(error);
     }
   };
+
+  const fetchCart = async () => {
+    const data = await CartApi.getAll() as any
+    dispatch(setProductsInCart(data.products))
+    
+    dispatch(setTotalPrice(data.total_price))
+
+    let totalItemInCart = 0;
+    data.products.map((product: any) => {
+      totalItemInCart = totalItemInCart + product.count;
+    });
+    dispatch(setTotalQuantityInCart(totalItemInCart))
+
+    // setUpdatedQuantityInCart(totalItemInCart)
+  }
 
   const fetchBestsellerProduct = async () => {
     const request = {
@@ -97,31 +115,20 @@ export default function HomeScreen() {
       console.log("Failed to fetch bestseller: " + error);
     }
   };
-  const _calculatingCartItemAmount = () => {
-    var totalFigureInCart = 0;
-    productList.map((product) => {
-      totalFigureInCart = totalFigureInCart + product.quantity;
-    });
-    setUpdatedQuantityInCart(totalFigureInCart);
-    dispatch(setTotalQuantityInCart(totalFigureInCart));
-  };
+
   useEffect(() => {
     fetchFlashSale();
     fetchBestsellerProduct();
+    fetchCart()
   }, []);
-  useEffect(() => {
-    _calculatingCartItemAmount();
-  }, [productList]);
+
   const renderItem = ({ item }: any) => (
     <CardItem props={item} navigation={navigation} />
   );
 
-  //////////////disable warining on screen
-  console.disableYellowBox = true;
-
   return (
     <View>
-      <Header quantityOfItemsInCart={updatedQuantityInCart} />
+      <Header quantityOfItemsInCart={quantityInCart} />
       <ScrollView>
         <ImageBackground
           style={styles.image}

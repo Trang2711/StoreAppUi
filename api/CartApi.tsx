@@ -1,13 +1,13 @@
 import AxiosClient from "./AxiosClient";
 
 const CartApi = {
-  getCart: (id: any) => {
-    const url = `/carts/${id}`;
-    return AxiosClient.get(url);
+  changeCart: (data: any) => {
+    const url = `/api/change_cart/`;
+    return AxiosClient.post(url, data);
   },
 
   getAll: () => {
-    const url = "/carts";
+    const url = "/api/get_cart/";
     return AxiosClient.get(url);
   },
 };

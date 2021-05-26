@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -28,7 +28,22 @@ export default function AddingToCartModal({
       }
     }
   };
-  console.log("seller in addingf to cart modal", seller);
+
+  const [username, setUsername] = useState('')
+
+  useEffect(() => {
+    const fetchUsername = async () => {
+      try {
+        const info = await UserAPI.getInfo() as any
+        setUsername(info.username)
+      } catch (error) {
+        console.log('Failed to fetch info of user in adding to cart: ', error)
+      }
+    }
+
+    fetchUsername()
+  }, [])
+
   const onClickAddToCart = () => {
     setModalVisible(false);
     if (onClick) onClick(colors.length, 1);
@@ -46,7 +61,7 @@ export default function AddingToCartModal({
                 screen: "ChatDetailScreen",
                 params: {
                   seller: seller,
-                  customer: (await UserAPI.getUsername()) as any,
+                  customer: username,
                 },
               },
             })
