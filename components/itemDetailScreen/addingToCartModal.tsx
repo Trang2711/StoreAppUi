@@ -54,10 +54,12 @@ export default function AddingToCartModal({
       <View style={styles.footer}>
         <TouchableOpacity
           style={styles.chatBtn}
-          onPress={async () =>
-            navigation.navigate("ChatDetailScreen", {
-              seller: seller,
-              customer: username,
+          onPress={() =>
+            navigation.navigate("TopNav", {
+              screen: "ChatDetailScreen", params: {
+                seller: seller,
+                customer: username,
+              }
             })
           }
         >

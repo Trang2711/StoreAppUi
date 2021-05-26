@@ -149,11 +149,6 @@ function ChatTabNavigator() {
         component={ChatScreen}
         options={{ headerShown: false }}
       />
-      {/* <ChatTabStack.Screen
-        name="ChatDetailScreen"
-        component={ChatDetailScreen}
-        options={{ headerShown: false }}
-      /> */}
     </ChatTabStack.Navigator>
   );
 }

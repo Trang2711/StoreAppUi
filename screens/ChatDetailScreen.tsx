@@ -22,11 +22,7 @@ interface ref {
 }
 
 const ChatDetailScreen = ({ navigation, route }: any) => {
-  // const { seller, customer } = route.params;
-  const seller = "";
-  const customer = "";
-  console.log("route ", route);
-  // console.log("route param", route);
+  const { seller, customer } = route.params;
   console.log("seller from detai screen", seller);
   // const chats = ["1aaa", "2aaa", "3aaa", "4aa", "5aaa", "6a", "7aa"];
   const [chatMessages, setChatMessages] = useState([]);
