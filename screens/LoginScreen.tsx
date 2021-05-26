@@ -65,7 +65,7 @@ export default function LoginScreen({ navigation }: any) {
     setIsFailed(false);
     setPassword(e);
   };
-  
+
   const facebookSignIn = async () => {
     try {
       await Facebook.initializeAsync({
@@ -125,7 +125,7 @@ export default function LoginScreen({ navigation }: any) {
 
   return (
     <View style={styles.container}>
-      <View
+      {/* <View
         style={{
           flexDirection: "row",
           justifyContent: "flex-end",
@@ -139,7 +139,7 @@ export default function LoginScreen({ navigation }: any) {
         >
           <AntDesign name="close" size={24} color="black" />
         </Pressable>
-      </View>
+      </View> */}
       <Text style={styles.title}>PONZI</Text>
 
       <View style={{ paddingHorizontal: 40, marginTop: 20 }}>
@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: "bold",
     textAlign: "center",
-    marginTop: 20,
+    marginTop: 50,
   },
   input: {
     borderBottomColor: "#DDDDDD",

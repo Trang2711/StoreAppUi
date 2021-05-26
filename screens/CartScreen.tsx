@@ -1,24 +1,23 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Image, Alert, View, Text } from "react-native";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import { StyleSheet, TouchableOpacity, Alert, View, Text, ScrollView } from "react-native";
 import { useAppSelector, useAppDispatch } from "../redux/app/hook";
 import ProductItem from "../components/cartScreen/ProductItem";
 import {
   productsInsideCart,
   amountOfItemsInCart,
-  setTotalQuantityInCart,
   totalPrice,
 } from "../redux/features/cartSlice";
 import { withTheme } from "react-native-elements";
 import "intl";
 import "intl/locale-data/jsonp/en";
 import CartApi from '../api/CartApi'
+import { useNavigation } from "@react-navigation/native";
 
 export default function CartScreen() {
   const productList = useAppSelector(productsInsideCart);
   const totalItemInCart = useAppSelector(amountOfItemsInCart);
   const totalPriceOfProduct = useAppSelector(totalPrice)
-  console.log(totalItemInCart, totalPriceOfProduct)
+  const navigation = useNavigation();
 
   const _fomatNumber1 = (num: number) => {
     const formatter = new Intl.NumberFormat("us");
@@ -45,7 +44,10 @@ export default function CartScreen() {
                 {_fomatNumber1(totalPriceOfProduct)}₫
               </Text>
             </View>
-            <Text style={styles.paymentBtn}>Đặt hàng</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('PaymentScreen')}>
+              <Text style={styles.paymentBtn} >Đặt hàng</Text>
+            </TouchableOpacity>
+            
           </View>
         </>
       ) : (

@@ -29,6 +29,11 @@ export type TopTabParamList = {
   CartScreen: undefined;
   ItemDetailScreen: undefined;
   CommentsScreen: undefined;
+  PaymentScreen: undefined;
+  AddressScreen: undefined;
+  ProvinceScreen: undefined;
+  DistrictScreen: undefined;
+  WardScreen: undefined
 };
 
 export type HomeTabParamList = {

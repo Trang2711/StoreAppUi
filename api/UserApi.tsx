@@ -42,6 +42,14 @@ const UserApi = {
   confirmPassword: (data: any) => {
     const url = '/api/verify_password/'
     return AxiosClient.post(url, data);
+  },
+  addAddress: (data: any) => {
+    const url = '/api/set_address/'
+    return AxiosClient.post(url, data);
+  },
+  getOrderAddress: (data: any) => {
+    const url = '/api/order_address/'
+    return AxiosClient.post(url, data);
   }
 };
 

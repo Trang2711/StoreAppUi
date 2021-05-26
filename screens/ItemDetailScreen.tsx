@@ -28,6 +28,7 @@ import Comments from '../components/itemDetailScreen/Comments'
 import "intl";
 import "intl/locale-data/jsonp/en";
 import { baseUrl } from "../api/AxiosClient";
+import CartApi from "../api/CartApi";
 
 const colorMap = [
   {
@@ -335,7 +336,7 @@ export default function ItemDetailScreen({ navigation, route }: any) {
     );
   };
 
-  const handleAddToCart = (color: string, quantity: number) => {
+  const handleAddToCart = async (color: string, quantity: number) => {
     dispatch(
       addingNewProductToCart({
         id: idOfParticularProduct,
@@ -347,7 +348,11 @@ export default function ItemDetailScreen({ navigation, route }: any) {
         color: color,
       })
     );
-    setTemporaryQuantityDisplayInItemDetailScreem((prev) => prev + 1);
+    await CartApi.changeCart({
+      product: id,
+      sign: 1
+    })
+    // setTemporaryQuantityDisplayInItemDetailScreem((prev) => prev + 1);
   };
 
   const _renderComment = () => {
