@@ -16,6 +16,8 @@ import {
 import ChatSection from "../components/chatDetailScreen/ChatSection";
 import Pusher from "pusher-js/react-native";
 import UserAPI from "../api/UserApi";
+import { useAppSelector } from "../redux/app/hook";
+import { currentLoggingInUser } from "../redux/features/userSlice";
 
 interface ref {
   scrollToEnd: any;
@@ -27,6 +29,7 @@ const ChatDetailScreen = ({ navigation, route }: any) => {
   const [chatMessages, setChatMessages] = useState([]);
   const [inputMsg, setInputMsg] = useState("");
   const scrollViewRef = useRef<ref | null>();
+  const currentUserInformation = useAppSelector(currentLoggingInUser);
   ////////function
   const _sendMsg = async () => {
     // setChatMessages([...chatMessages, inputMsg]);
@@ -34,7 +37,7 @@ const ChatDetailScreen = ({ navigation, route }: any) => {
       setInputMsg("");
       const res = await UserAPI.pushingChatMsg({
         seller,
-        isFromCustomer: true,
+        isFromCustomer: customer === currentUserInformation.username,
         text: inputMsg,
         customer,
       });
