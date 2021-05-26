@@ -5,9 +5,13 @@ import { Text, View } from "../components/Themed";
 import FriendToChat from "../components/chatScreen/FriendToChat";
 import FriendList from "../components/chatScreen/FriendList";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import { useAppDispatch, useAppSelector } from "../redux/app/hook";
+import { currentLoggingInUser } from "../redux/features/userSlice";
 
 export default function ChatScreen({ navigation }: any) {
   const [searchText, setSearchText] = useState("Tim kiem");
+  const currentUserLoggingInInfo = useAppSelector(currentLoggingInUser);
+  console.log("current user", currentUserLoggingInInfo);
   return (
     <View style={styles.container}>
       <View style={styles.subContainer}>
@@ -19,8 +23,7 @@ export default function ChatScreen({ navigation }: any) {
                   style={{ width: 60, height: 60, borderRadius: 50 }}
                   resizeMode={"contain"}
                   source={{
-                    uri:
-                      "https://taimienphi.vn/tmp/cf/aut/mAKI-top-anh-dai-dien-dep-chat-1.jpg",
+                    uri: "https://taimienphi.vn/tmp/cf/aut/mAKI-top-anh-dai-dien-dep-chat-1.jpg",
                   }}
                 />
                 <View

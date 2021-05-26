@@ -18,6 +18,7 @@ const FriendList = ({ navigation }: any) => {
             onPress={() => {
               navigation.navigate("TopNav", {
                 screen: "ChatDetailScreen",
+                params: {},
               });
             }}
           >

@@ -56,10 +56,11 @@ export default function AddingToCartModal({
           style={styles.chatBtn}
           onPress={() =>
             navigation.navigate("TopNav", {
-              screen: "ChatDetailScreen", params: {
+              screen: "ChatDetailScreen",
+              params: {
                 seller: seller,
                 customer: username,
-              }
+              },
             })
           }
         >

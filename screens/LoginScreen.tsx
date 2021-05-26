@@ -18,6 +18,7 @@ import axios from "axios";
 import { useAppSelector, useAppDispatch } from "../redux/app/hook";
 import { setIsLogged } from "../redux/features/loginSlice";
 import { AsyncStorage } from "react-native";
+import { currentLoggingInUser, setUserInfo } from "../redux/features/userSlice";
 
 export default function LoginScreen({ navigation }: any) {
   const [username, setUsername] = useState<string>("");
@@ -29,6 +30,12 @@ export default function LoginScreen({ navigation }: any) {
   const handleLoginSuccessfully = async (token: string) => {
     await AsyncStorage.setItem("token", token);
     dispatch(setIsLogged(true));
+
+    ////////       set user info to redux
+    const response = await UserApi.getInfo();
+    dispatch(setUserInfo(response));
+
+    //// navigate
     navigation.navigate("BottomNav", { screen: "HomeScreen" });
   };
 
@@ -47,7 +54,7 @@ export default function LoginScreen({ navigation }: any) {
           handleLoginSuccessfully(token);
         }
       } catch (error) {
-        console.log('Failed to fetch token: ', error)
+        console.log("Failed to fetch token: ", error);
       }
     } else {
       setIsError(true);
@@ -65,7 +72,7 @@ export default function LoginScreen({ navigation }: any) {
     setIsFailed(false);
     setPassword(e);
   };
-  
+
   const facebookSignIn = async () => {
     try {
       await Facebook.initializeAsync({

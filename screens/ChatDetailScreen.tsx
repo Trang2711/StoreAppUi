@@ -93,9 +93,7 @@ const ChatDetailScreen = ({ navigation, route }: any) => {
                         // if (customer == "ngf") {
                         //   return navigation.navigate("ChatScreen");
                         // } else {
-                        navigation.navigate("BottomNav", {
-                          screen: "HomeScreen",
-                        });
+                        navigation.goBack();
                         // return navigation.navigate("ChatScreen");
                         // }
                       }}
