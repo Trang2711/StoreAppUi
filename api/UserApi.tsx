@@ -31,18 +31,22 @@ const UserApi = {
     const url = "api/chat_history/";
     return AxiosClient.post(url, data);
   },
+  getUsername: () => {
+    const url = "/api/get_username/";
+    return AxiosClient.get(url);
+  },
   getInfo: () => {
     const url = "/api/get_info/";
     return AxiosClient.get(url);
   },
   changeInfo: (data: any) => {
-    const url = '/api/change_info/'
+    const url = "/api/change_info/";
     return AxiosClient.post(url, data);
   },
   confirmPassword: (data: any) => {
-    const url = '/api/verify_password/'
+    const url = "/api/verify_password/";
     return AxiosClient.post(url, data);
-  }
+  },
 };
 
 export default UserApi;
