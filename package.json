@@ -1,9 +1,8 @@
 {
-  "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "start": "react-native start",
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
     "web": "expo start --web",
     "eject": "expo eject",
     "test": "jest --watchAll",
@@ -36,6 +35,7 @@
     "expo-linking": "~2.0.0",
     "expo-splash-screen": "~0.8.0",
     "expo-status-bar": "^1.0.4",
+    "expo-updates": "~0.4.0",
     "expo-web-browser": "~8.6.0",
     "intl": "^1.2.5",
     "pusher-js": "^7.0.3",
@@ -43,14 +43,17 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-google-login": "^5.2.2",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-40.0.1.tar.gz",
+    "react-native": "~0.63.4",
     "react-native-elements": "^3.4.1",
     "react-native-gesture-handler": "~1.8.0",
+    "react-native-momosdk": "^1.3.7",
+    "react-native-reanimated": "~1.13.0",
     "react-native-safe-area-context": "3.1.9",
     "react-native-screens": "~2.15.0",
     "react-native-snap-carousel": "^3.9.1",
     "react-native-tab-view": "^2.16.0",
     "react-native-table-component": "^1.2.1",
+    "react-native-unimodules": "~0.12.0",
     "react-native-web": "~0.13.12",
     "react-redux": "^7.2.4"
   },
@@ -62,7 +65,12 @@
     "@types/react-native-snap-carousel": "^3.8.3",
     "@types/react-native-table-component": "^1.2.0",
     "jest-expo": "~40.0.0",
-    "typescript": "^4.0.7"
+    "typescript": "^4.0.7",
+    "babel-jest": "~25.2.6",
+    "jest": "~25.2.6",
+    "react-test-renderer": "~16.13.1"
   },
-  "private": true
+  "private": true,
+  "name": "StoreAppUi",
+  "version": "1.0.0"
 }

@@ -1,129 +1,129 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { StyleSheet, Image, ActivityIndicator } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { Text, View } from "../components/Themed";
-import ProductApi from "../api/ProductApi";
-import { useAppSelector, useAppDispatch } from "../redux/app/hook";
-import { incrementByAmount, selectCount } from "../redux/features/counterSlice";
+
+import {
+  Platform,
+  DeviceEventEmitter,
+  NativeModules,
+  NativeEventEmitter,
+} from "react-native";
+import RNMomosdk from "react-native-momosdk";
+const RNMomosdkModule = NativeModules.RNMomosdk;
+const EventEmitter = new NativeEventEmitter(RNMomosdkModule);
 // import Pagination from "../components/common/Pagination"
 
 export default function NotificationsScreen({ route }: any) {
-  const count = useAppSelector(selectCount);
-  const dispatch = useAppDispatch();
-  const [amountOfCmt, setAmountOfCmt] = useState();
-  const [specifiedProduct, setSpecifiedProduct] = useState({});
-  const [extraCmt, setExtraCmt] = useState(0);
-  const [DisPlayCmt, setDisPlayCmt] = useState<any[]>([]);
-  const [itemImg, setItemImg] = useState([]);
-  const [loadingWhileFetchData, setLoadingWhileFetchData] = useState(true);
-  const [CurrentPage, setCurrentPage] = useState(1);
+  const merchantname = "CGV Cinemas";
+  const merchantcode = "CGV01";
+  const merchantNameLabel = "Nhà cung cấp";
+  const billdescription = "Fast and Furious 8";
+  const amount = 50000;
+  const enviroment = "0"; //"0": SANBOX , "1": PRODUCTION
+  interface product {
+    enviroment: string;
+    action: string;
+    merchantname: string;
+    merchantcode: string;
+    merchantnamelabel: string;
+    description: string;
+    amount: number;
+    orderId: string;
+    orderLabel: string;
+    appScheme: string;
+  }
 
   useEffect(() => {
-    fetchSpecifiedProduct();
-    setInterval(() => {
-      setLoadingWhileFetchData(false);
-    }, 1000);
-  }, [CurrentPage]);
+    EventEmitter.addListener(
+      "RCTMoMoNoficationCenterRequestTokenReceived",
+      (response) => {
+        try {
+          console.log("<MoMoPay>Listen.Event::" + JSON.stringify(response));
+          if (response && response.status == 0) {
+            //SUCCESS: continue to submit momoToken,phonenumber to server
+            let fromapp = response.fromapp; //ALWAYS:: fromapp==momotransfer
+            let momoToken = response.data;
+            let phonenumber = response.phonenumber;
+            let message = response.message;
+            let orderId = response.refOrderId;
+          } else {
+            //let message = response.message;
+            //Has Error: show message here
+          }
+        } catch (ex) {}
+      }
+    );
+    alert("asdf");
+    //OPTIONAL
+    // EventEmitter.addListener(
+    //   "RCTMoMoNoficationCenterRequestTokenState",
+    //   (response) => {
+    //     console.log("<MoMoPay>Listen.RequestTokenState:: " + response.status);
+    //     // status = 1: Parameters valid & ready to open MoMo app.
+    //     // status = 2: canOpenURL failed for URL MoMo app
+    //     // status = 3: Parameters invalid
+    //   }
+    // );
+  }, []);
 
-  useEffect(() => {
-    sliceCmt();
-  }, [extraCmt]);
-
-
-  async function fetchSpecifiedProduct() {
+  // TODO: Action to Request Payment MoMo App
+  const onMomoClick = async () => {
+    let jsonData: product = {};
+    jsonData.enviroment = enviroment; //SANBOX OR PRODUCTION
+    jsonData.action = "gettoken"; //DO NOT EDIT
+    jsonData.merchantname = "Laptop Ecommerce App"; //edit your merchantname here
+    jsonData.merchantcode = "MOMO6LBO20210528"; //edit your merchantcode here
+    jsonData.merchantnamelabel = merchantNameLabel;
+    jsonData.description = billdescription;
+    jsonData.amount = 5000; //order total amount
+    jsonData.orderId = "ID20181123192300";
+    jsonData.orderLabel = "Ma don hang";
+    jsonData.appScheme = "momo6lbo20210528"; // iOS App Only , match with Schemes Indentify from your  Info.plist > key URL types > URL Schemes
+    console.log("data_request_payment " + JSON.stringify(jsonData));
     try {
-      const response = await ProductApi.getProductDetails(3);
-      setSpecifiedProduct(response);
-      const temp = response as any;
-      setItemImg(temp.lapUrl);
+      if (Platform.OS === "android") {
+        let dataPayment = await RNMomosdk.requestPayment(jsonData);
+        console.log("dataPayent", dataPayment);
+        momoHandleResponse(dataPayment);
+      } else {
+        RNMomosdk.requestPayment(jsonData);
+      }
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
-  // function handlingUserPressingWatchMoreCmt() {
-  //   setExtraCmt((prev) => prev + 5);
-  //   setIsLoadingMoreCmt(true);
-  //   setTimeout(() => {
-  //     setIsLoadingMoreCmt(false);
-  //   }, 1000);
-  // }
-  async function sliceCmt() {
+  const momoHandleResponse = async (response: any) => {
     try {
-      const response = await ProductApi.getProductDetails(3);
-      const temp = response as any;
-      const allCmts = temp.comments;
-      setDisPlayCmt(allCmts.slice(0, 5 + extraCmt));
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  const _renderProduct = (item: any, key: any) => {
-    return (
-      <View key={key} style={styles.eachPost}>
-        <Image
-          style={styles.moreItemImg}
-          source={{ uri: item.lapUrl[0] }}
-        ></Image>
-        <Text>Giá: 1 triệu</Text>
-      </View>
-    )
-  }
-
+      if (response && response.status == 0) {
+        //SUCCESS continue to submit momoToken,phonenumber to server
+        let fromapp = response.fromapp; //ALWAYS:: fromapp == momotransfer
+        let momoToken = response.data;
+        let phonenumber = response.phonenumber;
+        let message = response.message;
+        console.log(response);
+      } else {
+        //let message = response.message;
+        //Has Error: show message here
+      }
+    } catch (ex) {}
+  };
   return (
-    <>
-     
-    </>
-  )
+    <View>
+      <TouchableOpacity
+        style={styles.momoContainer}
+        onPress={() => onMomoClick()}
+      >
+        <Text>Momo</Text>
+      </TouchableOpacity>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    height: "100%",
-  },
-  loadingContainer: {
-    flex: 1,
-    height: 675,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  loadingHorizontal: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    padding: 10,
-  },
-  text16: {
-    fontSize: 16,
-  },
-
-  text20: {
-    fontSize: 20,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-
-  boldText: {
-    fontWeight: "bold",
-  },
-  eachPost: {
-    marginRight: 8,
-    marginTop: 5,
-    marginBottom: 20,
-  },
-  moreItemImg: {
-    width: 184,
-    height: 150,
-  },
-  mayBeUlike: {
-    paddingBottom: 10,
-    paddingTop: 10,
-  },
-  centerItem: {
-    textAlign: "center",
+  momoContainer: {
+    marginTop: 50,
   },
 });
