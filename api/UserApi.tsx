@@ -59,6 +59,14 @@ const UserApi = {
     const url = "/api/get_avatar/";
     return AxiosClient.post(url, data);
   },
+  addAddress: (data: any) => {
+    const url = "/api/set_address/";
+    return AxiosClient.post(url, data);
+  },
+  getOrderAddress: (data: any) => {
+    const url = "/api/order_address/";
+    return AxiosClient.post(url, data);
+  },
 };
 
 export default UserApi;

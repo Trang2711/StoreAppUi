@@ -63,8 +63,8 @@ function RootStackTabNavigator() {
       <RootStack.Screen
         name="TopNav"
         component={TopTabNavigator}
-        options={{ headerShown: false }} />
-
+        options={{ headerShown: false }} 
+      />
       <RootStack.Screen
         name="ItemDetailScreen"
         component={ItemDetailScreen}
@@ -75,7 +75,6 @@ function RootStackTabNavigator() {
         options={{ title: 'Bình luận' }}
         component={CommentsScreen}
       />
-      
       <RootStack.Screen
         name="ProductReviewsScreen"
         options={{ title: 'Gửi bình luận' }}

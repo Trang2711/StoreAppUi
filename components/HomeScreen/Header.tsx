@@ -45,7 +45,7 @@ export default function Header({ quantityOfItemsInCart }: any) {
         />
         {quantityOfItemsInCart > 0 ? (
           <View style={styles.quantityIcon}>
-            <Text>{quantityOfItemsInCart}</Text>
+            <Text style={{color: 'white', fontSize: 12}}>{quantityOfItemsInCart}</Text>
           </View>
         ) : null}
       </View>
