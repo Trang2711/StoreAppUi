@@ -18,7 +18,6 @@ export default function CartScreen() {
   const productList = useAppSelector(productsInsideCart);
   const totalItemInCart = useAppSelector(amountOfItemsInCart);
   const totalPriceOfProduct = useAppSelector(totalPrice)
-  console.log(totalItemInCart, totalPriceOfProduct)
 
   const _fomatNumber1 = (num: number) => {
     const formatter = new Intl.NumberFormat("us");

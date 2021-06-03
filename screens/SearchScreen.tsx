@@ -55,7 +55,6 @@ export default function SearchScreen({ navigation }: any) {
   // };
 
   const handleSearchSubmit = (value: string) => {
-    console.log("chuyen sang filter screen")
     navigation.navigate('FilterScreen', {
       searchKeywords: value
     })

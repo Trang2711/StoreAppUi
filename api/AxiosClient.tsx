@@ -4,7 +4,7 @@ import { setIsLogged } from '../redux/features/loginSlice'
 import { useAppDispatch } from "../redux/app/hook";
 import { AsyncStorage } from 'react-native';
 
-export const baseUrl = "http://117.5.114.116:8120";
+export const baseUrl = "http://117.0.145.20:8120";
 
 const AxiosClient = axios.create({
   baseURL: `${baseUrl}/`,

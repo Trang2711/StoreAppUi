@@ -5,6 +5,7 @@ import { Text, View } from "../components/Themed";
 import { setIsLogged } from "../redux/features/loginSlice";
 import { useAppDispatch } from "../redux/app/hook";
 import UserApi from '../api/UserApi'
+import { baseUrl } from "../api/AxiosClient";
 
 interface Info {
   username: string,
@@ -21,13 +22,17 @@ export default function AccountScreen({ navigation }: any) {
   }
   const [info, setInfo] = useState<Info>()
 
+  const fetchInfo = async () => {
+    const info = await UserApi.getInfo()
+    setInfo(info as any)
+  }
+
   useEffect(() => {
-    const fetchInfo = async () => {
-      const info = await UserApi.getInfo()
-      setInfo(info as any)
-    }
-    fetchInfo()
-  }, [])
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetchInfo()
+    });
+    
+  }, [navigation])
 
   return (
     <>
@@ -37,7 +42,7 @@ export default function AccountScreen({ navigation }: any) {
             <ImageBackground
               style={styles.avatar}
               imageStyle={{ borderRadius: 50 }}
-              source={{ uri: info!.avatar }}
+              source={{ uri: `${baseUrl}${info!.avatar}` }}
             ></ImageBackground>
           </TouchableOpacity>
           <View>

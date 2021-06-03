@@ -154,7 +154,6 @@ export default function ItemDetailScreen({ navigation, route }: any) {
   }, [quantityInCart]);
 
   const getImages = (images: any) => {
-    console.log(images)
       let _images = images.map((item: any) => {
           const imgUrl = `${baseUrl}${item}`
           return {imgUrl}
@@ -199,10 +198,10 @@ export default function ItemDetailScreen({ navigation, route }: any) {
               </Text>
             </View>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <StarRating num={4.5} fontSize={18} />
+              <StarRating num={productDetail.rating_average} fontSize={18} />
               <Text
                 style={{ ...styles.textSmall, marginLeft: 5 }}
-              >{`(${_fomatNumber(12354)})`}</Text>
+              >{`(${_fomatNumber(productDetail.reviews.totalReview)})`}</Text>
             </View>
           </View>
 
@@ -291,7 +290,6 @@ export default function ItemDetailScreen({ navigation, route }: any) {
 
   const onTextLayout = useCallback(e => {
     setLengthMore(e.nativeEvent.lines.length >= 4); //to check the text is more than 4 lines or not
-    // console.log(e.nativeEvent);
   }, []);
 
   const _renderDescription = () => {
@@ -353,7 +351,7 @@ export default function ItemDetailScreen({ navigation, route }: any) {
   const _renderComment = () => {
     return (
       productDetail && (
-        <Comments comments={productDetail.reviews} productId={productDetail.id} navigation={navigation}/>
+        <Comments comments={productDetail.reviews} productId={productDetail.id} rating_average={productDetail.rating_average} navigation={navigation}/>
       )
     );
   };
