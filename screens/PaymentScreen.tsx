@@ -89,6 +89,11 @@ export default function PaymentScreen({ navigation }: any) {
             fee: shippingMethod.saving.fee,
             date: shippingMethod.saving.date
         }
+        return {
+            name: 'Vận chuyển tiêu chuẩn',
+            fee: shippingMethod.standard.fee,
+            date: shippingMethod.standard.date
+        }
     }
 
     const onSubmit = () => {

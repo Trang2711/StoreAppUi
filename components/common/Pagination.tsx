@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, ActivityIndicator, ScrollView, View, FlatList, Image } from "react-native";
 
-import CardItem from './cardItem/CardItem'
-import ProductApi from "../../api/ProductApi";
-
-const Pagination = ({ children, renderItem, paging, onPageChange, data }: any) => {
+const Pagination = ({ children, renderItem, paging, onPageChange, data, columnWrapperStyle, style, numColumns }: any) => {
   const [IsloadingMoreItem, setIsloadingMoreItem] = useState(false);
 
   const { total, perPage, currentPage } = paging
@@ -38,26 +35,15 @@ const Pagination = ({ children, renderItem, paging, onPageChange, data }: any) =
     >
       {children}
         <FlatList
-          numColumns={2}
+          numColumns={numColumns}
           horizontal={false}
           data={data}
           renderItem={renderItem}
           keyExtractor={(item : any) => item.id}
-          columnWrapperStyle={{
-            flex: 1,
-            justifyContent: "space-between",
-            paddingVertical: 15,
-            paddingHorizontal: 10,
-          }}
-        >
-          {
-            data && data.map((item: { id: any; }) => (
-              <CardItem
-                key={item.id}
-                props={item} />
-            ))
-          }
-        </FlatList>
+          
+          columnWrapperStyle={columnWrapperStyle}
+          style = {style}
+        />
       {IsloadingMoreItem ? (
         <ActivityIndicator size="large" color="black" />
       ) : null}

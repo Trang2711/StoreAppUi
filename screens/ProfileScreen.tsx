@@ -15,10 +15,11 @@ import { Text, View } from "../components/Themed";
 import UserApi from '../api/UserApi'
 import * as ImagePicker from 'expo-image-picker';
 import { ScrollView } from "react-native-gesture-handler";
+import { baseUrl } from "../api/AxiosClient";
 
 export default function ProfileScreen({ navigation, route }: any) {
     const { info } = route.params
-    const [image, setImage] = useState({ uri: info.avatar })
+    const [image, setImage] = useState({ uri: `${baseUrl}${info!.avatar}` })
     const [password, setPassword] = useState("")
     const [showPasswordInput, setShowPasswordInput] = useState(false)
     const [newPassword, setNewPassword] = useState('')
@@ -44,23 +45,25 @@ export default function ProfileScreen({ navigation, route }: any) {
     };
 
     const onSubmit = async () => {
-        console.log('submit')
+        let data = {}
         if (newPassword!.length >= 6 && newPassword === cfpassword) {
-            const data = {
+            data = {
                 avatar: image,
                 password: newPassword
             }
-            console.log(data)
-            await UserApi.changeInfo(data)
-            Alert.alert(
-                "Thông tin thay đổi đã được lưu lại"
-            );
         }
+        data = {
+            avatar: image,
+            password: null
+        }
+        await UserApi.changeInfo(data)
+        Alert.alert(
+            "Thông tin thay đổi đã được lưu lại"
+        );
     }
 
     const confirmPassword = async () => {
         const responce = await UserApi.confirmPassword({ password }) as any
-        console.log(responce)
         if (responce === 'Correct') {
             setModalVisible(false)
             setShowPasswordInput(true)

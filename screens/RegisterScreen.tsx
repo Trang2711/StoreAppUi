@@ -21,7 +21,6 @@ export default function LoginScreen({ navigation }: any) {
     const checkLogged = async () => {
       await AsyncStorage.removeItem("token");
       const token = await AsyncStorage.getItem("token");
-      // console.log('token ', token)
       if (token) navigation.navigate("BottomNav", { screen: "HomeScreen" });
     };
     checkLogged();
