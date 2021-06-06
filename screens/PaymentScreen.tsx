@@ -55,7 +55,7 @@ export default function PaymentScreen({ navigation }: any) {
     // const navigation = useNavigation()
 
     const fetchOrderAddress = async () => {
-        const data = await UserApi.getOrderAddress(address)
+        const data = await UserApi.setAddress(address)
         console.log(data)
         setshippingMethod(data as any)
     }
@@ -65,6 +65,7 @@ export default function PaymentScreen({ navigation }: any) {
         if (address) {
             fetchOrderAddress()
         }
+        // fetchOrderAddress()
     }, [address])
 
 
@@ -89,11 +90,6 @@ export default function PaymentScreen({ navigation }: any) {
             fee: shippingMethod.saving.fee,
             date: shippingMethod.saving.date
         }
-        return {
-            name: 'Vận chuyển tiêu chuẩn',
-            fee: shippingMethod.standard.fee,
-            date: shippingMethod.standard.date
-        }
     }
 
     const onSubmit = () => {
@@ -103,30 +99,20 @@ export default function PaymentScreen({ navigation }: any) {
         return (
             <View style={{ ...styles.container, marginTop: 0 }}>
                 {
-                    address
-                        ? <>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Text style={styles.title}>Địa chỉ nhận hàng</Text>
-                                <Text
-                                    style={{ textDecorationLine: 'underline' }}
-                                    onPress={() => navigation.navigate('AddressScreen')}
-                                >Thay đổi</Text>
-                            </View>
-                            <View>
-                                <Text style={{ fontSize: 15 }}>{`${address.address}, ${address.ward.name}, ${address.district.name}, ${address.province.name}`}</Text>
-                                <Text style={{ fontSize: 15, marginTop: 3 }}>{address.user}</Text>
-                                <Text style={{ fontSize: 15 }}>{address.phoneNumber}</Text>
-                            </View>
-                        </>
-                        : <>
+                    address && <>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                             <Text style={styles.title}>Địa chỉ nhận hàng</Text>
                             <Text
-                                style={{ textDecorationLine: 'underline', marginVertical: 10 }}
+                                style={{ textDecorationLine: 'underline' }}
                                 onPress={() => navigation.navigate('AddressScreen')}
-                            >
-                                Thêm địa chỉ nhận
-                            </Text>
-                        </>
+                            >Thay đổi</Text>
+                        </View>
+                        <View>
+                            <Text style={{ fontSize: 15 }}>{`${address.address}, ${address.ward.name}, ${address.district.name}, ${address.province.name}`}</Text>
+                            <Text style={{ fontSize: 15, marginTop: 3 }}>{address.user}</Text>
+                            <Text style={{ fontSize: 15 }}>{address.phoneNumber}</Text>
+                        </View>
+                    </>
                 }
             </View>
         )
@@ -219,7 +205,7 @@ export default function PaymentScreen({ navigation }: any) {
                                         onValueChange={() => setShippingMethodSelected(EXPRESS)}
                                         style={styles.checkbox}
                                     />
-                                    <View style={{width: '83%'}}>
+                                    <View style={{ width: '83%' }}>
                                         <View style={styles.shippingTitle}>
                                             <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Vận chuyển nhanh</Text>
                                             <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'black' }}>{_fomatNumber1(shippingMethod.express.fee)}đ</Text>
@@ -237,7 +223,7 @@ export default function PaymentScreen({ navigation }: any) {
                                         onValueChange={() => setShippingMethodSelected(STANDARD)}
                                         style={styles.checkbox}
                                     />
-                                    <View style={{width: '83%'}}>
+                                    <View style={{ width: '83%' }}>
                                         <View style={styles.shippingTitle}>
                                             <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Vận chuyển thường</Text>
                                             <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'black' }}>{_fomatNumber1(shippingMethod.standard.fee)}đ</Text>
@@ -254,7 +240,7 @@ export default function PaymentScreen({ navigation }: any) {
                                         onValueChange={() => setShippingMethodSelected(SAVING)}
                                         style={styles.checkbox}
                                     />
-                                    <View style={{width: '83%'}}>
+                                    <View style={{ width: '83%' }}>
                                         <View style={styles.shippingTitle}>
                                             <Text style={{ fontSize: 16, fontWeight: 'bold' }}>Vận chuyển tiết kiệm</Text>
                                             <Text style={{ fontSize: 15, fontWeight: 'bold', color: 'black' }}>{_fomatNumber1(shippingMethod.saving.fee)}đ</Text>
@@ -275,36 +261,40 @@ export default function PaymentScreen({ navigation }: any) {
     }
     return (
         <>
-            <ScrollView>
-                {renderAddress()}
-                <View style={{ ...styles.container, paddingHorizontal: 0 }}>
-                    {
-                        productList.map((productItem, index) => (
-                            <ProductItem key={index} productItem={productItem} />
-                        ))
-                    }
-                </View>
-                {renderPaymentMethod()}
-                {address && renderShippingMethod()}
-            </ScrollView>
-            <View style={styles.payment_area}>
-                <View style={styles.moneyContainer}>
-                    <Text style={{ fontSize: 15 }}>
-                        Thành tiền
+            {
+                shippingMethod && <>
+                    <ScrollView>
+                        {renderAddress()}
+                        <View style={{ ...styles.container, paddingHorizontal: 0 }}>
+                            {
+                                productList.map((productItem, index) => (
+                                    <ProductItem key={index} productItem={productItem} />
+                                ))
+                            }
+                        </View>
+                        {renderPaymentMethod()}
+                        {address && renderShippingMethod()}
+                    </ScrollView>
+                    <View style={styles.payment_area}>
+                        <View style={styles.moneyContainer}>
+                            <Text style={{ fontSize: 15 }}>
+                                Thành tiền
               </Text>
-                    <Text
-                        style={{ fontSize: 17, color: "#d53332", fontWeight: "bold" }}
-                    >
-                        {_fomatNumber1(totalPriceOfProduct + getShippingMethod(shippingMethodSelected)!.fee)}₫
+                            <Text
+                                style={{ fontSize: 17, color: "#d53332", fontWeight: "bold" }}
+                            >
+                                {_fomatNumber1(totalPriceOfProduct + getShippingMethod(shippingMethodSelected)!.fee)}₫
               </Text>
-                </View>
-                <TouchableOpacity onPress={onSubmit}>
-                    <Text style={styles.paymentBtn} >Đặt hàng</Text>
-                </TouchableOpacity>
+                        </View>
+                        <TouchableOpacity onPress={onSubmit}>
+                            <Text style={styles.paymentBtn} >Đặt hàng</Text>
+                        </TouchableOpacity>
 
-            </View>
+                    </View>
+                </>
+            }
         </>
-    );
+    )
 }
 
 const styles = StyleSheet.create({
