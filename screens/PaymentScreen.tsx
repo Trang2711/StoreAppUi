@@ -119,7 +119,6 @@ export default function PaymentScreen({ navigation }: any) {
         source: response.tokenId,
         description: "test payment",
       });
-      console.log("res from Ngia server", res);
       handleBillCharged();
     } catch (error) {
       console.log("Người dùng từ chối thanh toán");
@@ -137,7 +136,19 @@ export default function PaymentScreen({ navigation }: any) {
     if (paymentMethod === "Thanh toán bằng thẻ Visa") {
       const totalInvoiceCost =
         getShippingMethod(shippingMethodSelected)?.fee + totalPriceOfProduct;
-      handleCardInputDetails(totalInvoiceCost);
+      if (totalInvoiceCost < 100000000) {
+        handleCardInputDetails(totalInvoiceCost);
+      } else {
+        Alert.alert(
+          "Thanh toán thất bại!",
+          "Thẻ VISA chỉ chấp nhận thanh toán những đơn hàng dưới 100 triệu đồng, bạn vui lòng điều chỉnh lại đơn hàng của mình nhé.",
+          [
+            {
+              text: "OK",
+            },
+          ]
+        );
+      }
     } else {
     }
   };

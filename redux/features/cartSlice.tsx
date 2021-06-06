@@ -89,6 +89,7 @@ export const cartSlice = createSlice({
     deleteAllItemsFromCart: (state) => {
       state.products = [];
       state.quantity = 0;
+      state.totalPrice = 0;
     },
   },
 });
