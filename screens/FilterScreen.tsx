@@ -191,16 +191,12 @@ export default function FilterScreen({ route, navigation }: any) {
       sort_options: sortOption,
       paging: paging
     }
-    console.log(request)
+    
     try {
       const responce = await SearchAndFiltersApi.getProductList(request)
       const { data, paging } = responce as any
 
-      console.log("responce pagination: ")
-      console.log(paging)
-
       if (paging.currentPage === 1) {
-        console.log("rerender")
         setPostList(data)
       }
       else
@@ -471,6 +467,13 @@ export default function FilterScreen({ route, navigation }: any) {
         paging={pagination}
         onPageChange={handlePaginationChange}
         data={postList}
+        columnWrapperStyle={{
+          flex: 1,
+          justifyContent: "space-between",
+          paddingVertical: 15,
+          paddingHorizontal: 10,
+        }}
+        numColumns={2}
       >
         <Header
           navigation={navigation}

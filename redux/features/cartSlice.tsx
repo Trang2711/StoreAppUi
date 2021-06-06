@@ -17,7 +17,7 @@ interface Number {
 interface ProductState {
   products: Array<product>;
   quantity: any;
-  totalPrice: number,
+  totalPrice: number;
 }
 
 const initialCart: ProductState = {
@@ -35,11 +35,11 @@ export const cartSlice = createSlice({
     },
 
     setProductsInCart: (state, aciton: PayloadAction<any>) => {
-      state.products = aciton.payload
+      state.products = aciton.payload;
     },
 
     setTotalPrice: (state, aciton: PayloadAction<number>) => {
-      state.totalPrice = aciton.payload
+      state.totalPrice = aciton.payload;
     },
 
     addingItemQuantity: (state, action: PayloadAction<Number>) => {
@@ -47,8 +47,9 @@ export const cartSlice = createSlice({
         (product) => product.id == action.payload.id
       );
       state.products[index].count = state.products[index].count + 1;
-      state.totalPrice = state.totalPrice + state.products[index].discount_price
-      state.quantity = state.quantity + 1
+      state.totalPrice =
+        state.totalPrice + state.products[index].discount_price;
+      state.quantity = state.quantity + 1;
     },
 
     subtractItemQuantity: (state, action: PayloadAction<Number>) => {
@@ -57,8 +58,9 @@ export const cartSlice = createSlice({
       );
       if (state.products[index].count > 1) {
         state.products[index].count = state.products[index].count - 1;
-        state.totalPrice = state.totalPrice - state.products[index].discount_price
-        state.quantity = state.quantity - 1
+        state.totalPrice =
+          state.totalPrice - state.products[index].discount_price;
+        state.quantity = state.quantity - 1;
       }
     },
 
@@ -71,17 +73,22 @@ export const cartSlice = createSlice({
       } else {
         state.products.push(action.payload);
       }
-      
-      state.totalPrice = state.totalPrice + action.payload.discount_price
-      state.quantity = state.quantity + 1
+
+      state.totalPrice = state.totalPrice + action.payload.discount_price;
+      state.quantity = state.quantity + 1;
     },
 
     deleteAnItemFromCart: (state, action: PayloadAction<product>) => {
       state.products = state.products.filter(
         (product) => product.id !== action.payload.id
       );
-      state.totalPrice = state.totalPrice + action.payload.discount_price
-      state.quantity = state.quantity - action.payload.count
+      state.totalPrice = state.totalPrice + action.payload.discount_price;
+      state.quantity = state.quantity - action.payload.count;
+    },
+
+    deleteAllItemsFromCart: (state) => {
+      state.products = [];
+      state.quantity = 0;
     },
   },
 });
@@ -92,7 +99,8 @@ export const {
   subtractItemQuantity,
   setTotalQuantityInCart,
   setProductsInCart,
-  setTotalPrice
+  setTotalPrice,
+  deleteAllItemsFromCart,
 } = cartSlice.actions;
 
 export const productsInsideCart = (state: RootState) => state.cart.products;

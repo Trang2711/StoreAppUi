@@ -1,61 +1,28 @@
 import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
-  FlatList,
-  TouchableOpacity,
   Pressable,
 } from "react-native";
 import { Text, View } from "../components/Themed";
-import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 
 import Pagination from "../components/common/Pagination";
 import ProductApi from "../api/ProductApi";
-import Comment from "../components/common/Carousel";
+import Comment from "../components/common/Comment";
 import "intl";
 import "intl/locale-data/jsonp/en";
-const numberCols = 5;
-
-const filterOptions = [
-  {
-    label: "Tất cả",
-    total: 1900,
-  },
-  {
-    label: "Có hình ảnh",
-    total: 1900,
-  },
-  {
-    label: "Có bình luận",
-    total: 1900,
-  },
-  {
-    label: "1",
-    total: 1900,
-  },
-  {
-    label: "2",
-    total: 1900,
-  },
-  {
-    label: "3",
-    total: 1900,
-  },
-  {
-    label: "4",
-    total: 1900,
-  },
-  {
-    label: "5",
-    total: 1900,
-  },
-];
 
 export default function SearchScreen({ route, navigation }: any) {
   const { product_id } = route.params;
-
+  const [isSelected, setIsSelected] = useState("Tất cả")
   const [comments, setComments] = useState([]);
-  const [filter, setFilter] = useState('all')
+  const [total, setTotal] = useState(0)
+  const [filter, setFilter] = useState<any>({
+    product: product_id,
+    star: null,
+    hasImage: false,
+    hasComment: false,
+  })
 
   const [pagination, setPagination] = useState({
     currentPage: 1,
@@ -71,15 +38,14 @@ export default function SearchScreen({ route, navigation }: any) {
   const fetchComments = async (id: any) => {
     try {
       const request = {
-        product_id: id,
+        ...filter,
         paging: _paging,
       };
       const responce = await ProductApi.getCommentsOfProduct(request);
-      const { data, paging } = responce as any;
-
+      const { reviews, paging } = responce as any;
       if (paging.currentPage === 1) {
-        setComments(data);
-      } else setComments(comments.concat(data));
+        setComments(reviews);
+      } else setComments(comments.concat(reviews));
 
       setPagination(paging);
     } catch (error) {
@@ -117,6 +83,8 @@ export default function SearchScreen({ route, navigation }: any) {
       paging={pagination}
       onPageChange={handlePaginationChange}
       data={comments}
+      style={{ paddingHorizontal: 15, backgroundColor: 'white' }}
+      numColumns={1}
     >
       <View
         style={{
@@ -127,20 +95,66 @@ export default function SearchScreen({ route, navigation }: any) {
         }}
       >
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <View
-            style={{ ...styles.filterOption, ...styles.active, width: "32%" }}
+          <Pressable
+            style={
+              isSelected === "Tất cả"
+                ? { ...styles.filterOption, ...styles.active, width: "32%" }
+                : { ...styles.filterOption, width: "32%" }
+            }
+            onPress={() => {
+              setFilter({
+                product: product_id,
+                star: null,
+                hasImage: false,
+                hasComment: false,
+              })
+              setPaging({ ..._paging, currentPage: 1 })
+              setIsSelected("Tất cả")
+            }}
           >
             <Text>Tất cả</Text>
-            <Text style={{ fontSize: 12 }}>{_fomatNumber(195748)}</Text>
-          </View>
-          <View style={{ ...styles.filterOption, width: "32%" }}>
+            <Text style={{ fontSize: 12 }}>{_fomatNumber(total)}</Text>
+          </Pressable>
+          <Pressable
+            style={
+              isSelected === "Có hình ảnh"
+                ? { ...styles.filterOption, ...styles.active, width: "32%" }
+                : { ...styles.filterOption, width: "32%" }
+            }
+            onPress={() => {
+              setFilter({
+                product: product_id,
+                star: null,
+                hasImage: true,
+                hasComment: false,
+              })
+              setPaging({ ..._paging, currentPage: 1 })
+              setIsSelected("Có hình ảnh")
+            }}
+          >
             <Text>Có hình ảnh</Text>
-            <Text style={{ fontSize: 12 }}>{_fomatNumber(195748)}</Text>
-          </View>
-          <View style={{ ...styles.filterOption, width: "32%" }}>
+            <Text style={{ fontSize: 12 }}>{_fomatNumber(total)}</Text>
+          </Pressable>
+          <Pressable
+            style={
+              isSelected === "Có bình luận"
+                ? { ...styles.filterOption, ...styles.active, width: "32%" }
+                : { ...styles.filterOption, width: "32%" }
+            }
+            onPress={() => {
+              setFilter({
+                product: product_id,
+                star: null,
+                hasImage: false,
+                hasComment: true,
+              })
+              setPaging({ ..._paging, currentPage: 1 })
+              setIsSelected("Có bình luận")
+            }}
+          >
             <Text>Có bình luận</Text>
-            <Text style={{ fontSize: 12 }}>{_fomatNumber(195748)}</Text>
-          </View>
+            <Text style={{ fontSize: 12 }}>{_fomatNumber(total)}</Text>
+          </Pressable>
         </View>
         <View
           style={{
@@ -149,55 +163,155 @@ export default function SearchScreen({ route, navigation }: any) {
             marginTop: 5,
           }}
         >
-          <View style={{ ...styles.filterOption, width: "19%" }}>
+          <Pressable
+            style={
+              isSelected === "1 sao"
+                ? { ...styles.filterOption, ...styles.active, width: "19%" }
+                : { ...styles.filterOption, width: "19%" }
+            }
+            onPress={() => {
+              setFilter({
+                product: product_id,
+                star: 1,
+                hasImage: false,
+                hasComment: false,
+              })
+              setPaging({ ..._paging, currentPage: 1 })
+              setIsSelected("1 sao")
+            }}
+          >
             <View
-              style={styles.starContainer}
+              style={
+                isSelected === "1 sao"
+                  ? { ...styles.starContainer, backgroundColor: "white" }
+                  : styles.starContainer
+              }
             >
               <Text>1</Text>
               <MaterialIcons name="star" size={16} color="#eec82c" />
             </View>
-            <Text style={{ fontSize: 12 }}>{_fomatNumber(195748)}</Text>
-          </View>
+            <Text style={{ fontSize: 12 }}>{_fomatNumber(total)}</Text>
+          </Pressable>
 
-          <View style={{ ...styles.filterOption, width: "19%" }}>
+          <Pressable
+            style={
+              isSelected === "2 sao"
+                ? { ...styles.filterOption, ...styles.active, width: "19%" }
+                : { ...styles.filterOption, width: "19%" }
+            }
+            onPress={() => {
+              setFilter({
+                product: product_id,
+                star: 2,
+                hasImage: false,
+                hasComment: false,
+              })
+              setPaging({ ..._paging, currentPage: 1 })
+              setIsSelected("2 sao")
+            }}
+          >
             <View
-              style={styles.starContainer}
+              style={
+                isSelected === "2 sao"
+                  ? { ...styles.starContainer, backgroundColor: "white" }
+                  : styles.starContainer
+              }
             >
               <Text>2</Text>
               <MaterialIcons name="star" size={16} color="#eec82c" />
             </View>
-            <Text style={{ fontSize: 12 }}>{_fomatNumber(195748)}</Text>
-          </View>
+            <Text style={{ fontSize: 12 }}>{_fomatNumber(total)}</Text>
+          </Pressable>
 
-          <View style={{ ...styles.filterOption, width: "19%" }}>
+          <Pressable
+            style={
+              isSelected === "3 sao"
+                ? { ...styles.filterOption, ...styles.active, width: "19%" }
+                : { ...styles.filterOption, width: "19%" }
+            }
+            onPress={() => {
+              setFilter({
+                product: product_id,
+                star: 3,
+                hasImage: false,
+                hasComment: false,
+              })
+              setPaging({ ..._paging, currentPage: 1 })
+              setIsSelected("3 sao")
+            }}
+          >
             <View
-              style={styles.starContainer}
+              style={
+                isSelected === "3 sao"
+                  ? { ...styles.starContainer, backgroundColor: "white" }
+                  : styles.starContainer
+              }
             >
               <Text>3</Text>
               <MaterialIcons name="star" size={16} color="#eec82c" />
             </View>
-            <Text style={{ fontSize: 12 }}>{_fomatNumber(195748)}</Text>
-          </View>
+            <Text style={{ fontSize: 12 }}>{_fomatNumber(total)}</Text>
+          </Pressable>
 
-          <View style={{ ...styles.filterOption, width: "19%" }}>
+          <Pressable
+            style={
+              isSelected === "4 sao"
+                ? { ...styles.filterOption, ...styles.active, width: "19%" }
+                : { ...styles.filterOption, width: "19%" }
+            }
+            onPress={() => {
+              setFilter({
+                product: product_id,
+                star: 4,
+                hasImage: false,
+                hasComment: false,
+              })
+              setPaging({ ..._paging, currentPage: 1 })
+              setIsSelected("4 sao")
+            }}
+          >
             <View
-              style={styles.starContainer}
+              style={
+                isSelected === "4 sao"
+                  ? { ...styles.starContainer, backgroundColor: "white" }
+                  : styles.starContainer
+              }
             >
               <Text>4</Text>
               <MaterialIcons name="star" size={16} color="#eec82c" />
             </View>
-            <Text style={{ fontSize: 12 }}>{_fomatNumber(195748)}</Text>
-          </View>
+            <Text style={{ fontSize: 12 }}>{_fomatNumber(total)}</Text>
+          </Pressable>
 
-          <View style={{ ...styles.filterOption, width: "19%" }}>
+          <Pressable
+            style={
+              isSelected === "5 sao"
+                ? { ...styles.filterOption, ...styles.active, width: "19%" }
+                : { ...styles.filterOption, width: "19%" }
+            }
+            onPress={() => {
+              setFilter({
+                product: product_id,
+                star: 5,
+                hasImage: false,
+                hasComment: false,
+              })
+              setPaging({ ..._paging, currentPage: 1 })
+              setIsSelected("5 sao")
+            }}
+          >
             <View
-              style={styles.starContainer}
+              style={
+                isSelected === "5 sao"
+                  ? { ...styles.starContainer, backgroundColor: "white" }
+                  : styles.starContainer
+              }
             >
               <Text>5</Text>
               <MaterialIcons name="star" size={16} color="#eec82c" />
             </View>
-            <Text style={{ fontSize: 12 }}>{_fomatNumber(195748)}</Text>
-          </View>
+            <Text style={{ fontSize: 12 }}>{_fomatNumber(total)}</Text>
+          </Pressable>
         </View>
       </View>
     </Pagination>

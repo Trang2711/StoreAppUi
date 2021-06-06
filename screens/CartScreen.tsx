@@ -44,7 +44,7 @@ export default function CartScreen() {
                 {_fomatNumber1(totalPriceOfProduct)}₫
               </Text>
             </View>
-            <TouchableOpacity onPress={() => navigation.navigate('PaymentScreen')}>
+            <TouchableOpacity onPress={() => navigation.navigate('AddressScreen')}>
               <Text style={styles.paymentBtn} >Đặt hàng</Text>
             </TouchableOpacity>
             

@@ -63,8 +63,12 @@ const UserApi = {
     const url = "/api/set_address/";
     return AxiosClient.post(url, data);
   },
-  getOrderAddress: (data: any) => {
+  setAddress: (data: any) => {
     const url = "/api/order_address/";
+    return AxiosClient.post(url, data);
+  },
+  makeStripePayment: (data: any) => {
+    const url = "/api/payment/";
     return AxiosClient.post(url, data);
   },
 };
