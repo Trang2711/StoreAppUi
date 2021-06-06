@@ -1,22 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Modal, CheckBox } from 'react-native';
+import {
+    StyleSheet,
+    View, Text,
+    ScrollView,
+    TouchableOpacity,
+    Modal,
+    CheckBox,
+    ActivityIndicator,
+    ImageBackground,
+
+} from 'react-native';
 import { useAppSelector, useAppDispatch } from "../redux/app/hook";
 import ProductItem from "../components/cartScreen/ProductItem";
-
+import { baseUrl } from "../api/AxiosClient";
 import {
     productsInsideCart,
-    amountOfItemsInCart,
     totalPrice,
 } from "../redux/features/cartSlice";
-import {
-    addressOfUser,
-    setAddressOfUser,
-} from "../redux/features/addressSlice";
-import { useNavigation } from "@react-navigation/native";
+import { addressOfUser } from "../redux/features/addressSlice";
 import UserApi from '../api/UserApi';
-
 import { AntDesign } from '@expo/vector-icons';
-import axios from "axios"
 
 const paymentMethodList = [
     {
@@ -25,15 +28,9 @@ const paymentMethodList = [
     },
     {
         value: '',
-        label: 'Ví ZaloPay'
+        label: 'Thanh toán bằng thẻ Visa'
     }
 ]
-
-const fees = {
-    express: 6457,
-    standard: 854,
-    saving: 58445
-}
 
 const EXPRESS = 1
 const STANDARD = 2
@@ -43,7 +40,6 @@ export default function PaymentScreen({ navigation }: any) {
     const productList = useAppSelector(productsInsideCart);
     const totalPriceOfProduct = useAppSelector(totalPrice)
     const address = useAppSelector<any>(addressOfUser)
-    // const [address, setAddress] = useState(_address)
     const [paymentMethod, setPaymentMethod] = useState('Thanh toán khi nhận hàng')
     const [shippingMethodSelected, setShippingMethodSelected] = useState(STANDARD)
     const [shippingMethod, setshippingMethod] = useState<any>()
@@ -52,20 +48,16 @@ export default function PaymentScreen({ navigation }: any) {
     const [modalShippingVisible, setModalShippingVisible] = useState(false);
 
     const dispatch = useAppDispatch();
-    // const navigation = useNavigation()
 
     const fetchOrderAddress = async () => {
         const data = await UserApi.setAddress(address)
-        console.log(data)
         setshippingMethod(data as any)
     }
-
 
     useEffect(() => {
         if (address) {
             fetchOrderAddress()
         }
-        // fetchOrderAddress()
     }, [address])
 
 
@@ -259,39 +251,80 @@ export default function PaymentScreen({ navigation }: any) {
             </View >
         )
     }
+
+    const renderProduct = (productItem: any) => {
+        const {
+            id,
+            title,
+            product_thumbnail,
+            price,
+            discount_price,
+            sold,
+            rating_average,
+            count,
+        } = productItem
+        return (
+            <View key={id} style={styles.containerOfProduct}>
+                <ImageBackground
+                    style={styles.image}
+                    source={{ uri: `${baseUrl}${product_thumbnail}` }}
+                ></ImageBackground>
+
+                <View style={styles.content_area}>
+                    <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: "bold" }}>
+                        {title}
+                    </Text>
+                    <View
+                        style={{ flexDirection: "row", alignItems: "center", marginTop: 3 }}
+                    >
+                        <Text style={styles.priceSale}>{_fomatNumber1(discount_price)}đ</Text>
+                        {discount_price < price && <Text style={styles.price}>{_fomatNumber1(price)}đ</Text>}
+                    </View>
+                    <View style={styles.quantity_area}>
+                        <Text style={{ fontSize: 14, marginRight: 5 }}>Số lượng:</Text>
+                        <View style={{ flexDirection: "row", alignItems: "center" }}>
+                            <Text style={{ paddingHorizontal: 3 }}> {count} </Text>
+                        </View>
+                    </View>
+                </View>
+            </View>
+        );
+    }
     return (
         <>
             {
-                shippingMethod && <>
-                    <ScrollView>
-                        {renderAddress()}
-                        <View style={{ ...styles.container, paddingHorizontal: 0 }}>
-                            {
-                                productList.map((productItem, index) => (
-                                    <ProductItem key={index} productItem={productItem} />
-                                ))
-                            }
-                        </View>
-                        {renderPaymentMethod()}
-                        {address && renderShippingMethod()}
-                    </ScrollView>
-                    <View style={styles.payment_area}>
-                        <View style={styles.moneyContainer}>
-                            <Text style={{ fontSize: 15 }}>
-                                Thành tiền
+                !shippingMethod
+                    ? <ActivityIndicator size="large" />
+                    : <>
+                        <ScrollView>
+                            {renderAddress()}
+                            <View style={{ ...styles.container, paddingHorizontal: 0 }}>
+                                {
+                                    productList.map((productItem, index) => (
+                                        renderProduct(productItem)
+                                    ))
+                                }
+                            </View>
+                            {renderPaymentMethod()}
+                            {address && renderShippingMethod()}
+                        </ScrollView>
+                        <View style={styles.payment_area}>
+                            <View style={styles.moneyContainer}>
+                                <Text style={{ fontSize: 15 }}>
+                                    Thành tiền
               </Text>
-                            <Text
-                                style={{ fontSize: 17, color: "#d53332", fontWeight: "bold" }}
-                            >
-                                {_fomatNumber1(totalPriceOfProduct + getShippingMethod(shippingMethodSelected)!.fee)}₫
+                                <Text
+                                    style={{ fontSize: 17, color: "#d53332", fontWeight: "bold" }}
+                                >
+                                    {_fomatNumber1(totalPriceOfProduct + getShippingMethod(shippingMethodSelected)!.fee)}₫
               </Text>
-                        </View>
-                        <TouchableOpacity onPress={onSubmit}>
-                            <Text style={styles.paymentBtn} >Đặt hàng</Text>
-                        </TouchableOpacity>
+                            </View>
+                            <TouchableOpacity onPress={onSubmit}>
+                                <Text style={styles.paymentBtn} >Đặt hàng</Text>
+                            </TouchableOpacity>
 
-                    </View>
-                </>
+                        </View>
+                    </>
             }
         </>
     )
@@ -359,5 +392,39 @@ const styles = StyleSheet.create({
     },
     checkbox: {
         marginRight: 10,
-    }
+    },
+    containerOfProduct: {
+        backgroundColor: "white",
+        marginBottom: 10,
+        paddingHorizontal: 10,
+        paddingVertical: 3,
+        flexDirection: "row",
+        alignItems: "center",
+        marginTop: 10,
+    },
+    image: {
+        resizeMode: "cover",
+        width: 120,
+        height: 100,
+        marginRight: 5,
+    },
+    content_area: {
+        flex: 1,
+    },
+    quantity_area: {
+        flexDirection: "row",
+        alignItems: "center",
+        marginTop: 7,
+    },
+    price: {
+        fontSize: 11,
+        color: "gray",
+        textDecorationLine: "line-through",
+    },
+    priceSale: {
+        fontSize: 15,
+        fontWeight: "bold",
+        // color: "#d53332",
+        marginRight: 6,
+    },
 });

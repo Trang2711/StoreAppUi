@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
-  FlatList,
-  TouchableOpacity,
   Pressable,
 } from "react-native";
 import { Text, View } from "../components/Themed";
-import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 
 import Pagination from "../components/common/Pagination";
@@ -14,42 +11,6 @@ import ProductApi from "../api/ProductApi";
 import Comment from "../components/common/Comment";
 import "intl";
 import "intl/locale-data/jsonp/en";
-const numberCols = 5;
-
-const filterOptions = [
-  {
-    label: "Tất cả",
-    total: 1900,
-  },
-  {
-    label: "Có hình ảnh",
-    total: 1900,
-  },
-  {
-    label: "Có bình luận",
-    total: 1900,
-  },
-  {
-    label: "1",
-    total: 1900,
-  },
-  {
-    label: "2",
-    total: 1900,
-  },
-  {
-    label: "3",
-    total: 1900,
-  },
-  {
-    label: "4",
-    total: 1900,
-  },
-  {
-    label: "5",
-    total: 1900,
-  },
-];
 
 export default function SearchScreen({ route, navigation }: any) {
   const { product_id } = route.params;

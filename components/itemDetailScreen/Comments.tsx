@@ -54,14 +54,14 @@ export default function Comments({ navigation, productId, comments, rating_avera
           <StarRating num={rating_average} fontSize={20} />
           <Text style={{ color: "gray", fontSize: 12, marginLeft: 5 }}>
             {`${rating_average}/5`}
-                </Text>
+          </Text>
         </View>
         <Text style={styles.textSmall}>{`(${_fomatNumber(totalReview)} đánh giá)`}</Text>
       </View>
 
       <View>
-        {reviews.map((item: any) => {
-          return <Comment item={item} />;
+        {reviews.map((item: any, index: any) => {
+          return <Comment key={index} item={item} />;
         })}
       </View>
 
