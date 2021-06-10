@@ -14,7 +14,7 @@ import { AxiosResponse } from "axios";
 import { useNavigation } from "@react-navigation/native";
 
 import ProductApi from "../api/ProductApi";
-import CartApi from '../api/CartApi'
+import CartApi from "../api/CartApi";
 import SearchAndFiltersApi from "../api/SearchAndFiltersApi";
 
 import Header from "../components/HomeScreen/Header";
@@ -27,7 +27,7 @@ import {
   productsInsideCart,
   setTotalQuantityInCart,
   setProductsInCart,
-  setTotalPrice
+  setTotalPrice,
 } from "../redux/features/cartSlice";
 const carousel = [
   {
@@ -68,19 +68,19 @@ export default function HomeScreen() {
   };
 
   const fetchCart = async () => {
-    const data = await CartApi.getAll() as any
-    dispatch(setProductsInCart(data.products))
-    
-    dispatch(setTotalPrice(data.total_price))
+    const data = (await CartApi.getAll()) as any;
+    dispatch(setProductsInCart(data.products));
+
+    dispatch(setTotalPrice(data.total_price));
 
     let totalItemInCart = 0;
     data.products.map((product: any) => {
       totalItemInCart = totalItemInCart + product.count;
     });
-    dispatch(setTotalQuantityInCart(totalItemInCart))
+    dispatch(setTotalQuantityInCart(totalItemInCart));
 
     // setUpdatedQuantityInCart(totalItemInCart)
-  }
+  };
 
   const fetchBestsellerProduct = async () => {
     const request = {
@@ -119,7 +119,7 @@ export default function HomeScreen() {
   useEffect(() => {
     fetchFlashSale();
     fetchBestsellerProduct();
-    fetchCart()
+    fetchCart();
   }, []);
 
   const renderItem = ({ item }: any) => (

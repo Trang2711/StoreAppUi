@@ -1,89 +1,215 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { PaymentsStripe as Stripe } from "expo-payments-stripe";
-import CardButton from "./CardButton";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import React, { useState, useEffect } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+  Image,
+  Pressable,
+  Modal,
+  Alert,
+} from "react-native";
+import UserApi from "../api/UserApi";
+import { AsyncStorage } from "react-native";
 
-const RegisterScreen = ({ navigation }: any) => {
-  const [loading, setloading] = useState(false);
-  const [token, setToken] = useState({
-    tokenId: null,
-  });
-
+export default function LoginScreen({ navigation }: any) {
   useEffect(() => {
-    Stripe.setOptionsAsync({
-      publishableKey:
-        "pk_test_51IxSO5FkT8Rf0i1NWITpWLxqKgxa8xScNUtqDPOoneoerfVPVvMhU2WGCApWriSoYVFaVhix93o16u3N6FHaYjiY00yAZvxGWl",
-      androidPayMode: "test", // [optional] used to set wallet environment (AndroidPay)
-      merchantId: "your_merchant_id", // [optional] used for payments with ApplePay
-    });
+    const checkLogged = async () => {
+      await AsyncStorage.removeItem("token");
+      const token = await AsyncStorage.getItem("token");
+      if (token) navigation.navigate("BottomNav", { screen: "HomeScreen" });
+    };
+    checkLogged();
   }, []);
-  const handleCardDetails = async () => {
-    try {
-      setloading(true);
-      const cardOptions = {
-        requiredBillingAddressFields: "full",
-        prefilledInformation: {
-          billingAddress: {
-            name: "Test Name",
-            line1: "Test Line 1",
-            line2: "4",
-            city: "Test City",
-            state: "Test State",
-            country: "Test Country",
-            postalCode: "31217",
-          },
-        },
+
+  const [username, setUsername] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [cfpassword, setCfpassword] = useState<string>("");
+  const [isEmailError, setIsEmailError] = useState(false);
+  const [isUsernameError, setIsUsernameError] = useState(false);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+
+  var usernameRegex = /^[a-zA-Z0-9]+$/;
+
+  const onSubmit = async () => {
+    if (
+      username !== "" &&
+      username?.match(usernameRegex) &&
+      password !== "" &&
+      password!.length >= 6 &&
+      password === cfpassword
+    ) {
+      const form = {
+        username: username,
+        password: password,
+        email: email,
       };
-      // GETS YOUR TOKEN FROM STRIPE FOR PAYMENT PROCESS
-      const token = await Stripe.paymentRequestWithCardFormAsync(
-        cardOptions as any
-      );
-      console.log("token", token);
-      setToken(token as any);
-      setloading(false);
-    } catch (error) {
-      setloading(false);
+      const responce = (await UserApi.signUp(form)) as any;
+      if (responce === "Successfully") {
+        Alert.alert("", "Một email xác thực đã được gửi đến hòm thư của bạn", [
+          { text: "OK" },
+        ]);
+      }
+      console.log("responce:", responce);
+      const { username_existed, email_existed } = responce as any;
+      if (username_existed) setIsUsernameError(true);
+      if (email_existed) setIsEmailError(true);
+
+      if (!username_existed && !email_existed) {
+        setModalVisible(true);
+        setTimeout(() => {
+          setModalVisible(false);
+        }, 2500);
+      }
     }
   };
+
+  const onEmailChange = (e: string) => {
+    setIsEmailError(false);
+    setEmail(e);
+  };
+
+  const onUsernameChange = (e: string) => {
+    setIsUsernameError(false);
+    setUsername(e);
+  };
+
   return (
-    <View>
-      <TouchableOpacity onPress={handleCardDetails}>
-        <CardButton text="Card Details" loading={loading} />
-      </TouchableOpacity>
-      <View style={styles.token}>
-        {token && (
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: 5,
+    <View style={styles.container}>
+      <Text style={styles.title}>PONZI</Text>
+
+      <View style={{ paddingHorizontal: 40, marginTop: 60 }}>
+        <TextInput
+          style={styles.input}
+          onChangeText={onUsernameChange}
+          value={username}
+          placeholder="Username"
+          maxLength={32}
+          autoCapitalize="none"
+        />
+        {username !== "" && !username?.match(usernameRegex) && (
+          <Text style={styles.errorMess}>
+            Username chỉ bao gồm chữ cái và số.
+          </Text>
+        )}
+        {isUsernameError && (
+          <Text style={styles.errorMess}>Username đã được sử dụng</Text>
+        )}
+        <TextInput
+          style={styles.input}
+          onChangeText={onEmailChange}
+          value={email}
+          placeholder="Địa chỉ email"
+          textContentType="emailAddress"
+          maxLength={32}
+          autoCapitalize="none"
+        />
+        {isEmailError && (
+          <Text style={styles.errorMess}>Email này đã được sủ dụng</Text>
+        )}
+
+        <TextInput
+          style={styles.input}
+          onChangeText={setPassword}
+          value={password}
+          placeholder="Mật khẩu"
+          secureTextEntry={true}
+          maxLength={32}
+          autoCapitalize="none"
+        />
+        {password !== "" && password!.length < 6 && (
+          <Text style={styles.errorMess}>Mật khẩu gồm ý nhất 6 chữ số</Text>
+        )}
+
+        <TextInput
+          style={styles.input}
+          onChangeText={setCfpassword}
+          value={cfpassword}
+          placeholder="Nhập lại mật khẩu"
+          secureTextEntry={true}
+          maxLength={32}
+          autoCapitalize="none"
+        />
+        {password !== cfpassword && (
+          <Text style={styles.errorMess}>Mật khẩu xác nhận không khớp</Text>
+        )}
+
+        <View
+          style={{ flexDirection: "row", alignItems: "center", marginTop: 30 }}
+        >
+          <Text style={{ fontSize: 14, color: "black" }}>
+            Bạn đã có tài khoản?
+          </Text>
+          <Pressable
+            onPress={() => {
+              navigation.navigate("LoginScreen");
             }}
           >
-            <Text style={styles.tokenLabel}>Token: {token?.tokenId}</Text>
-            <CardButton text="Make Payment" />
-          </View>
-        )}
+            <Text
+              style={{
+                color: "#0A75AD",
+                textDecorationLine: "underline",
+                fontSize: 14,
+              }}
+            >
+              Đăng nhập
+            </Text>
+          </Pressable>
+        </View>
+
+        <TouchableOpacity style={styles.btnSubmit} onPress={onSubmit}>
+          <Text
+            style={{
+              fontSize: 15,
+              fontWeight: "bold",
+              color: "white",
+              textAlign: "center",
+            }}
+          >
+            Đăng ký
+          </Text>
+        </TouchableOpacity>
       </View>
+      <Modal
+        animationType={"slide"}
+        transparent={false}
+        visible={modalVisible}
+      ></Modal>
     </View>
   );
-};
-
-export default RegisterScreen;
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    marginTop: 30,
   },
-  token: {},
-  tokenLabel: {
+  title: {
+    fontSize: 25,
+    fontWeight: "bold",
     textAlign: "center",
-    color: "#111",
-    marginBottom: 5,
-    padding: 5,
+    marginTop: 20,
+  },
+  input: {
+    borderBottomColor: "#DDDDDD",
+    borderBottomWidth: 0.5,
+    marginTop: 25,
+  },
+  inputError: {
+    borderBottomColor: "#db0505",
+    borderBottomWidth: 0.5,
+  },
+  btnSubmit: {
+    paddingVertical: 7,
+    backgroundColor: "black",
+    color: "white",
+    marginTop: 20,
+  },
+  errorMess: {
+    color: "#db0505",
+    paddingTop: 5,
+    fontSize: 13,
   },
 });
