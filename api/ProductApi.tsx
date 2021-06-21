@@ -27,6 +27,16 @@ const ProductApi = {
   sendReview: (data: any) => {
     const url = '/api/send_review/'
     return AxiosClient.post(url, data)
+  },
+
+  getPurchaseDetails: (data: any) => {
+    const url = '/api/purchase/'
+    return AxiosClient.post(url, data)
+  },
+  
+  getAllPurchase: () => {
+    const url = '/api/purchase/'
+    return AxiosClient.get(url)
   }
 };
 

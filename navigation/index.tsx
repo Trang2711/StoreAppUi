@@ -14,6 +14,8 @@ import LinkingConfiguration from './LinkingConfiguration';
 import ItemDetailScreen from '../screens/ItemDetailScreen';
 import CommentsScreen from '../screens/CommentsScreen'
 import ProductReviews from '../screens/ProductReviews'
+import PurchaseScreen from '../screens/PurchaseScreen'
+import PurchaseDetailsScreen from '../screens/PurchaseDetailsScreen'
 
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
@@ -46,7 +48,17 @@ const RootStack = createStackNavigator<StackParamList>();
 function RootStackTabNavigator() {
   return (
     <RootStack.Navigator>
-       <RootStack.Screen
+      <RootStack.Screen
+        name="PurchaseDetailsScreen"
+        options={{ title: "Thông tin đơn hàng" }}
+        component={PurchaseDetailsScreen}
+      />
+      <RootStack.Screen
+        name="PurchaseScreen"
+        options={{ title: "Đơn mua" }}
+        component={PurchaseScreen}
+      />
+      <RootStack.Screen
         name="LoginScreen"
         component={LoginScreen}
         options={{ headerShown: false }}
@@ -63,7 +75,7 @@ function RootStackTabNavigator() {
       <RootStack.Screen
         name="TopNav"
         component={TopTabNavigator}
-        options={{ headerShown: false }} 
+        options={{ headerShown: false }}
       />
       <RootStack.Screen
         name="ItemDetailScreen"
