@@ -4,22 +4,15 @@ import { useAppSelector } from "../../redux/app/hook";
 import { currentLoggingInUser } from "../../redux/features/userSlice";
 
 const ChatSection = ({ chatMessage, customer }: any) => {
-  console.log("chat", chatMessage);
-  console.log("custoemr", customer);
-  console.log("receiver", chatMessage.receiver);
   const currentUserInformation = useAppSelector(currentLoggingInUser);
   const cusSending =
     currentUserInformation.username === chatMessage.receiver ? true : false;
   return (
-    <View
-      style={[
+      <Text style={[
         cusSending
           ? styles.messageContainerReceived
           : styles.messageContainerSent,
-      ]}
-    >
-      <Text style={styles.messageText}>{chatMessage.text}</Text>
-    </View>
+      ]}>{chatMessage.text}</Text>
   );
 };
 
@@ -30,26 +23,24 @@ const styles = StyleSheet.create({
     backgroundColor: "#3b3b3b",
     justifyContent: "center",
     alignSelf: "flex-start",
-    borderRadius: 10,
-    paddingRight: 10,
-    paddingLeft: 10,
-    paddingTop: 5,
-    paddingBottom: 5,
+    borderRadius: 40,
+    marginLeft: 2,
+    paddingHorizontal: 15,
+    paddingVertical: 7,
     marginBottom: 10,
+    color: "white",
+    fontSize: 16,
   },
   messageContainerSent: {
     backgroundColor: "#027df7",
     justifyContent: "center",
     alignSelf: "flex-end",
-    borderRadius: 10,
-    paddingRight: 10,
-    paddingLeft: 10,
-    paddingTop: 10,
-    paddingBottom: 10,
+    borderRadius: 40,
+    marginLeft: 2,
+    paddingHorizontal: 15,
+    paddingVertical: 7,
     marginBottom: 10,
-  },
-  messageText: {
     color: "white",
-    fontSize: 18,
+    fontSize: 16,
   },
 });

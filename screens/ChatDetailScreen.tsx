@@ -69,7 +69,7 @@ const ChatDetailScreen = ({ navigation, route }: any) => {
     _getCurrentUserChattingWithInfo();
     _getMsgHistory();
   }, []);
-  console.log("user avater", currentChattingUserAvatar);
+
   useEffect(() => {
     const pusher = new Pusher("0d984425ec77e69c43f6", {
       cluster: "ap1",
@@ -100,21 +100,21 @@ const ChatDetailScreen = ({ navigation, route }: any) => {
         <View style={styles.headerContainer}>
           <View style={styles.user}>
             <View style={styles.userImgAndName}>
-              <View style={{ display: "flex", flexDirection: "row" }}>
-                <View style={{ marginTop: 15 }}>
-                  <TouchableOpacity>
-                    <Ionicons
-                      name="arrow-back-outline"
-                      size={27}
-                      color="black"
-                      onPress={() => {
-                        navigation.goBack();
-                      }}
-                    ></Ionicons>
-                  </TouchableOpacity>
-                </View>
+              <View style={{ display: "flex", flexDirection: "row", alignItems: "center", borderBottomColor: "#DDDDDD", borderBottomWidth: 1, paddingBottom: 10 }}>
+                <TouchableOpacity
+                  style={{marginLeft: 10}}
+                  onPress={() => {
+                    navigation.goBack();
+                  }}
+                >
+                  <Ionicons
+                    name="arrow-back-outline"
+                    size={27}
+                    color="black"
+                  ></Ionicons>
+                </TouchableOpacity>
                 <Image
-                  style={{ width: 60, height: 60, borderRadius: 50 }}
+                  style={{ width: 40, height: 40, borderRadius: 50, marginLeft: 5 }}
                   resizeMode={"contain"}
                   source={{
                     uri: currentChattingUserAvatar.avatar
@@ -131,7 +131,7 @@ const ChatDetailScreen = ({ navigation, route }: any) => {
                 >
                   <Text
                     style={{
-                      fontSize: 24,
+                      fontSize: 21,
                       marginLeft: 5,
                       fontWeight: "bold",
                     }}
@@ -168,13 +168,13 @@ const ChatDetailScreen = ({ navigation, route }: any) => {
           <TextInput
             placeholder="Aa"
             style={{
-              width: "85%",
-              height: "90%",
-              fontSize: 20,
-              backgroundColor: "#bdbdbd",
-              paddingLeft: 15,
+              width: "88%",
+              height: "70%",
+              fontSize: 16,
+              backgroundColor: "#ecedee",
+              paddingLeft: 25,
               paddingRight: 15,
-              borderRadius: 10,
+              borderRadius: 30,
             }}
             onChangeText={setInputMsg}
             value={inputMsg}
@@ -184,7 +184,7 @@ const ChatDetailScreen = ({ navigation, route }: any) => {
             style={{ marginLeft: 10 }}
             onPress={_sendMsg}
           >
-            <Ionicons name="send-sharp" size={27} color="black"></Ionicons>
+            <Ionicons name="send-sharp" size={26} color="black"></Ionicons>
           </TouchableWithoutFeedback>
         </View>
       </View>
@@ -197,7 +197,6 @@ export default ChatDetailScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
     paddingBottom: 0,
   },
   subContainer: {
@@ -207,8 +206,6 @@ const styles = StyleSheet.create({
   headerContainer: {
     width: "100%",
     height: 100,
-    borderBottomWidth: 1,
-    borderBottomColor: "#bdbdbd",
   },
   user: {
     marginTop: 30,
@@ -218,15 +215,19 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  userImgAndName: {},
+  userImgAndName: {
+    width: '100%',
+  },
   userImgAndChat_img: {},
   textInputArea: {
     width: "100%",
-    height: 50,
-    borderTopColor: "#bdbdbd",
+    height: 60,
+    borderTopColor: "#DDDDDD",
     borderTopWidth: 1,
     borderRadius: 10,
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: 'space-between',
+    paddingHorizontal: 15
   },
 });

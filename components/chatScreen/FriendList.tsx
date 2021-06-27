@@ -10,11 +10,12 @@ const FriendList = ({
   currentUserInformation,
   isSeller,
 }: any) => {
-  // console.log("chat list in friend list", listOfChattingUser);
+
   useEffect(() => {
-    LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
-    LogBox.ignoreAllLogs(); //Ignore all log notifications
+    LogBox.ignoreLogs(["Warning: ..."]);
+    LogBox.ignoreAllLogs();
   }, []);
+
   return (
     <View>
       {listOfChattingUser.map((chatuser: any, index: any) => {
@@ -39,7 +40,7 @@ const FriendList = ({
             <View style={styles.friendArea}>
               {/* <View style={styles.friendImg}> */}
               <Image
-                style={{ width: 70, height: 70, borderRadius: 200 }}
+                style={{ width: 47, height: 47, borderRadius: 30 }}
                 resizeMode={"cover"}
                 source={{
                   uri: chatuser.user.avatar
@@ -81,13 +82,13 @@ const styles = StyleSheet.create({
   friendNameAndLastMsg: {
     flex: 1,
     justifyContent: "center",
-    marginLeft: 20,
+    marginLeft: 15,
   },
   friendName: {
     fontSize: 18,
     marginBottom: 5,
   },
   message: {
-    fontSize: 16,
+    color: 'black'
   },
 });

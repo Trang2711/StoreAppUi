@@ -1,23 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Image, TextInput, Modal } from "react-native";
+import { StyleSheet, Image, TextInput, Modal, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Text, View } from "../components/Themed";
 import FriendToChat from "../components/chatScreen/FriendToChat";
 import FriendList from "../components/chatScreen/FriendList";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import { ScrollView } from "react-native-gesture-handler";
 import { useAppDispatch, useAppSelector } from "../redux/app/hook";
 import { currentLoggingInUser } from "../redux/features/userSlice";
 import UserApi from "../api/UserApi";
+import { baseUrl } from "../api/AxiosClient";
+import { Entypo, FontAwesome5 } from '@expo/vector-icons';
 
 export default function ChatScreen({ navigation }: any) {
   const [searchText, setSearchText] = useState("Tim kiem");
   const [showChatWithBuyer, setShowChatWithBuyer] = useState<Boolean>();
   const [listOfChattingUser, setListOfChattingUser] = useState([]);
   const currentUserInformation = useAppSelector(currentLoggingInUser);
+  const [modalVisible, setModalVisible] = useState(false)
   //////// nếu showChatWithBuyer mà false thì tương đương với showChatWithSeller là true
   useEffect(() => {
     setShowChatWithBuyer(true);
   }, []);
+
   useEffect(() => {
     const _setListOfChattingUserEqualToListOfBuyer = async () => {
       const response = await UserApi.getListOfChatCustomer();
@@ -35,7 +39,7 @@ export default function ChatScreen({ navigation }: any) {
       _setListOfChattingUserEqualToListOfSeller();
     }
   }, [showChatWithBuyer]);
-  console.log("show chat with buyer", showChatWithBuyer);
+
   return (
     <View style={styles.container}>
       <View style={styles.subContainer}>
@@ -43,15 +47,21 @@ export default function ChatScreen({ navigation }: any) {
           <View style={styles.user}>
             <View style={styles.styleForDisplayFlexAndCenterThings}>
               <Image
-                style={{ width: 60, height: 60, borderRadius: 50 }}
-                resizeMode={"contain"}
+                style={{ width: 42, height: 42, borderRadius: 50 }}
+                resizeMode={"cover"}
                 source={{
-                  uri: currentUserInformation.avatar,
+                  uri: `${baseUrl}${currentUserInformation.avatar}`,
                 }}
               />
               <View style={styles.styleForDisplayFlexAndCenterThings}>
-                <Text style={{ fontSize: 28 }}>Chat</Text>
+                <Text style={{ fontSize: 22, fontWeight: 'bold', marginLeft: 6 }}>Chat</Text>
               </View>
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={styles.chatWithBuyer}>{showChatWithBuyer ? 'Người mua' : 'Người bán'}</Text>
+              <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                <Ionicons name="ios-chatbubble-ellipses-outline" size={22} color="black" />
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -59,14 +69,6 @@ export default function ChatScreen({ navigation }: any) {
           showsVerticalScrollIndicator={false}
           showsHorizontalScrollIndicator={false}
         >
-          <View style={styles.styleForDisplayFlexAndCenterThings}>
-            <TouchableOpacity onPress={() => setShowChatWithBuyer(false)}>
-              <Text style={styles.chatWithBuyer}>Người bán</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setShowChatWithBuyer(true)}>
-              <Text style={styles.chatWithSeller}>Người mua</Text>
-            </TouchableOpacity>
-          </View>
           <View style={{ flexDirection: "row", justifyContent: "center" }}>
             <View style={styles.searchBarContainer}>
               <Ionicons
@@ -76,8 +78,7 @@ export default function ChatScreen({ navigation }: any) {
               ></Ionicons>
               <TextInput
                 style={styles.search_input}
-                placeholder="Tim kiem"
-                // value={searchText}
+                placeholder="Search"
               />
             </View>
           </View>
@@ -90,6 +91,30 @@ export default function ChatScreen({ navigation }: any) {
             isSeller={showChatWithBuyer}
           />
         </ScrollView>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          presentationStyle="overFullScreen"
+        // transparent={true}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <TouchableOpacity onPress={() => {
+                setShowChatWithBuyer(false)
+                setModalVisible(false)
+              }}>
+                <Text style={styles.chatWithSeller}>Nhắn tin với người bán</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => {
+                setShowChatWithBuyer(true)
+                setModalVisible(false)
+              }}>
+                <Text style={styles.chatWithSeller}>Nhắn tin với người mua</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
       </View>
     </View>
   );
@@ -106,7 +131,7 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     width: "100%",
-    height: 100,
+    height: 95,
   },
   user: {
     marginTop: 30,
@@ -114,9 +139,8 @@ const styles = StyleSheet.create({
     height: 60,
     display: "flex",
     flexDirection: "row",
-    // justifyContent: "space-between",
-    alignItems: "center",
-    marginLeft: "30%",
+    justifyContent: 'space-between',
+    alignItems: 'center'
   },
   cameraAndPen: {
     display: "flex",
@@ -136,10 +160,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   searchBarContainer: {
-    marginTop: 10,
-    width: "95%",
+    width: "100%",
     height: 40,
-    backgroundColor: "#e0e0e0",
+    backgroundColor: "#ecedee",
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
@@ -157,31 +180,37 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   chatWithBuyer: {
-    fontSize: 17,
-    marginLeft: 0,
-    fontWeight: "bold",
-    borderRadius: 10,
-    lineHeight: 40,
-    paddingLeft: 15,
-    paddingRight: 15,
-    backgroundColor: "#e0e0e0",
-    color: "#757575",
+    fontSize: 15.5,
+    marginRight: 5,
   },
   chatWithSeller: {
-    fontSize: 17,
-    marginLeft: 15,
-    fontWeight: "bold",
-    borderRadius: 10,
-    lineHeight: 40,
-    paddingLeft: 15,
-    paddingRight: 15,
-    backgroundColor: "#e0e0e0",
-    color: "#757575",
+    fontSize: 15.5,
+    marginVertical: 10
   },
   styleForDisplayFlexAndCenterThings: {
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+  },
+  centeredView: {
+    flex: 1,
     justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  },
+  modalView: {
+    width: '80%',
+    backgroundColor: "white",
+    borderRadius: 5,
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
   },
 });
