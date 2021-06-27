@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, ImageBackground, ScrollView, TouchableOpacity, AsyncStorage, ActivityIndicator } from "react-native";
+import { StyleSheet, ImageBackground, ScrollView, TouchableOpacity, AsyncStorage, ActivityIndicator, Pressable } from "react-native";
 import { AntDesign, MaterialCommunityIcons, MaterialIcons, Ionicons } from '@expo/vector-icons';
 import { Text, View } from "../components/Themed";
 import { setIsLogged } from "../redux/features/loginSlice";
@@ -31,7 +31,7 @@ export default function AccountScreen({ navigation }: any) {
     const unsubscribe = navigation.addListener('focus', () => {
       fetchInfo()
     });
-    
+
   }, [navigation])
 
   return (
@@ -50,7 +50,7 @@ export default function AccountScreen({ navigation }: any) {
             <Text style={{ marginTop: 3 }}>{info!.email}</Text>
           </View>
         </View>
-          : <ActivityIndicator style={{marginVertical: 30}} size="large" color='black' />
+          : <ActivityIndicator style={{ marginVertical: 30 }} size="large" color='black' />
       }
       <View style={styles.sectionContainer}>
         <Text style={styles.title}>Đơn hàng của tôi</Text>
@@ -71,11 +71,14 @@ export default function AccountScreen({ navigation }: any) {
             <View style={styles.icon}><MaterialCommunityIcons name="truck-fast-outline" size={30} color="black" /></View>
             <Text>Đã vận chuyển</Text>
           </View>
-          <View style={styles.iconContainer}>
+
+          <Pressable
+            style={styles.iconContainer}
+            onPress={() => navigation.navigate("PurchaseScreen")}>
             {/* <MaterialIcons name="stars" size={24} color="black" /> */}
             <View style={styles.icon}><MaterialIcons name="stars" size={30} color="black" /></View>
-            <Text>Đánh giá</Text>
-          </View>
+            <Text>Đã nhận</Text>
+          </Pressable>
           <View style={styles.iconContainer}>
             <View style={styles.icon}><Ionicons name="backspace-outline" size={30} color="black" /></View>
             <Text>Trả lại</Text>

@@ -4,40 +4,43 @@ import { Feather, Ionicons, AntDesign } from '@expo/vector-icons';
 import ProductApi from '../api/ProductApi'
 import { baseUrl } from "../api/AxiosClient";
 
-const data = [
-  {
-    product: {
-      id: "grgre",
-      title: "Birddybag indian apache tee",
-      product_thumbnail: "https://images.pexels.com/photos/8326316/pexels-photo-8326316.jpeg?cs=srgb&dl=pexels-kindel-media-8326316.jpg&fm=jpg",
-      price: 320000,
-      discount_price: 250000,
-      total_price: 300000,
-      count: 1,
-      idShop: "fgbigbvui"
-    },
-    shipping: {
-      method: "Giao hàng nhanh",
-      date: "T2, 03/05/2021",
-      fee: 22000
-    },
-    shipping_address: {
-      name: "Trịnh Thị Thu Trang",
-      phone: "0978924372",
-      province: "Hưng Yên",
-      district: "Văn Lâm",
-      ward: "Đại Đồng",
-      addressDetail: "thôn Đông Mai"
-    },
-    payment: "Thanh toán khi nhận hàng"
-  }
-]
+// const data = [
+//   {
+//     product: {
+//       id: "grgre",
+//       title: "Birddybag indian apache tee",
+//       product_thumbnail: "https://images.pexels.com/photos/8326316/pexels-photo-8326316.jpeg?cs=srgb&dl=pexels-kindel-media-8326316.jpg&fm=jpg",
+//       price: 320000,
+//       discount_price: 250000,
+//       total_price: 300000,
+//       count: 1,
+//       idShop: "fgbigbvui"
+//     },
+//     shipping: {
+//       method: "Giao hàng nhanh",
+//       date: "T2, 03/05/2021",
+//       fee: 22000
+//     },
+//     shipping_address: {
+//       name: "Trịnh Thị Thu Trang",
+//       phone: "0978924372",
+//       province: "Hưng Yên",
+//       district: "Văn Lâm",
+//       ward: "Đại Đồng",
+//       addressDetail: "thôn Đông Mai"
+//     },
+//     payment: "Thanh toán khi nhận hàng"
+//   }
+// ]
 
-export default function PurchaseDetailsScreen({ productId, navigation }: any) {
+export default function PurchaseDetailsScreen({ route, navigation }: any) {
+  const { id } = route.params
   const [shipping, setShipping] = useState<any>()
   const [address, setAddress] = useState<any>()
-  const [product, setProduct] = useState<any>()
+  const [products, setProducts] = useState<any>()
   const [payment, setPayment] = useState<any>()
+  const [totalPrice, setTotalPrice] = useState<any>()
+  const [finalPrice, setFinalPrice] = useState<any>()
 
   const _fomatNumber1 = (num: number) => {
     const formatter = new Intl.NumberFormat("us");
@@ -45,37 +48,48 @@ export default function PurchaseDetailsScreen({ productId, navigation }: any) {
   };
 
   const fetchData = async () => {
-    const data = ProductApi.getPurchaseDetails(productId) as any
+    const data = await ProductApi.getPurchaseDetails({ id: id }) as any
+    console.log(data)
     setShipping(data.shipping)
-    setProduct(data.product)
-    setPayment(data.payment),
+    setProducts(data.products)
+    setPayment(data.payment_method),
     setAddress(data.shipping_address)
+    setTotalPrice(data.totalPrice)
+    setFinalPrice(data.finalPrice)
   }
 
   useEffect(() => {
     fetchData()
   }, [])
 
-  const renderProduct = (productItem: any) => {
-    const {
-      id,
-      title,
-      product_thumbnail,
-      price,
-      discount_price,
-      total_price,
-      count,
-    } = productItem;
-    return (
-      <View key={id} style={styles.containerOfProduct}>
-        <Pressable
-        // onPress={() => navigation.navigate("PurchaseDetialsScreen")}
+  const renderProduct = () => {
+    console.log('produc: ')
+    return products.map((item: any) => {
+      const {
+        product_code,
+        title,
+        product_thumbnail,
+        price,
+        seller,
+        discount_price,
+        count,
+      } = item;
+      console.log(`${baseUrl}/${product_thumbnail}`)
+      return (
+        <Pressable 
+          key={product_code} 
+          style={styles.containerOfProduct}
+          onPress={() =>
+            navigation.navigate("Root", {
+              screen: "ItemDetailScreen",
+              params: { id: product_code },
+            })
+          }
         >
           <View style={styles.content}>
             <ImageBackground
               style={styles.image}
-              // source={{ uri: `${baseUrl}${product_thumbnail}` }}
-              source={{ uri: `${product_thumbnail}` }}
+              source={{ uri: `${baseUrl}/${product_thumbnail}` }}
             ></ImageBackground>
 
             <View style={styles.content_area}>
@@ -87,7 +101,7 @@ export default function PurchaseDetailsScreen({ productId, navigation }: any) {
               >
                 <Text style={styles.priceSale}>
                   {_fomatNumber1(discount_price)}đ
-                    </Text>
+                </Text>
                 {discount_price < price && (
                   <Text style={styles.price}>{_fomatNumber1(price)}đ</Text>
                 )}
@@ -100,58 +114,70 @@ export default function PurchaseDetailsScreen({ productId, navigation }: any) {
               </View>
             </View>
           </View>
-          <View style={styles.details}>
-            <Text>Thành tiền: </Text>
-            <Text style={{ color: 'red', fontSize: 16, fontWeight: "bold" }}>{_fomatNumber1(total_price)}đ</Text>
-          </View>
         </Pressable>
-      </View>
-    );
+      )
+    })
   };
 
   return (
     <View>
       <View style={styles.container}>
         <View style={{ marginBottom: 10, borderBottomColor: "#DDDDDD", borderBottomWidth: 0.5, paddingHorizontal: 10 }}>
-          <View style={{ flexDirection: "row", paddingBottom: 10 }}>
-            <Feather name="truck" size={18} color="black" />
-            <View style={{ marginLeft: 10 }}>
-              <Text style={styles.title}>Thông tin vận chuyển</Text>
-              <Text style={{ color: "gray" }}>Đơn vị vận chuyển: {shipping.method}</Text>
-              <Text style={{ color: "gray" }}>Thời gian giao hàng: {shipping.date}</Text>
-              <Text style={{ color: "gray" }}>Phi vận chuyển: {_fomatNumber1(shipping.fee)}đ</Text>
+          {
+            shipping && <View style={{ flexDirection: "row", paddingBottom: 10 }}>
+              <Feather name="truck" size={18} color="black" />
+              <View style={{ marginLeft: 10 }}>
+                <Text style={styles.title}>Thông tin vận chuyển</Text>
+                <Text style={{ color: "gray" }}>Đơn vị: {shipping.method}</Text>
+                <Text style={{ color: "gray", marginTop: 4 }}>Thời gian giao hàng: {shipping.date}</Text>
+                <Text style={{ color: "gray", marginTop: 4 }}>Phí vận chuyển: {_fomatNumber1(shipping.fee)}đ</Text>
+              </View>
             </View>
-          </View>
+          }
         </View>
 
         <View style={{ marginBottom: 10, paddingHorizontal: 10 }}>
-          <View style={{ flexDirection: "row" }}>
-            <Ionicons name="location-outline" size={22} color="black" />
-            <View style={{ marginLeft: 10, }}>
-              <Text style={styles.title}>Địa chỉ nhận hàng</Text>
-              <Text style={{ color: "gray" }}>{address.name}</Text>
-              <Text style={{ color: "gray" }}>{address.phone}</Text>
-              <Text style={{ color: "gray", marginRight: 10 }}>{`${address.addressDetail}, ${address.ward}, ${address.district}, ${address.province}`}</Text>
+          {
+            address && <View style={{ flexDirection: "row" }}>
+              <Ionicons name="location-outline" size={22} color="black" />
+              <View style={{ marginLeft: 10, }}>
+                <Text style={styles.title}>Địa chỉ nhận hàng</Text>
+                <Text style={{ color: "gray" }}>{address.name}</Text>
+                <Text style={{ color: "gray", marginTop: 4 }}>{address.phone}</Text>
+                <Text style={{ color: "gray", marginTop: 4, marginRight: 10 }}>{`${address.addressDetail}, ${address.ward}, ${address.district}, ${address.province}`}</Text>
+              </View>
             </View>
-          </View>
+          }
         </View>
 
       </View>
 
-      {
-        renderProduct(data[0])
-      }
+      <View>
+        {
+          products && renderProduct()
+        }
+      </View>
+
+      <View style={{...styles.container, borderBottomColor: "#DDDDDD", borderBottomWidth: 1,}}>
+        <View style={styles.details}>
+          <View style={{ flexDirection: "row", alignItems: 'center'}}>
+            <AntDesign style={{marginRight: 10,}} name="creditcard" size={18} color="black" />
+            <Text style={{...styles.title, marginBottom: 0}}>Thành tiền: </Text>
+          </View>
+          <Text style={{ color: 'red', fontSize: 16, fontWeight: "bold" }}>{_fomatNumber1(finalPrice)}đ</Text>
+        </View>
+      </View>
 
       <View style={styles.container}>
-        <View style={{ paddingHorizontal: 10, paddingBottom: 10, flexDirection: "row", borderBottomColor: "#DDDDDD", borderBottomWidth: 0.5, }}>
-          <AntDesign name="pay-circle-o1" size={20} color="black" />
+        <View style={{ paddingHorizontal: 10, flexDirection: "row"}}>
+          <AntDesign name="pay-circle-o1" size={19} color="black" />
           <View style={{ marginLeft: 10, }}>
             <Text style={styles.title}>Phương thức thanh toán</Text>
             <Text style={{ color: "gray" }}>{payment}</Text>
           </View>
         </View>
 
-        <View style={styles.review}>
+        {/* <View style={styles.review}>
           <Text style={{ color: "gray", fontSize: 14, textDecorationLine: "underline" }}>Xem đánh giá</Text>
           <Pressable
             style={styles.repurchaseBtn}
@@ -164,7 +190,7 @@ export default function PurchaseDetailsScreen({ productId, navigation }: any) {
           >
             <Text style={{ color: 'white' }}>Nhắn tin với shop</Text>
           </Pressable>
-        </View>
+        </View> */}
       </View>
     </View>
   );

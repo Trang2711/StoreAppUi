@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { ImageBackground, Pressable } from 'react-native';
 import { StyleSheet, Text, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -6,19 +6,19 @@ import { baseUrl } from "../api/AxiosClient";
 import { MaterialIcons } from '@expo/vector-icons';
 import ProductApi from '../api/ProductApi'
 
-const data = [
-    {
-        id: "grgre",
-        title: "Birddybag indian apache tee",
-        product_thumbnail: "https://images.pexels.com/photos/8326316/pexels-photo-8326316.jpeg?cs=srgb&dl=pexels-kindel-media-8326316.jpg&fm=jpg",
-        price: 320000,
-        discount_price: 250000,
-        total_price: 300000,
-        count: 1,
-        shipping_method: "Giao hàng nhanh",
-        shipping_date: "T2, 03/05/2021",
-    }
-]
+// const data = [
+
+//         'thumbnail': thumbnail,
+//         'shipping': {
+//             'date': order.shippingDate,
+//             'fee': order.shippingCost,
+//             'method': order.shippingMethod
+//         },
+//         'status': order.order_status,
+//         'cost': order.finalCost,
+//         'payment': order.paymentMethod,
+//     }
+// ]
 export default function PurchaseScreen({ navigation }: any) {
     const [purchase, setPurchase] = useState<any>()
 
@@ -29,7 +29,7 @@ export default function PurchaseScreen({ navigation }: any) {
 
 
     const fetchData = async () => {
-        const data = ProductApi.getAllPurchase() as any
+        const data = await ProductApi.getAllPurchase() as any
         setPurchase(data)
     }
 
@@ -40,66 +40,62 @@ export default function PurchaseScreen({ navigation }: any) {
     const renderProduct = (productItem: any) => {
         const {
             id,
-            title,
-            product_thumbnail,
-            price,
-            discount_price,
-            total_price,
-            count,
-            shipping_method,
-            shipping_date
+            thumbnail,
+            cost,
+            numProduct,
+            shipping,
+            payment
         } = productItem;
         return (
             <View key={id} style={styles.containerOfProduct}>
                 <Pressable
-                // onPress={() => navigation.navigate("PurchaseDetialsScreen")}
+                    onPress={() =>
+                        navigation.navigate(
+                            "PurchaseDetailsScreen",
+                            { id: id },
+                        )
+                    }
                 >
                     <View style={styles.content}>
                         <ImageBackground
                             style={styles.image}
-                            // source={{ uri: `${baseUrl}${product_thumbnail}` }}
-                            source={{ uri: `${product_thumbnail}` }}
+                            source={{ uri: `${baseUrl}/${thumbnail}` }}
                         ></ImageBackground>
 
                         <View style={styles.content_area}>
                             <Text numberOfLines={1} style={{ fontSize: 15, fontWeight: "bold" }}>
-                                {title}
+                                Đơn hàng {id}
                             </Text>
-                            <View
-                                style={{ flexDirection: "row", alignItems: "center", marginTop: 3 }}
-                            >
-                                <Text style={styles.priceSale}>
-                                    {_fomatNumber1(discount_price)}đ
-                        </Text>
-                                {discount_price < price && (
-                                    <Text style={styles.price}>{_fomatNumber1(price)}đ</Text>
-                                )}
-                            </View>
                             <View style={styles.quantity_area}>
-                                <Text style={{ fontSize: 14, marginRight: 5 }}>Số lượng:</Text>
-                                <View style={{ flexDirection: "row", alignItems: "center" }}>
-                                    <Text style={{ paddingHorizontal: 3 }}> {count} </Text>
-                                </View>
+                                <Text style={{ fontSize: 14, marginRight: 5 }}>Số lượng: {numProduct}</Text>
+                            </View>
+                            <View style={{ flexDirection: "row", marginTop: 7 }}>
+                                <Text>Thành tiền: </Text>
+                                <Text style={{ color: 'red', fontWeight: "bold", marginLeft: 2 }}>{_fomatNumber1(cost)}đ</Text>
                             </View>
                         </View>
                     </View>
                     <View style={styles.details}>
-                        <View>
-                            <Text style={{ color: "gray", fontSize: 14 }}>{shipping_method}</Text>
-                            <Text style={{ color: "gray", fontSize: 14 }}>{shipping_date}</Text>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                            {
+                                shipping.method !== '' && <>
+                                    <Text style={{ color: "gray", fontSize: 14 }}>{shipping.method}</Text>
+                                    <Text style={{ color: "gray", fontSize: 14, marginTop: 2 }}>{shipping.date}</Text>
+                                </>
+
+                            }
                         </View>
-                        <View style={{ flexDirection: "row", alignItems: "center" }}>
-                            <MaterialIcons name="payment" size={25} color="red" />
-                            <View style={{ flexDirection: "row", marginLeft: 7 }}>
-                                <Text>Thành tiền: </Text>
-                                <Text style={{ color: 'red' }}>{_fomatNumber1(total_price)}đ</Text>
-                            </View>
-                        </View>
+                        {
+                            payment !== '' && <Text style={{ color: "gray", fontSize: 14 }}>{payment}</Text>
+                        }
+                        
                     </View>
                 </Pressable>
 
-                <View style={styles.review}>
-                    <Text style={{ color: "gray", fontSize: 14 }}>Đã đánh giá</Text>
+                {/* <View style={styles.review}>
+                    <View>
+                        <Text style={{ color: "gray", fontSize: 14 }}>{payment}</Text>
+                    </View>
                     <Pressable
                         style={styles.repurchaseBtn}
                     // onPress={() =>
@@ -111,7 +107,7 @@ export default function PurchaseScreen({ navigation }: any) {
                     >
                         <Text style={{ color: 'white' }}>Mua lại</Text>
                     </Pressable>
-                </View>
+                </View> */}
             </View>
         );
     };
@@ -119,7 +115,7 @@ export default function PurchaseScreen({ navigation }: any) {
         <ScrollView>
             <View>
                 {
-                    purchase.map((item: any) => renderProduct(item))
+                    purchase && purchase.map((item: any) => renderProduct(item))
                 }
             </View>
         </ScrollView>
@@ -128,8 +124,6 @@ export default function PurchaseScreen({ navigation }: any) {
 
 const styles = StyleSheet.create({
     containerOfProduct: {
-        // paddingVertical: 10,
-        marginBottom: 10,
         marginTop: 10,
         backgroundColor: "white",
     },
@@ -168,9 +162,9 @@ const styles = StyleSheet.create({
     details: {
         paddingHorizontal: 10,
         paddingVertical: 12,
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
+        // flexDirection: "row",
+        // alignItems: "center",
+        // justifyContent: "space-between",
         borderBottomColor: "#DDDDDD",
         borderBottomWidth: 1,
     },

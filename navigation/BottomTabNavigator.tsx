@@ -17,10 +17,9 @@ import CategoriesScreen from "../screens/CategoriesScreen";
 import NewsScreen from "../screens/NewsScreen";
 import ChatScreen from "../screens/ChatScreen";
 import AccountScreen from "../screens/AccountScreen";
-import ItemDetailScreen from "../screens/ItemDetailScreen";
-import CommentsScreen from "../screens/CommentsScreen";
-import ChatDetailScreen from "../screens/ChatDetailScreen";
 import ProfileScreen from "../screens/ProfileScreen";
+import PurchaseScreen from '../screens/PurchaseScreen'
+import PurchaseDetailsScreen from '../screens/PurchaseDetailsScreen'
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -168,6 +167,17 @@ function AccountTabNavigator() {
         name="InfoScreen"
         options={{ title: "Sửa hồ sơ" }}
         component={ProfileScreen}
+      />
+      
+      <AccountTabStack.Screen
+        name="PurchaseDetailsScreen"
+        options={{ title: "Thông tin đơn hàng" }}
+        component={PurchaseDetailsScreen}
+      />
+      <AccountTabStack.Screen
+        name="PurchaseScreen"
+        options={{ title: "Đơn mua" }}
+        component={PurchaseScreen}
       />
     </AccountTabStack.Navigator>
   );

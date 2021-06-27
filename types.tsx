@@ -11,8 +11,6 @@ export type StackParamList = {
   ItemDetailScreen: undefined;
   CommentsScreen: undefined;
   ProductReviewsScreen: undefined;
-  PurchaseScreen: undefined;
-  PurchaseDetailsScreen: undefined;
 };
 
 export type BottomTabParamList = {
@@ -59,4 +57,6 @@ export type AccountTabParamList = {
   ReviewsScreen: undefined;
   LoginScreen: undefined;
   OrderScreen: undefined;
+  PurchaseScreen: undefined;
+  PurchaseDetailsScreen: undefined;
 };

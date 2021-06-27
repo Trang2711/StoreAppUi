@@ -71,6 +71,10 @@ const UserApi = {
     const url = "/api/payment/";
     return AxiosClient.post(url, data);
   },
+  makePayment: (data: any) => {
+    const url = "api/payment_cod/";
+    return AxiosClient.post(url, data);
+  }
 };
 
 export default UserApi;

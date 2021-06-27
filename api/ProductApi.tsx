@@ -30,12 +30,12 @@ const ProductApi = {
   },
 
   getPurchaseDetails: (data: any) => {
-    const url = '/api/purchase/'
+    const url = '/api/order_info/'
     return AxiosClient.post(url, data)
   },
   
   getAllPurchase: () => {
-    const url = '/api/purchase/'
+    const url = '/api/get_orders/'
     return AxiosClient.get(url)
   }
 };

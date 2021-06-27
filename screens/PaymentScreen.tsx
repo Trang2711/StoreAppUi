@@ -92,7 +92,6 @@ export default function PaymentScreen({ navigation }: any) {
   };
 
   const handleCardInputDetails = async (totalInvoiceCost: number) => {
-    console.log(totalInvoiceCost);
     try {
       const cardOptions = {
         requiredBillingAddressFields: "full",
@@ -118,8 +117,19 @@ export default function PaymentScreen({ navigation }: any) {
         currency: "vnd",
         source: response.tokenId,
         description: "test payment",
+        shipping: {
+          method: getShippingMethod(shippingMethodSelected)!.name,
+          date: getShippingMethod(shippingMethodSelected)!.date,
+          fee: getShippingMethod(shippingMethodSelected)!.fee
+        },
+        payment: paymentMethod,
       });
-      handleBillCharged();
+
+      if(res as any === "Success") {
+        handleBillCharged();
+      } else {
+        Alert.alert("Thanh toán không thành công!")
+      }
     } catch (error) {
       console.log("Người dùng từ chối thanh toán");
     }
@@ -132,10 +142,10 @@ export default function PaymentScreen({ navigation }: any) {
     return formatter.format(num);
   };
 
-  const makePayment = () => {
+  const makePayment = async() => {
+    const totalInvoiceCost =
+      getShippingMethod(shippingMethodSelected)?.fee + totalPriceOfProduct;
     if (paymentMethod === "Thanh toán bằng thẻ Visa") {
-      const totalInvoiceCost =
-        getShippingMethod(shippingMethodSelected)?.fee + totalPriceOfProduct;
       if (totalInvoiceCost < 100000000) {
         handleCardInputDetails(totalInvoiceCost);
       } else {
@@ -150,6 +160,24 @@ export default function PaymentScreen({ navigation }: any) {
         );
       }
     } else {
+      try {
+        const res = await UserApi.makePayment({
+          amount: totalInvoiceCost,
+          shipping: {
+            method: getShippingMethod(shippingMethodSelected)!.name,
+            date: getShippingMethod(shippingMethodSelected)!.date,
+            fee: getShippingMethod(shippingMethodSelected)!.fee
+          },
+          payment: paymentMethod,
+        });
+
+        if(res as any === "Success")
+          Alert.alert("Đặt hàng thành công!")
+        else 
+          Alert.alert("Thanh toán không thành công!")
+      } catch (e) {
+        console.log("Error: " + e)
+      }
     }
   };
 
@@ -484,7 +512,7 @@ export default function PaymentScreen({ navigation }: any) {
               >
                 {_fomatNumber1(
                   totalPriceOfProduct +
-                    getShippingMethod(shippingMethodSelected)!.fee
+                  getShippingMethod(shippingMethodSelected)!.fee
                 )}
                 ₫
               </Text>
