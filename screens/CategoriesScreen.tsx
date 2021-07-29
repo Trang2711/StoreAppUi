@@ -72,6 +72,7 @@ export default function CategoriesScreen() {
     async function fetchCateories() {
       const data = await CategoryApi.getAll();
       const _categories = data as any;
+
       if (_categories) {
         setCategories(_categories);
         setActiveCategory(_categories[0]);
@@ -134,7 +135,7 @@ export default function CategoriesScreen() {
             <View style={{ marginTop: 10, paddingVertical: 10 }}>
               <Text style={styles.title}>{activeCategory.name}</Text>
               <FlatList
-                data={products}
+                data={activeCategory.products}
                 renderItem={renderItem}
                 keyExtractor={(item) => item.id}
                 numColumns={2}

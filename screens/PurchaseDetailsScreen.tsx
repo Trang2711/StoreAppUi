@@ -63,7 +63,6 @@ export default function PurchaseDetailsScreen({ route, navigation }: any) {
   }, [])
 
   const renderProduct = () => {
-    console.log('produc: ')
     return products.map((item: any) => {
       const {
         product_code,
@@ -74,7 +73,6 @@ export default function PurchaseDetailsScreen({ route, navigation }: any) {
         discount_price,
         count,
       } = item;
-      console.log(`${baseUrl}/${product_thumbnail}`)
       return (
         <Pressable 
           key={product_code} 

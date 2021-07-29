@@ -1,19 +1,17 @@
 
 import React from 'react'
 import { View, Text, ImageBackground, StyleSheet, TouchableOpacity } from 'react-native'
+import { baseUrl } from '../../../api/AxiosClient'
 
-const CardItemSmall = ({ item, navigation }: any) => {
-    const { id, srcImg, title } = item
+const CardItemSmall = ({props}: any) => {
+    const { product_thumbnail, title } = props.item
     return (
         <TouchableOpacity
             style={styles.container}
-            onPress={() =>
-                navigation.navigate("NotificationsScreen" )
-            }
         >
-            <ImageBackground style={styles.image} source={{ uri: srcImg }} >
+            <ImageBackground style={styles.image} source={{ uri: `${baseUrl}${product_thumbnail}` }} >
             </ImageBackground>
-            <Text style={styles.title}>{title}</Text>
+            <Text numberOfLines={2} style={styles.title}>{title}</Text>
         </TouchableOpacity>
     )
 }
@@ -27,13 +25,12 @@ const styles = StyleSheet.create({
 
     image: {
         width: "100%",
-        height: 110,
-        resizeMode: "center",
+        height: 105,
+        resizeMode: "cover",
     },
     title: {
-        fontSize: 11,
+        fontSize: 12,
         paddingHorizontal: 10,
-        textAlign: "center",
     }
 });
 

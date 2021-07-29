@@ -27,7 +27,6 @@ interface ref {
 
 const ChatDetailScreen = ({ navigation, route }: any) => {
   const { seller, customer } = route.params;
-  console.log("seller from detai screen", seller);
   const [chatMessages, setChatMessages] = useState([]);
   const [inputMsg, setInputMsg] = useState("");
   const scrollViewRef = useRef<ref | null>();
@@ -56,7 +55,6 @@ const ChatDetailScreen = ({ navigation, route }: any) => {
         customer,
         seller,
       });
-      console.log("chat history", response);
       setChatMessages(response as any);
     };
 
@@ -76,7 +74,6 @@ const ChatDetailScreen = ({ navigation, route }: any) => {
     });
     var channel = pusher.subscribe(`${customer}-${seller}`);
     channel.bind("chat", (data: any) => {
-      console.log("data from pusher", data);
       setChatMessages((chatMessages): any => {
         return [...chatMessages, data];
       });

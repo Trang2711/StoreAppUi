@@ -52,7 +52,6 @@ export default function LoginScreen({ navigation }: any) {
           { text: "OK" },
         ]);
       }
-      console.log("responce:", responce);
       const { username_existed, email_existed } = responce as any;
       if (username_existed) setIsUsernameError(true);
       if (email_existed) setIsEmailError(true);
